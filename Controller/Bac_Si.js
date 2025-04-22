@@ -12,7 +12,7 @@ class Bacsi_Controler {
       res.status(200).json(result);
     });
   };
-
+  
   add_Bacsi = (req, res, next) => {
     const data = {
       TenBacSi: req.body.TenBacSi?.trim(),
@@ -74,6 +74,8 @@ class Bacsi_Controler {
         message: 'Cập nhật bác sĩ thành công',
         updatedBacSi
       });
+
+      
     });
   };
 }

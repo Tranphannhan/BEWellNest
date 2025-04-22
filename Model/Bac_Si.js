@@ -31,7 +31,7 @@ class Database_Bacsi {
   Update_Bacsi_M = async (id, updatedData, Callback) => {
     try {
       await connectDB();
-      const updated = await Bac_Si.findByIdAndUpdate(id, updatedData, { new: true });
+      const updated = await Bac_Si.findByIdAndUpdate (id, updatedData, { new: true });
       Callback(null, updated);
     } catch (error) {
       Callback(error);

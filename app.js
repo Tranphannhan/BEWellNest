@@ -9,11 +9,11 @@ let indexRouter_Benhnhan = require ('./routes/Benh_nhan');
 let indexRouter_Cakham = require ('./routes/Ca_kham');
 let indexRouter_Donthuoc = require ('./routes/Don_Thuoc');
 let indexRouter_Donthuoc_Chitiet = require ('./routes/Don_Thuoc_Chi_Tiet');
+let indexRouter_Phieu_Kham_Benh = require ('./routes/Phieu_Kham_Benh');
 
-
-
+  
+ 
 var app = express();
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -26,11 +26,15 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 
 
-app.use('/Bacsi', indexRouter_Bacsi);
+app.use ('/Bacsi', indexRouter_Bacsi);
 app.use ('/Benhnhan' , indexRouter_Benhnhan);
 app.use ('/Cakham' , indexRouter_Cakham);
 app.use ('/Donthuoc' , indexRouter_Donthuoc);
 app.use ('/Donthuoc_Chitiet' , indexRouter_Donthuoc_Chitiet);
+app.use ('/Phieu_Kham_Benh' , indexRouter_Phieu_Kham_Benh);
+
+
+
  
 
 
