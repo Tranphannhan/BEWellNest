@@ -2,7 +2,7 @@ const Connect_Phieu_Kham_Benh = require("../Model/Phieu_Kham_Benh");
 const Connect_Data_Model = new Connect_Phieu_Kham_Benh();
 
 
-class Donthuoc_Controler {
+class Phieu_Kham_Benh {
   Runviews = (req, res, next) => res.send("Loadding Thành Công")
 
   Select_Phieukhambenh = (req, res, next) => {
@@ -67,4 +67,4 @@ class Donthuoc_Controler {
   
 }
 
-module.exports = Donthuoc_Controler;
+module.exports = Phieu_Kham_Benh;

@@ -10,8 +10,22 @@ let indexRouter_Cakham = require ('./routes/Ca_kham');
 let indexRouter_Donthuoc = require ('./routes/Don_Thuoc');
 let indexRouter_Donthuoc_Chitiet = require ('./routes/Don_Thuoc_Chi_Tiet');
 let indexRouter_Phieu_Kham_Benh = require ('./routes/Phieu_Kham_Benh');
+let indexRouter_The_Kham_Benh = require ('./routes/The_Kham_Benh');
+let indexRouter_Yeu_Cau_Xet_Nghiem = require ('./routes/Yeu_Cau_Xet_Nghiem');
+let indexRouter_Ket_Qua_Xet_Nghiem = require ('./routes/Ket_Qua_Xet_Nghiem');
+let indexRouter_Kham_Lam_Sang= require ('./routes/Kham_Lam_Sang');
+
+
+
+
+
+
+
+
+
 
   
+
  
 var app = express();
 // view engine setup
@@ -32,10 +46,20 @@ app.use ('/Cakham' , indexRouter_Cakham);
 app.use ('/Donthuoc' , indexRouter_Donthuoc);
 app.use ('/Donthuoc_Chitiet' , indexRouter_Donthuoc_Chitiet);
 app.use ('/Phieu_Kham_Benh' , indexRouter_Phieu_Kham_Benh);
+app.use ('/The_Kham_Benh' , indexRouter_The_Kham_Benh);
+app.use ('/Yeu_Cau_Xet_Nghiem' , indexRouter_Yeu_Cau_Xet_Nghiem);
+app.use ('/Ket_Qua_Xet_Nghiem' , indexRouter_Ket_Qua_Xet_Nghiem);
+app.use ('/Kham_Lam_Sang' , indexRouter_Kham_Lam_Sang);
+
+
+
+
+
 
 
 
  
+
 
 
 
