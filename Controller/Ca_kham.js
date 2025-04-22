@@ -13,7 +13,66 @@ class Cakham_Controler {
     });
   };
 
+  add_Cakham = (req, res, next) => {
+    const data = {
+      Id_BacSi: req.body.Id_BacSi,
+      Id_PhongKham: req.body.Id_PhongKham?.trim(),
+      TenCa: req.body.TenCa?.trim(),
+      SoPhong: req.body.SoPhong?.trim(),
+      TenBacSi: req.body.TenBacSi?.trim()
+    };
+    Connect_Data_Model.Insert_Cakham_M(data, (err, result) => {
+      if (err) {
+        return res.status(500).json({ message: "Thêm ca khám thất bại", error: err });
+      }
+      res.status(200).json({ message: "Thêm ca khám thành công", data: result });
+    });
+  };
 
+  deleteCakham = (req, res) => {
+    const { id } = req.params;
+  
+    Connect_Data_Model.Delete_Cakham_M(id, (error, deletedCakham) => {
+      if (error) {
+        return res.status(500).json({ message: 'Lỗi khi xóa ca khám', error });
+      }
+  
+      if (!deletedCakham) {
+        return res.status(404).json({ message: 'Không tìm thấy ca khám để xóa' });
+      }
+  
+      return res.status(200).json({
+        message: 'Xóa ca khám thành công',
+        deletedCakham
+      });
+    });
+  };
+
+  updateCakham = (req, res) => {
+    const { id } = req.params;
+    const data = {
+      Id_BacSi: req.body.Id_BacSi,
+      Id_PhongKham: req.body.Id_PhongKham?.trim(),
+      TenCa: req.body.TenCa?.trim(),
+      SoPhong: req.body.SoPhong?.trim(),
+      TenBacSi: req.body.TenBacSi?.trim()
+    };
+  
+    Connect_Data_Model.Update_Cakham_M(id, data, (error, updatedCakham) => {
+      if (error) {
+        return res.status(500).json({ message: 'Lỗi khi cập nhật ca khám', error });
+      }
+  
+      if (!updatedCakham) {
+        return res.status(404).json({ message: 'Không tìm thấy ca khám để cập nhật' });
+      }
+  
+      return res.status(200).json({
+        message: 'Cập nhật ca khám thành công',
+        updatedCakham
+      });
+    });
+  };
 }
 
 module.exports = Cakham_Controler;

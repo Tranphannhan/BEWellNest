@@ -3,7 +3,7 @@ const ObjectId = mongoose.Types.ObjectId;
 
 const Cakham_Schema = new mongoose.Schema({
     Id_BacSi: ObjectId,
-    Id_PhongKham: String,
+    Id_PhongKham: ObjectId,
     TenCa: String,
     SoPhong: String,
     TenBacSi: String

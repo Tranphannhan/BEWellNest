@@ -1,4 +1,3 @@
-
 const connectDB = require("../Model/Db");
 const Cakham = require("../Schema/Cakham"); 
 
@@ -12,6 +11,40 @@ class Database_Cakham {
       Callback(error);
     }
 
+  };
+
+  // Thêm ca khám
+  Insert_Cakham_M = async (data, Callback) => {
+    try {
+      await connectDB();
+      const newCakham = new Cakham(data);
+      const saved = await newCakham.save();
+      Callback(null, saved);
+    } catch (error) {
+      Callback(error);
+    }
+  };
+
+  // Cập nhật ca khám
+  Update_Cakham_M = async (id, updatedData, Callback) => {
+    try {
+      await connectDB();
+      const updated = await Cakham.findByIdAndUpdate(id, updatedData, { new: true });
+      Callback(null, updated);
+    } catch (error) {
+      Callback(error);
+    }
+  };
+
+  // Xóa ca khám
+  Delete_Cakham_M = async (id, Callback) => {
+    try {
+      await connectDB();
+      const deleted = await Cakham.findByIdAndDelete(id);
+      Callback(null, deleted);
+    } catch (error) {
+      Callback(error);
+    }
   };
 }
 
