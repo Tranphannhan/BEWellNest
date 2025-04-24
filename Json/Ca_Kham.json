@@ -1,0 +1,10 @@
+[{
+  "_id": {
+    "$oid": "6803bb5570cd96d5cde6d7b9"
+  },
+  "Id_BacSi": "6803bb1e70cd96d5cde6d7b6",
+  "Id_PhongKham": "6803ba8570cd96d5cde6d7a6",
+  "TenCa": "Ca sáng",
+  "SoPhong": "101",
+  "TenBacSi": "Trần Văn B"
+}]

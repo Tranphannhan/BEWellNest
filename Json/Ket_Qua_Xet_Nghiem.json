@@ -1,0 +1,9 @@
+[{
+  "_id": {
+    "$oid": "6803bfa670cd96d5cde6d832"
+  },
+  "Id_YeuCauXetNghiem": "6803bf5e70cd96d5cde6d827",
+  "Id_PhieuKhamBenh": "6803be0770cd96d5cde6d80c",
+  "TenXetNghiem": "Xét nghiệm máu",
+  "KetQua": "Bình thường"
+}]

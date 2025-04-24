@@ -1,0 +1,12 @@
+[{
+  "_id": {
+    "$oid": "6803b93370cd96d5cde6d766"
+  },
+  "Id_BenhNhan": "6803b8f270cd96d5cde6d761",
+  "HoVaTen": "Nguyễn Văn A",
+  "GioiTinh": "Nam",
+  "NgaySinh": "1990-05-20",
+  "SoDienThoai": "0901234567",
+  "SoBaoHiemYTe": "BHYT123456",
+  "DiaChi": "123 Nguyễn Trãi, Hà Nội"
+}]

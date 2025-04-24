@@ -1,0 +1,14 @@
+[{
+  "_id": {
+    "$oid": "6803be0770cd96d5cde6d80c"
+  },
+  "Id_TheKhamBenh": "6803b93370cd96d5cde6d766",
+  "Id_CaKham": "6803bb5570cd96d5cde6d7b9",
+  "SoPhongKham": "101",
+  "Ngay": "2025-04-19",
+  "TrangThaiThanhToan": "True",
+  "TenCa": "Ca sáng",
+  "TenBacSi": "Trần Văn B",
+  "SoPhong": "101",
+  "STTKham": "1"
+}]

@@ -4,6 +4,9 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+
+
+
 var indexRouter_Bacsi = require('./routes/Bac_Si');
 let indexRouter_Benhnhan = require ('./routes/Benh_nhan'); 
 let indexRouter_Cakham = require ('./routes/Ca_kham');
@@ -14,30 +17,24 @@ let indexRouter_The_Kham_Benh = require ('./routes/The_Kham_Benh');
 let indexRouter_Yeu_Cau_Xet_Nghiem = require ('./routes/Yeu_Cau_Xet_Nghiem');
 let indexRouter_Ket_Qua_Xet_Nghiem = require ('./routes/Ket_Qua_Xet_Nghiem');
 let indexRouter_Kham_Lam_Sang= require ('./routes/Kham_Lam_Sang');
+let indexRouter_Tai_Khoan= require ('./routes/Tai_Khoan');
 
 
 
-
-
-
-
-
-
-
-  
 
  
 var app = express();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
+
+
 
 
 app.use ('/Bacsi', indexRouter_Bacsi);
@@ -50,15 +47,7 @@ app.use ('/The_Kham_Benh' , indexRouter_The_Kham_Benh);
 app.use ('/Yeu_Cau_Xet_Nghiem' , indexRouter_Yeu_Cau_Xet_Nghiem);
 app.use ('/Ket_Qua_Xet_Nghiem' , indexRouter_Ket_Qua_Xet_Nghiem);
 app.use ('/Kham_Lam_Sang' , indexRouter_Kham_Lam_Sang);
-
-
-
-
-
-
-
-
- 
+app.use ('/Tai_Khoan' , indexRouter_Tai_Khoan);
 
 
 
