@@ -12,9 +12,7 @@ Sau khi hoàn thành tất cả các bước trên. Bạn đã sẵn sàng để
 ```
   
 
-Nếu có các cập nhật từ main, pull về
-
-*  Merge
+*Nếu có các cập nhật từ main, pull về
   ```bash 
  git pull
 ```
