@@ -1,25 +1,25 @@
-
+  
 const connectDB = require("../Model/Db");
-const Khamlamsang = require("../Schema/Kham_Lam_Sang"); 
+const Loai_Tai_Khoan = require("../Schema/Loai_Tai_Khoan"); 
 
-class Database_Khamlamsang {
-    Select_Phieukhambenh_M = async (Callback) => {
+class Database_Loaitaikhoan {
+    Select_Loaitaikhoan_M = async (Callback) => {
         try {
             await connectDB();
-            const Select_Khamlamsang = await Khamlamsang.find({});
-            Callback(null, Select_Khamlamsang);
+            const Select_Loai_Tai_Khoan = await Loai_Tai_Khoan.find({});
+            Callback(null, Select_Loai_Tai_Khoan);
         } 
         
         catch (error) {
             Callback(error);
-        }      
+        }     
     };
 
 
-    Add_Kham_Lam_Sang_M = async (Data , Callback) => {
+    Add_Loaitaikhoan_M = async (Data , Callback) => {
         try {
             await connectDB();
-            const Add_New = new Khamlamsang (Data);
+            const Add_New = new Loai_Tai_Khoan (Data);
             const Result = await Add_New.save();
             Callback (null , Result);
         }
@@ -30,10 +30,10 @@ class Database_Khamlamsang {
     }
 
 
-    Edit_Kham_Lam_Sang_M = async (id , Data , Callback) => {
+    Edit_Loaitaikhoan_M = async (id , Data , Callback) => {
         try {
             await connectDB();
-            const Result = await Khamlamsang.findByIdAndUpdate (id , Data ,  { new: true });
+            const Result = await Loai_Tai_Khoan.findByIdAndUpdate (id , Data ,  { new: true });
             Callback (null , Result);
         }
 
@@ -43,10 +43,10 @@ class Database_Khamlamsang {
     }
 
     
-    Delete_Kham_Lam_Sang_M =  async (id , Callback) => {
+    Delete_Loaitaikhoan_M =  async (id , Callback) => {
         try {
             await connectDB();
-            const Result = await Khamlamsang.findByIdAndDelete (id);
+            const Result = await Loai_Tai_Khoan.findByIdAndDelete (id);
             Callback (null , Result);
         }
 
@@ -56,4 +56,4 @@ class Database_Khamlamsang {
     }
 }
 
-module.exports = Database_Khamlamsang;
+module.exports = Database_Loaitaikhoan;
