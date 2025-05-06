@@ -8,7 +8,6 @@ var logger = require('morgan');
 
 
 var indexRouter_Bacsi = require('./routes/Bac_Si');
-let indexRouter_Benhnhan = require ('./routes/Benh_nhan'); 
 let indexRouter_Cakham = require ('./routes/Ca_kham');
 let indexRouter_Donthuoc = require ('./routes/Don_Thuoc');
 let indexRouter_Donthuoc_Chitiet = require ('./routes/Don_Thuoc_Chi_Tiet');
@@ -18,7 +17,14 @@ let indexRouter_Yeu_Cau_Xet_Nghiem = require ('./routes/Yeu_Cau_Xet_Nghiem');
 let indexRouter_Ket_Qua_Xet_Nghiem = require ('./routes/Ket_Qua_Xet_Nghiem');
 let indexRouter_Kham_Lam_Sang= require ('./routes/Kham_Lam_Sang');
 let indexRouter_Tai_Khoan= require ('./routes/Tai_Khoan');
+<<<<<<< HEAD
 let indexRouter_Loai_Tai_Khoan = require ('./routes/Loai_Tai_Khoan');
+=======
+let indexRouter_Khoa= require ('./routes/Khoa');
+let indexRouter_Phong_Kham= require ('./routes/Phong_Kham');
+
+
+>>>>>>> 30cda165ea715ad6732b1b8dc8b9d4fc9144f70e
 
 
 
@@ -38,7 +44,6 @@ app.use(express.json());
 
 
 app.use ('/Bacsi', indexRouter_Bacsi);
-app.use ('/Benhnhan' , indexRouter_Benhnhan);
 app.use ('/Cakham' , indexRouter_Cakham);
 app.use ('/Donthuoc' , indexRouter_Donthuoc);
 app.use ('/Donthuoc_Chitiet' , indexRouter_Donthuoc_Chitiet);
@@ -48,11 +53,16 @@ app.use ('/Yeu_Cau_Xet_Nghiem' , indexRouter_Yeu_Cau_Xet_Nghiem);
 app.use ('/Ket_Qua_Xet_Nghiem' , indexRouter_Ket_Qua_Xet_Nghiem);
 app.use ('/Kham_Lam_Sang' , indexRouter_Kham_Lam_Sang);
 app.use ('/Tai_Khoan' , indexRouter_Tai_Khoan);
+<<<<<<< HEAD
 app.use ('/Loai_Tai_Khoan' , indexRouter_Loai_Tai_Khoan);
 
 
 
 
+=======
+app.use ('/Khoa' , indexRouter_Khoa);
+app.use ('/Phong_Kham' , indexRouter_Phong_Kham);
+>>>>>>> 30cda165ea715ad6732b1b8dc8b9d4fc9144f70e
 
 
 

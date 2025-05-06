@@ -16,13 +16,13 @@ class The_Kham_Benh_Controler {
 
   Add_Thekhambenh = (req , res , next) => {
     const Data_Add = {
-        Id_BenhNhan : req.body.Id_BenhNhan.trim(),
         HoVaTen : req.body.HoVaTen.trim(),
         GioiTinh : req.body.GioiTinh.trim(),
         NgaySinh : req.body.NgaySinh.trim(),
         SoDienThoai : req.body.SoDienThoai.trim(),
         SoBaoHiemYTe : req.body.SoBaoHiemYTe.trim(),
-        DiaChi : req.body.DiaChi.trim()
+        DiaChi : req.body.DiaChi.trim(),
+        SDT_NguoiThan : req.body.SDT_NguoiThan.trim()
     }
 
     if (!Data_Add) return res.send ("Không có dữ liệu");
