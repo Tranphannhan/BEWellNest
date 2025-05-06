@@ -2,8 +2,8 @@ const mongoose = require("mongoose");
 const ObjectId = mongoose.Types.ObjectId;
 
 const Yeu_Cau_Xet_Nghiem_Schema = new mongoose.Schema({
-    Id_PhieuKhamBenh : String,
-    Id_PhongThietBi : String,
+    Id_PhieuKhamBenh : ObjectId,
+    Id_PhongThietBi : ObjectId,
     TenXetNghiem : String,
     TrangThaiThanhToan : String,  
     STT : String
