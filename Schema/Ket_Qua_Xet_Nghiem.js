@@ -6,6 +6,7 @@ const Ket_Qua_Xet_Nghiem_Schema = new mongoose.Schema({
     Id_PhieuKhamBenh : ObjectId,
     TenXetNghiem : String,
     KetQua : String,  
+    Anh_Xet_Nghiem : String
 
 }, { collection: "Ket_Qua_Xet_Nghiem" }); 
 module.exports = mongoose.model("Ket_Qua_Xet_Nghiem", Ket_Qua_Xet_Nghiem_Schema);

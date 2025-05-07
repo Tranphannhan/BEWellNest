@@ -8,9 +8,7 @@ class Database_Ketqua_Xet_Nghiem {
             await connectDB();
             const Select_Yeucauxetnghiem = await Ketquaxetnghiem.find({});
             Callback(null, Select_Yeucauxetnghiem);
-        } 
-        
-        catch (error) {
+        } catch (error) {
             Callback(error);
         }   
     };
@@ -22,9 +20,7 @@ class Database_Ketqua_Xet_Nghiem {
             const Add_New = new Ketquaxetnghiem (Data);
             const Result = await Add_New.save();
             Callback (null , Result);
-        }
-
-        catch (error) {
+        } catch (error) {
             Callback(error);
         }
     }
@@ -35,9 +31,7 @@ class Database_Ketqua_Xet_Nghiem {
             await connectDB();
             const Result = await Ketquaxetnghiem.findByIdAndUpdate (id , Data ,  { new: true });
             Callback (null , Result);
-        }
-
-        catch (error) {
+        } catch (error) {
             Callback(error);
         }
     }
@@ -48,9 +42,7 @@ class Database_Ketqua_Xet_Nghiem {
             await connectDB();
             const Result = await Ketquaxetnghiem.findByIdAndDelete (id);
             Callback (null , Result);
-        }
-
-        catch (error) {
+        } catch (error) {
             Callback(error);
         }
     }

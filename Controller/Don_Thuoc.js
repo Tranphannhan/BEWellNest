@@ -14,6 +14,21 @@ class Donthuoc_Controler {
     });
   };
 
+
+
+  Check_Status = (req, res, next) => {
+    const Id_PhieuKhamBenhs = req.params.ID_Phieukhambenh;
+    Connect_Data_Model.Select_Check_Status_Donthuoc_M ( Id_PhieuKhamBenhs , (error, result) => {
+        if (error) return next(error);
+        const status = result[0].TrangThaiThanhToan == "True" ? "Thanh Toán Thành Công" : "Thanh Toán Thất Bại";
+        res.status(200).json({ message: status, data: result });
+
+    });
+  }
+   
+
+  // 
+
   add_Donthuoc = (req, res, next) => {
     const data = {
       Id_PhieuKhamBenh: req.body.Id_PhieuKhamBenh,

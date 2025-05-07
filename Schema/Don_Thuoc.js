@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const ObjectId = mongoose.Types.ObjectId;
 
 const Donthuoc_Schema = new mongoose.Schema({
-    Id_PhieuKhamBenh: ObjectId,
+    Id_PhieuKhamBenh: String,
     TenDonThuoc: String,
     TrangThaiThanhToan: String
     

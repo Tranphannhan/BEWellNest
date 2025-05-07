@@ -14,6 +14,18 @@ class Yeucauxetnghiem_Controler {
       res.status(200).json(result);
     });
   };
+   
+
+  Check_Status = (req, res, next) => {
+    const Id_PhieuKhamBenhs = req.params.ID_Phieukhambenh;
+    
+    Connect_Data_Model.Select_Check_Status_Yeucauxetnghiem_M ( Id_PhieuKhamBenhs , (error, result) => {
+        if (error) return next(error);
+        const status = result[0].TrangThaiThanhToan == "True" ? "Thanh Toán Thành Công" : "Thanh Toán Thất Bại";
+        res.status(200).json({ message: status, data: result });
+    });
+  }
+
 
   Add_Yeucauxetnghiem = (req, res, next) => {
     const ngay = new Date().toISOString().split("T")[0];

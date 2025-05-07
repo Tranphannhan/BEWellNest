@@ -12,6 +12,20 @@ class Database_Donthuoc {
       }
     };
 
+    
+    // Check đơn thuốc
+    Select_Check_Status_Donthuoc_M = async (Id_PhieuKhamBenh , Callback) => {
+      try {
+        await connectDB();
+        const Check_Donthuoc = await Donthuoc.find({Id_PhieuKhamBenh : Id_PhieuKhamBenh})
+          .select ('TrangThaiThanhToan');
+        Callback(null, Check_Donthuoc);
+      } catch (error){
+        Callback(error);
+      }
+    }
+
+
     // Thêm đơn thuốc
     Insert_Donthuoc_M = async (data, Callback) => {
       try {

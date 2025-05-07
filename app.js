@@ -22,7 +22,6 @@ let indexRouter_Khoa= require ('./routes/Khoa');
 let indexRouter_Phong_Kham= require ('./routes/Phong_Kham');
 
 
-
  
 var app = express();
 // view engine setup
@@ -36,7 +35,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 
 
-
+ 
 
 app.use ('/Bacsi', indexRouter_Bacsi);
 app.use ('/Cakham' , indexRouter_Cakham);

@@ -8,12 +8,21 @@ class Database_Yeu_Cau_Xet_Nghiem {
             await connectDB();
             const Select_Yeucauxetnghiem = await Yeucauxetnghiem.find({});
             Callback(null, Select_Yeucauxetnghiem);
-        } 
-        
-        catch (error) {
+        } catch (error) {
             Callback(error);
         }   
-    };
+    };    
+
+    Select_Check_Status_Yeucauxetnghiem_M = async (Id_PhieuKhamBenh , Callback) => {
+        try {
+            await connectDB();
+            const Check_Donthuoc = await Yeucauxetnghiem.find({Id_PhieuKhamBenh : Id_PhieuKhamBenh})
+                .select ('TrangThaiThanhToan');
+            Callback(null, Check_Donthuoc);
+        } catch (error){
+            Callback(error);
+        }
+    } 
 
 
     Add_Yeucauxetnghiem_M = async (Data , Callback) => {
@@ -22,25 +31,27 @@ class Database_Yeu_Cau_Xet_Nghiem {
             const Add_New = new Yeucauxetnghiem (Data);
             const Result = await Add_New.save();
             Callback (null , Result);
-        }
-
-        catch (error) {
+        } catch (error) {
             Callback(error);
         }
     }
 
 
-    Edit_Yeucauxetnghiem_M = async (id , Data , Callback) => {
+    Edit_Yeucauxetnghiem_M = async (_id, Data_Edit, Callback) => {
         try {
-            await connectDB();
-            const Result = await Yeucauxetnghiem.findByIdAndUpdate (id , Data ,  { new: true });
-            Callback (null , Result);
-        }
-
-        catch (error) {
+            await connectDB();    
+            const oldRecord = await Yeucauxetnghiem.findOne({ _id: _id }).select('Anh_Xet_Nghiem');
+            if (Data_Edit.Anh_Xet_Nghiem === oldRecord?.Anh_Xet_Nghiem) {
+                delete Data_Edit.Anh_Xet_Nghiem;
+            }
+    
+            const Result = await Yeucauxetnghiem.findByIdAndUpdate( _id, Data_Edit, { new: true });
+            Callback(null, Result);
+        } catch (error) {
             Callback(error);
         }
-    }
+    };
+    
 
 
     Delete_Yeucauxetnghiem_M =  async (id , Callback) => {
@@ -48,9 +59,7 @@ class Database_Yeu_Cau_Xet_Nghiem {
             await connectDB();
             const Result = await Yeucauxetnghiem.findByIdAndDelete (id);
             Callback (null , Result);
-        }
-
-        catch (error) {
+        } catch (error) {
             Callback(error);
         }
     }

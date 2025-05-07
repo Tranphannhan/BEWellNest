@@ -7,12 +7,33 @@ class Database_Phieu_Kham_Benh {
             await connectDB();
             const Select_Phieukhambenh = await Phieu_Kham_Benh.find({});
             Callback(null, Select_Phieukhambenh);
-        } 
-        
-        catch (error) {
+        } catch (error) {
             Callback(error);
         }   
-    };
+    };   
+
+    Select_Check_Status_Phieukhambenh_M = async (Id_TheKhamBenh , Callback) => {
+        try {
+            await connectDB();
+            const Check_Donthuoc = await Phieu_Kham_Benh.find({Id_TheKhamBenh : Id_TheKhamBenh})
+                .select ('TrangThaiThanhToan');
+            Callback(null, Check_Donthuoc);
+        } catch (error){
+            Callback(error);
+        }
+    }
+
+
+    Check_Benhnhan__M = async ( _id , Ngay , Callback) => {
+        try {
+            await connectDB();
+            const Check_Donthuoc = await Phieu_Kham_Benh.find({_id : _id , Ngay : Ngay})
+                .select ('Id_CaKham Ngay');
+            Callback(null, Check_Donthuoc);
+        } catch (error){
+            Callback(error);
+        }
+    }
 
 
     Add_Phieukhambenh_M = async (Data , Callback) => {
@@ -21,9 +42,7 @@ class Database_Phieu_Kham_Benh {
             const Add_New = new Phieu_Kham_Benh (Data);
             const Result = await Add_New.save();
             Callback (null , Result);
-        }
-
-        catch (error) {
+        } catch (error) {
             Callback(error);
         }
     }
@@ -34,9 +53,7 @@ class Database_Phieu_Kham_Benh {
             await connectDB();
             const Result = await Phieu_Kham_Benh.findByIdAndUpdate (id , Data ,  { new: true });
             Callback (null , Result);
-        }
-
-        catch (error) {
+        } catch (error) {
             Callback(error);
         }
     }
@@ -46,9 +63,7 @@ class Database_Phieu_Kham_Benh {
             await connectDB();
             const Result = await Phieu_Kham_Benh.findByIdAndDelete (id);
             Callback (null , Result);
-        }
-
-        catch (error) {
+        } catch (error) {
             Callback(error);
         }
     }

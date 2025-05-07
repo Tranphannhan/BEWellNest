@@ -14,8 +14,41 @@ class Phieu_Kham_Benh {
     });
   };
 
+<<<<<<< HEAD
   Add_Phieukhambenh = (req, res, next) => {
     const ngay = new Date().toISOString().split('T')[0]; // Lấy ngày hiện tại dạng YYYY-MM-DD
+=======
+   
+  Check_Status = (req, res, next) => {
+    const Id_TheKhamBenh = req.params.Id_TheKhamBenh;
+    Connect_Data_Model.Select_Check_Status_Phieukhambenh_M ( Id_TheKhamBenh , (error, result) => {
+        if (error) return next(error);
+        const status = result[0].TrangThaiThanhToan == "True" ? "Thanh Toán Thành Công" : "Thanh Toán Thất Bại";
+        res.status(200).json({ message: status, data: result });
+    });
+  }
+   
+
+  // Tìm kiếm ca khám theo ngày 
+  // ?Id=123&ngay=2025-06-05
+  // http://localhost:5000/PhieuKhamBenh/GetById_CaKham_Date?Id=123&ngay=2025-06-05
+
+  Fill_Cakhambenh = (req, res , next) => {
+    const id = req.query.Id;
+    const ngay = req.query.ngay;  
+
+    Connect_Data_Model.Check_Benhnhan__M ( id , ngay , (error, result) => {
+        if (error) return next(error);
+        const status = result.length === 0 ? "Khách Hàng Mới " : "Đã Từng Đến Khám";
+        res.status(200).json({ message: status, data: result });
+    });
+  }
+
+
+   
+
+
+>>>>>>> 6ec1f38 (Upload)
 
     // Lấy số thứ tự tiếp theo
     Connect_Data_Model.GetNextSTT_M(ngay, req.body.Id_CaKham.trim(), (error, nextSTT) => {

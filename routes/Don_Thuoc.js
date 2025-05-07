@@ -8,5 +8,7 @@ router.post('/', Handle_Donthuoc.add_Donthuoc);
 router.delete('/:id', Handle_Donthuoc.deleteDonthuoc);
 router.put('/:id', Handle_Donthuoc.updateDonthuoc);
 
+router.get ('/Xacnhanthanhtoan/:ID_Phieukhambenh', Handle_Donthuoc.Check_Status);
 module.exports = router;
 
+    

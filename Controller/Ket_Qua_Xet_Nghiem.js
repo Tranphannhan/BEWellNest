@@ -14,6 +14,7 @@ class Ketquaxetnghiem_Controler {
     });
   };
 
+<<<<<<< HEAD
   Add_Ketquaxetnghiem = (req, res, next) => {
     const Data_Add = {
       Id_YeuCauXetNghiem: req.body.Id_YeuCauXetNghiem.trim(),
@@ -43,6 +44,36 @@ class Ketquaxetnghiem_Controler {
 
     if (!Data_Edit.Id_YeuCauXetNghiem || !Data_Edit.Id_PhieuKhamBenh || !Data_Edit.TenXetNghiem || !Data_Edit.KetQua) { // ✅ Kiểm tra dữ liệu hợp lệ
       return res.status(400).json({ message: "Thiếu dữ liệu cần thiết" }); // ✅ Chuẩn hóa response
+=======
+
+  Add_Ketquaxetnghiem = (req , res , next) => {
+    const Get_Anh_Xet_Nghiem = req.body.Anh_Xet_Nghiem == '' ? "null" : req.body.Anh_Xet_Nghiem;
+    const Data_Add = {
+        Id_YeuCauXetNghiem : req.body.Id_YeuCauXetNghiem.trim(),
+        Id_PhieuKhamBenh : req.body.Id_PhieuKhamBenh.trim(),
+        TenXetNghiem : req.body.TenXetNghiem.trim(),
+        KetQua : req.body.KetQua.trim(),
+        Anh_Xet_Nghiem : Get_Anh_Xet_Nghiem
+    }   
+
+    if (!Data_Add) return res.send ("Không có dữ liệu");
+    Connect_Data_Model.Add_Ketquaxetnghiem_M (Data_Add , (Error , Result) => {
+        if (Error) return next(Error);
+        res.send ("Thêm Mới Kết quả Xét Nghiệm Thành Công");
+    });
+  }  
+  
+  
+  Edit_Ketquaxetnghiem = (req , res, next ) => {
+    const {ID} = req.params;
+    const Get_Anh_Xet_Nghiem = req.body.Anh_Xet_Nghiem == '' ? "null" : req.body.Anh_Xet_Nghiem;
+    const Data_Edit = {
+        Id_YeuCauXetNghiem : req.body.Id_YeuCauXetNghiem.trim(),
+        Id_PhieuKhamBenh : req.body.Id_PhieuKhamBenh.trim(),
+        TenXetNghiem : req.body.TenXetNghiem.trim(),
+        KetQua : req.body.KetQua.trim(),
+        Anh_Xet_Nghiem : Get_Anh_Xet_Nghiem
+>>>>>>> 6ec1f38 (Upload)
     }
 
     Connect_Data_Model.Edit_Ketquaxetnghiem_M(ID, Data_Edit, (Error, Result) => {
