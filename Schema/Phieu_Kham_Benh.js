@@ -9,7 +9,6 @@ const Phieu_Kham_Benh_Schema = new mongoose.Schema({
     TrangThaiThanhToan : String,
     TenCa : String,
     TenBacSi : String,
-    SoPhong : String,
     STTKham : String   
     
 }, { collection: "Phieu_Kham_Benh" }); 

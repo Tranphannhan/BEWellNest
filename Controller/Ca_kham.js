@@ -2,13 +2,14 @@ const Connect_Cakham = require("../Model/Ca_kham");
 const Connect_Data_Model = new Connect_Cakham();
 
 class Cakham_Controler {
-  Runviews = (req, res, next) => {
-    res.send("Loadding Thành Công");
-  };
+  Runviews = (req, res, next) => res.status(200).json({ message: "Loadding Thành Công" }); // ✅ Chuẩn hóa phản hồi
 
   Select_Cakham = (req, res, next) => {
-    Connect_Data_Model.Select_Cakham_M ((error, result) => {
+    Connect_Data_Model.Select_Cakham_M((error, result) => {
       if (error) return next(error);
+      if (!result || result.length < 1) { // ✅ Kiểm tra dữ liệu rỗng
+        return res.status(404).json({ message: "Dữ liệu ca khám rỗng" }); // ✅ Chuẩn hóa phản hồi
+      }
       res.status(200).json(result);
     });
   };
@@ -21,26 +22,35 @@ class Cakham_Controler {
       SoPhong: req.body.SoPhong?.trim(),
       TenBacSi: req.body.TenBacSi?.trim()
     };
+
+    // ✅ Kiểm tra dữ liệu hợp lệ
+    if (!data.Id_BacSi || !data.TenCa || !data.SoPhong || !data.TenBacSi) {
+      return res.status(400).json({ message: "Thiếu dữ liệu cần thiết" }); // ✅ Kiểm tra dữ liệu hợp lệ
+    }
+
     Connect_Data_Model.Insert_Cakham_M(data, (err, result) => {
       if (err) {
         return res.status(500).json({ message: "Thêm ca khám thất bại", error: err });
       }
-      res.status(200).json({ message: "Thêm ca khám thành công", data: result });
+      res.status(201).json({ message: "Thêm ca khám thành công", data: result }); // ✅ Chuẩn hóa response
     });
   };
 
-  deleteCakham = (req, res) => {
+  deleteCakham = (req, res, next) => {
     const { id } = req.params;
-  
+
+    // ✅ Kiểm tra ID hợp lệ
+    if (!id) return res.status(400).json({ message: "Thiếu ID để xóa ca khám" }); // ✅ Kiểm tra ID hợp lệ
+
     Connect_Data_Model.Delete_Cakham_M(id, (error, deletedCakham) => {
       if (error) {
         return res.status(500).json({ message: 'Lỗi khi xóa ca khám', error });
       }
-  
+
       if (!deletedCakham) {
-        return res.status(404).json({ message: 'Không tìm thấy ca khám để xóa' });
+        return res.status(404).json({ message: 'Không tìm thấy ca khám để xóa' }); // ✅ Chuẩn hóa response
       }
-  
+
       return res.status(200).json({
         message: 'Xóa ca khám thành công',
         deletedCakham
@@ -48,7 +58,7 @@ class Cakham_Controler {
     });
   };
 
-  updateCakham = (req, res) => {
+  updateCakham = (req, res, next) => {
     const { id } = req.params;
     const data = {
       Id_BacSi: req.body.Id_BacSi,
@@ -57,16 +67,21 @@ class Cakham_Controler {
       SoPhong: req.body.SoPhong?.trim(),
       TenBacSi: req.body.TenBacSi?.trim()
     };
-  
+
+    // ✅ Kiểm tra dữ liệu hợp lệ
+    if (!data.Id_BacSi || !data.TenCa || !data.SoPhong || !data.TenBacSi) {
+      return res.status(400).json({ message: "Thiếu dữ liệu cần thiết" }); // ✅ Kiểm tra dữ liệu hợp lệ
+    }
+
     Connect_Data_Model.Update_Cakham_M(id, data, (error, updatedCakham) => {
       if (error) {
         return res.status(500).json({ message: 'Lỗi khi cập nhật ca khám', error });
       }
-  
+
       if (!updatedCakham) {
-        return res.status(404).json({ message: 'Không tìm thấy ca khám để cập nhật' });
+        return res.status(404).json({ message: 'Không tìm thấy ca khám để cập nhật' }); // ✅ Chuẩn hóa response
       }
-  
+
       return res.status(200).json({
         message: 'Cập nhật ca khám thành công',
         updatedCakham

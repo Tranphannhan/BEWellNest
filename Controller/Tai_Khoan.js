@@ -1,75 +1,84 @@
 const Connect_Select_Tai_Khoan = require("../Model/Tai_Khoan");
 const Connect_Data_Model = new Connect_Select_Tai_Khoan();     
-const Handle_Password = require ('../Middleware/Password_encryption');
-const Connect_Handle_Password = new Handle_Password ();
-
+const Handle_Password = require('../Middleware/Password_encryption');
+const Connect_Handle_Password = new Handle_Password();
 
 class Tai_Khoan_Controler {
-    constructor (Password , ID , Data_Add){
+    constructor(Password, ID, Data_Add) {
         this.Password = Password;
         this.ID = ID;
-        this.Data_Add = Data_Add
+        this.Data_Add = Data_Add;
     }
 
-    Runviews = (req, res, next) => res.send("Loadding Thành Công")
+    Runviews = (req, res, next) => {
+        res.status(200).json({ message: "Loadding Thành Công" }); // ✅ đã sửa
+    }
 
     Select_Tai_Khoan = (req, res, next) => {
-        Connect_Data_Model.Select_Tai_Khoan_M ((error, result) => {
-        if (error) return next(error);
-        if (result.length < 1) return res.send ("Dữ liệu Tai Khoan  Rỗng");
-        res.status(200).json(result);
+        Connect_Data_Model.Select_Tai_Khoan_M((error, result) => {
+            if (error) return next(error);
+            if (result.length < 1)
+                return res.status(404).json({ message: "Dữ liệu Tài Khoản Rỗng" }); // ✅ đã sửa
+            res.status(200).json(result);
         });
     };
 
+    Add_Tai_Khoan = async (req, res, next) => {
+        this.Password = await Connect_Handle_Password.hashPassword(req.body.MatKhau.trim());
+        if (!this.Password)
+            return res.status(400).json({ message: "Thêm Tài Khoản Thất Bại" }); // ✅ đã sửa
 
-    Add_Tai_Khoan = async (req , res , next) => {
-        this.Password = await Connect_Handle_Password.hashPassword (req.body.MatKhau.trim());
-        if (!this.Password) return res.send ("Thêm Tài Khoản Thất Bại");
-        this.Data_Add =  {
-            Id_LoaiTaiKhoan : req.body.Id_LoaiTaiKhoan.trim(),
-            TenTaiKhoan : req.body.TenTaiKhoan.trim(),
-            MatKhau : this.Password,
-            TenDangNhap : req.body.TenDangNhap.trim(),
-            TenLoaiTaiKhoan : req.body.TenLoaiTaiKhoan.trim()
-        }
+        this.Data_Add = {
+            Id_LoaiTaiKhoan: req.body.Id_LoaiTaiKhoan.trim(),
+            TenTaiKhoan: req.body.TenTaiKhoan.trim(),
+            MatKhau: this.Password,
+            TenDangNhap: req.body.TenDangNhap.trim(),
+            TenLoaiTaiKhoan: req.body.TenLoaiTaiKhoan.trim()
+        };
 
-        if (!this.Data_Add) return res.send ("Không có dữ liệu tài khoản");
-        Connect_Data_Model.Add_Tai_Khoan_M (this.Data_Add , (Error , Result) => {
+        if (!this.Data_Add)
+            return res.status(400).json({ message: "Không có dữ liệu tài khoản" }); // ✅ đã sửa
+
+        Connect_Data_Model.Add_Tai_Khoan_M(this.Data_Add, (Error, Result) => {
             if (Error) return next(Error);
-            res.send ("Thêm Mới Tài Khoản Thành Công");
+            res.status(201).json({ message: "Thêm Mới Tài Khoản Thành Công" }); // ✅ đã sửa
         });
-    }  
+    }
 
- 
-      Edit_Tai_Khoan = async (req , res, next ) => {
-        this.Password = await Connect_Handle_Password.hashPassword (req.body.MatKhau.trim());
+    Edit_Tai_Khoan = async (req, res, next) => {
+        this.Password = await Connect_Handle_Password.hashPassword(req.body.MatKhau.trim());
         this.ID = req.params.ID;
-        if (!this.Password && !this.ID) return res.send ("Cập Nhật Tài Khoản Thất Bại");
+
+        if (!this.Password || !this.ID)
+            return res.status(400).json({ message: "Cập Nhật Tài Khoản Thất Bại" }); // ✅ đã sửa
+
         this.Data_Edit = {
-            Id_LoaiTaiKhoan : req.body.Id_LoaiTaiKhoan.trim(),
-            TenTaiKhoan : req.body.TenTaiKhoan.trim(),
-            MatKhau : this.Password,
-            TenDangNhap : req.body.TenDangNhap.trim(),
-            TenLoaiTaiKhoan : req.body.TenLoaiTaiKhoan.trim()
-        }
+            Id_LoaiTaiKhoan: req.body.Id_LoaiTaiKhoan.trim(),
+            TenTaiKhoan: req.body.TenTaiKhoan.trim(),
+            MatKhau: this.Password,
+            TenDangNhap: req.body.TenDangNhap.trim(),
+            TenLoaiTaiKhoan: req.body.TenLoaiTaiKhoan.trim()
+        };
 
-        if (!this.Data_Edit) return res.send ("Không có dữ liệu");
-        Connect_Data_Model.Edit_Tai_Khoan_M (this.ID , this.Data_Edit , (Error , Result) => {
+        if (!this.Data_Edit)
+            return res.status(400).json({ message: "Không có dữ liệu" }); // ✅ đã sửa
+
+        Connect_Data_Model.Edit_Tai_Khoan_M(this.ID, this.Data_Edit, (Error, Result) => {
             if (Error) return next(Error);
-            res.send ("Cập Nhật Tài Khoản Thành Công");
+            res.status(200).json({ message: "Cập Nhật Tài Khoản Thành Công" }); // ✅ đã sửa
         });
-      }
-    
+    }
 
-      Delete_Tai_Khoan = (req , res, next) => {
+    Delete_Tai_Khoan = (req, res, next) => {
         this.ID = req.params.ID;
-        if (!this.ID) return res.send ("Xóa Tài Khoản Thất Bại");
-        Connect_Data_Model.Delete_Tai_Khoan_M (this.ID , (Error , Result) => {
+        if (!this.ID)
+            return res.status(400).json({ message: "Xóa Tài Khoản Thất Bại" }); // ✅ đã sửa
+
+        Connect_Data_Model.Delete_Tai_Khoan_M(this.ID, (Error, Result) => {
             if (Error) return next(Error);
-            res.send ("Xóa Tài Khoản Thành Công");
+            res.status(200).json({ message: "Xóa Tài Khoản Thành Công" }); // ✅ đã sửa
         });
-      }
-  
+    }
 }
 
 module.exports = Tai_Khoan_Controler;

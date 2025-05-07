@@ -3,12 +3,15 @@ const Connect_Data_Model = new Connect_Phong_Kham();
 
 class Phong_Kham_Controler {
   Runviews = (req, res, next) => {
-    res.send("Loadding Thành Công");
+    res.status(200).json({ message: "Loadding Thành Công" }); // ✅ đã sửa
   };
 
   Select_Phong_Kham = (req, res, next) => {
     Connect_Data_Model.Select_Phong_Kham_M((error, result) => {
       if (error) return next(error);
+      if (!result || result.length === 0) { // ✅ kiểm tra rỗng
+        return res.status(404).json({ message: "Dữ liệu phòng khám rỗng" }); // ✅ đã sửa
+      }
       res.status(200).json(result);
     });
   };
@@ -18,26 +21,38 @@ class Phong_Kham_Controler {
       Id_Khoa: req.body.Id_Khoa,
       SoPhongKham: req.body.SoPhongKham?.trim()
     };
+
+    if (!data.Id_Khoa || !data.SoPhongKham) {
+      return res.status(400).json({ message: "Thiếu dữ liệu để thêm phòng khám" }); // ✅ đã thêm
+    }
+
     Connect_Data_Model.Insert_Phong_Kham_M(data, (err, result) => {
       if (err) {
-        return res.status(500).json({ message: "Thêm phòng khám thất bại", error: err });
+        return res.status(500).json({ message: "Thêm phòng khám thất bại", error: err }); // ✅ đã sửa
       }
-      res.status(200).json({ message: "Thêm phòng khám thành công", data: result });
+      res.status(201).json({ message: "Thêm phòng khám thành công", data: result }); // ✅ đã sửa
     });
   };
 
   deletePhong_Kham = (req, res) => {
     const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({ message: "Thiếu ID để xoá phòng khám" }); // ✅ đã thêm
+    }
+
     Connect_Data_Model.Delete_Phong_Kham_M(id, (error, deletedPhong_Kham) => {
       if (error) {
-        return res.status(500).json({ message: 'Lỗi khi xóa phòng khám', error });
+        return res.status(500).json({ message: "Lỗi khi xóa phòng khám", error }); // ✅ đã sửa
       }
+
       if (!deletedPhong_Kham) {
-        return res.status(404).json({ message: 'Không tìm thấy phòng khám để xóa' });
+        return res.status(404).json({ message: "Không tìm thấy phòng khám để xóa" }); // ✅ đã sửa
       }
+
       return res.status(200).json({
-        message: 'Xóa phòng khám thành công',
-        deletedPhong_Kham
+        message: "Xóa phòng khám thành công",
+        data: deletedPhong_Kham // ✅ đổi tên field cho thống nhất
       });
     });
   };
@@ -48,19 +63,26 @@ class Phong_Kham_Controler {
       Id_Khoa: req.body.Id_Khoa,
       SoPhongKham: req.body.SoPhongKham?.trim()
     };
+
+    if (!id || !data.Id_Khoa || !data.SoPhongKham) {
+      return res.status(400).json({ message: "Thiếu dữ liệu để cập nhật phòng khám" }); // ✅ đã thêm
+    }
+
     Connect_Data_Model.Update_Phong_Kham_M(id, data, (error, updatedPhong_Kham) => {
       if (error) {
-        return res.status(500).json({ message: 'Lỗi khi cập nhật phòng khám', error });
+        return res.status(500).json({ message: "Lỗi khi cập nhật phòng khám", error }); // ✅ đã sửa
       }
+
       if (!updatedPhong_Kham) {
-        return res.status(404).json({ message: 'Không tìm thấy phòng khám để cập nhật' });
+        return res.status(404).json({ message: "Không tìm thấy phòng khám để cập nhật" }); // ✅ đã sửa
       }
+
       return res.status(200).json({
-        message: 'Cập nhật phòng khám thành công',
-        updatedPhong_Kham
+        message: "Cập nhật phòng khám thành công",
+        data: updatedPhong_Kham // ✅ đổi tên field cho thống nhất
       });
     });
   };
 }
 
-module.exports = Phong_Kham_Controler; 
+module.exports = Phong_Kham_Controler;

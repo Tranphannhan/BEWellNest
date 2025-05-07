@@ -54,6 +54,42 @@ class Database_Yeu_Cau_Xet_Nghiem {
             Callback(error);
         }
     }
+
+    GetNextSTT_M = async (ngay, Id_PhongThietBi, Callback) => {
+        try {
+            await connectDB();
+   
+            const Yeu_Cau_Xet_Nghiem = await Yeucauxetnghiem.find({
+                Ngay: ngay,
+                Id_PhongThietBi: Id_PhongThietBi,
+                TrangThaiThanhToan: 'true'
+            }).sort({ STT: -1 }).limit(1);
+
+            // Nếu không có phiếu nào, bắt đầu từ 1
+            if (Yeu_Cau_Xet_Nghiem.length === 0) {
+                Callback(null, "1");
+            } else {
+                // Tăng số thứ tự lên 1
+                const nextSTT = (parseInt(Yeu_Cau_Xet_Nghiem[0].STT) + 1).toString();
+                Callback(null, nextSTT);
+            }
+        } catch (error) {
+            Callback(error);
+        }
+    }
+
+    Get_By_PTB_Date_M = async (Id_PhongThietBi, ngay, Callback) => {
+        try {
+            await connectDB();
+            const result = await Yeucauxetnghiem.find({
+                Id_PhongThietBi: Id_PhongThietBi,
+                Ngay: ngay,
+            });
+            Callback(null, result);
+        } catch (error) {
+            Callback(error);
+        }
+    };
 }
 
 module.exports = Database_Yeu_Cau_Xet_Nghiem;

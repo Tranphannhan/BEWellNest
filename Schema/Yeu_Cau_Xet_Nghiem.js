@@ -6,6 +6,7 @@ const Yeu_Cau_Xet_Nghiem_Schema = new mongoose.Schema({
     Id_PhongThietBi : ObjectId,
     TenXetNghiem : String,
     TrangThaiThanhToan : String,  
+    Ngay : String,
     STT : String
 
 }, { collection: "Yeu_Cau_Xet_Nghiem" }); 

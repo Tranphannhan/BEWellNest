@@ -1,4 +1,3 @@
-
 const connectDB = require("../Model/Db");
 const Phieu_Kham_Benh = require("../Schema/Phieu_Kham_Benh"); 
 
@@ -53,6 +52,29 @@ class Database_Phieu_Kham_Benh {
             Callback(error);
         }
     }
+
+    GetNextSTT_M = async (ngay, idCaKham, Callback) => {
+        try {
+            await connectDB();
+            // Tìm phiếu khám bệnh có cùng ngày và ca khám
+            const phieuKham = await Phieu_Kham_Benh.find({
+                Ngay: ngay,
+                Id_CaKham: idCaKham,
+                TrangThaiThanhToan: 'true'
+            }).sort({ STTKham: -1 }).limit(1);
+
+            // Nếu không có phiếu nào, bắt đầu từ 1
+            if (phieuKham.length === 0) {
+                Callback(null, "1");
+            } else {
+                // Tăng số thứ tự lên 1
+                const nextSTT = (parseInt(phieuKham[0].STTKham) + 1).toString();
+                Callback(null, nextSTT);
+            }
+        } catch (error) {
+            Callback(error);
+        }
+    };
 }
 
 module.exports = Database_Phieu_Kham_Benh;
