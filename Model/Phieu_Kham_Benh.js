@@ -12,23 +12,36 @@ class Database_Phieu_Kham_Benh {
         }   
     };   
 
-    Select_Check_Status_Phieukhambenh_M = async (Id_TheKhamBenh , Callback) => {
+    Select_Check_Status_Phieukhambenh_M = async (Id_PhieuKhamBenh , Callback) => {
         try {
             await connectDB();
-            const Check_Donthuoc = await Phieu_Kham_Benh.find({Id_TheKhamBenh : Id_TheKhamBenh})
-                .select ('TrangThaiThanhToan');
+            const Check_Donthuoc = await Phieu_Kham_Benh.find({_id : Id_PhieuKhamBenh})
             Callback(null, Check_Donthuoc);
         } catch (error){
             Callback(error);
         }
     }
 
+    PaymentConfirmation_M = async (id, Callback) =>{
+          try {
+            await connectDB();
+            const Check_Donthuoc = await Phieu_Kham_Benh.findByIdAndUpdate(
+            {_id:id},
+            { $set: { TrangThaiThanhToan: true } },
+            { new: true }
+          )
+            Callback(null, Check_Donthuoc);
+          } catch (error){
+            Callback(error);
+          }
+    }
+    
 
-    Check_Benhnhan__M = async ( _id , Ngay , Callback) => {
+
+    Check_Benhnhan__M = async ( Id_CaKham , Ngay , Callback) => {
         try {
             await connectDB();
-            const Check_Donthuoc = await Phieu_Kham_Benh.find({_id : _id , Ngay : Ngay})
-                .select ('Id_CaKham Ngay');
+            const Check_Donthuoc = await Phieu_Kham_Benh.find({Id_CaKham : Id_CaKham , Ngay : Ngay})
             Callback(null, Check_Donthuoc);
         } catch (error){
             Callback(error);

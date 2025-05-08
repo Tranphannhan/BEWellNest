@@ -7,7 +7,7 @@ class Donthuoc_Controler {
   Select_Donthuoc = (req, res, next) => {
     Connect_Data_Model.Select_Donthuoc_M((error, result) => {
       if (error) return next(error);
-      if (!result || result.length < 1) { // ✅ Kiểm tra dữ liệu rỗng
+      if (!result || result.length < 1) { 
         return res.status(404).json({ message: "Dữ liệu Đơn Thuốc rỗng" }); // ✅ Chuẩn hóa response
       }
       res.status(200).json(result);
@@ -16,15 +16,35 @@ class Donthuoc_Controler {
 
 
 
-  Check_Status = (req, res, next) => {
-    const Id_PhieuKhamBenhs = req.params.ID_Phieukhambenh;
-    Connect_Data_Model.Select_Check_Status_Donthuoc_M ( Id_PhieuKhamBenhs , (error, result) => {
-        if (error) return next(error);
-        const status = result[0].TrangThaiThanhToan == "True" ? "Thanh Toán Thành Công" : "Thanh Toán Thất Bại";
-        res.status(200).json({ message: status, data: result });
+  PaymentConfirmation = (req, res, next) => {
+    const Id_DonThuoc = req.params.ID_DonThuoc;
+  
+    Connect_Data_Model.Select_Check_Status_Donthuoc_M(Id_DonThuoc, (error, result) => {
+      if (error) return next(error);
+  
+      // Kiểm tra nếu không có dữ liệu
+      if (!result || result.length === 0) {
+        return res.status(404).json({ message: "Không tìm thấy đơn thuốc" });
+      }
+
+      if(result[0].TrangThaiThanhToan == "true"){
+        return res.status(200).json({
+          message: "Đơn thuốc đã được thanh toán trước đó",
+          data: result
+        })
+      }else{
+        Connect_Data_Model.PaymentConfirmation_M(Id_DonThuoc,(error, result)=>{
+          if (error) return next(error);
+          return res.status(200).json({
+            message: "Xác nhận thanh toán đơn thuốc thành công",
+            data: result
+          })
+        })
+      }
 
     });
-  }
+  };
+  
    
 
   // 

@@ -14,66 +14,68 @@ class Phieu_Kham_Benh {
     });
   };
 
-<<<<<<< HEAD
   Add_Phieukhambenh = (req, res, next) => {
     const ngay = new Date().toISOString().split('T')[0]; // Lấy ngày hiện tại dạng YYYY-MM-DD
-=======
-   
-  Check_Status = (req, res, next) => {
-    const Id_TheKhamBenh = req.params.Id_TheKhamBenh;
-    Connect_Data_Model.Select_Check_Status_Phieukhambenh_M ( Id_TheKhamBenh , (error, result) => {
-        if (error) return next(error);
-        const status = result[0].TrangThaiThanhToan == "True" ? "Thanh Toán Thành Công" : "Thanh Toán Thất Bại";
-        res.status(200).json({ message: status, data: result });
-    });
-  }
-   
-
-  // Tìm kiếm ca khám theo ngày 
-  // ?Id=123&ngay=2025-06-05
-  // http://localhost:5000/PhieuKhamBenh/GetById_CaKham_Date?Id=123&ngay=2025-06-05
-
-  Fill_Cakhambenh = (req, res , next) => {
-    const id = req.query.Id;
-    const ngay = req.query.ngay;  
-
-    Connect_Data_Model.Check_Benhnhan__M ( id , ngay , (error, result) => {
-        if (error) return next(error);
-        const status = result.length === 0 ? "Khách Hàng Mới " : "Đã Từng Đến Khám";
-        res.status(200).json({ message: status, data: result });
-    });
-  }
-
-
-   
-
-
->>>>>>> 6ec1f38 (Upload)
-
+  
     // Lấy số thứ tự tiếp theo
     Connect_Data_Model.GetNextSTT_M(ngay, req.body.Id_CaKham.trim(), (error, nextSTT) => {
       if (error) return next(error);
-
+  
       const Data_Add = {
-        Id_TheKhamBenh: req.body.Id_TheKhamBenh.trim(),
+        Id_PhieuKhamBenh: req.body.Id_PhieuKhamBenh.trim(),
         Id_CaKham: req.body.Id_CaKham.trim(),
         SoPhongKham: req.body.SoPhongKham.trim(),
         Ngay: ngay,
         TrangThaiThanhToan: false,
         TenCa: req.body.TenCa.trim(),
         TenBacSi: req.body.TenBacSi.trim(),
-        // Số thức tự mới tạo là 0 vì thanh toán xong thì mới xếp số thứ tự
         STTKham: 0
       };
-
-      if (!Data_Add) return res.status(400).json({ message: "Không có dữ liệu để thêm phiếu khám bệnh" }); // ✅ Đã sửa thành chuẩn response JSON
+  
+      if (!Data_Add) return res.status(400).json({ message: "Không có dữ liệu để thêm phiếu khám bệnh" });
       Connect_Data_Model.Add_Phieukhambenh_M(Data_Add, (Error, Result) => {
         if (Error) return next(Error);
-        res.status(201).json({ message: "Thêm mới phiếu khám bệnh thành công", data: Result }); // ✅ Đã sửa thành chuẩn response JSON
+        res.status(201).json({ message: "Thêm mới phiếu khám bệnh thành công", data: Result });
       });
     });
   };
+  
+  // chức năng xác nhận thanh toán
+  PaymentConfirmation = (req, res, next) => {
+    const Id_PhieuKhamBenh = req.params.Id_PhieuKhamBenh;
+    Connect_Data_Model.Select_Check_Status_Phieukhambenh_M(Id_PhieuKhamBenh, (error, result) => {
+      if (error) return next(error);
+      if (!result || result.length === 0) {
+          return res.status(404).json({ message: "Không tìm thấy phiếu khám bệnh" });
+        }
 
+      if(result[0].TrangThaiThanhToan == "true"){
+          return res.status(200).json({
+            message: "Phiếu khám bệnh đã được thanh toán trước đó",
+            data: result
+          })
+        }else{
+          Connect_Data_Model.PaymentConfirmation_M(Id_PhieuKhamBenh,(error, result)=>{
+            if (error) return next(error);
+            return res.status(200).json({
+              message: "Xác nhận thanh toán đơn thuốc thành công",
+              data: result
+            })
+          })
+        }
+    });
+  };
+  
+  Fill_Cakhambenh = (req, res, next) => {
+    const id = req.query.Id;
+    const ngay = req.query.ngay;
+  
+    Connect_Data_Model.Check_Benhnhan__M(id, ngay, (error, result) => {
+      if (error) return next(error);
+      res.status(200).json({ data: result });
+    });
+  };
+  
   Edit_Phieukhambenh = (req, res, next) => {
     const { ID } = req.params;
     const Data_Edit = {

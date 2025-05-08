@@ -13,16 +13,29 @@ class Database_Yeu_Cau_Xet_Nghiem {
         }   
     };    
 
-    Select_Check_Status_Yeucauxetnghiem_M = async (Id_PhieuKhamBenh , Callback) => {
+    Select_Check_Status_Yeucauxetnghiem_M = async (Id_YeuCauXetNghiem , Callback) => {
         try {
             await connectDB();
-            const Check_Donthuoc = await Yeucauxetnghiem.find({Id_PhieuKhamBenh : Id_PhieuKhamBenh})
-                .select ('TrangThaiThanhToan');
-            Callback(null, Check_Donthuoc);
+            const Data_YeuCauXetNghiem = await Yeucauxetnghiem.find({_id : Id_YeuCauXetNghiem})
+            Callback(null, Data_YeuCauXetNghiem);
         } catch (error){
             Callback(error);
         }
     } 
+
+    PaymentConfirmation_M = async (id, Callback) =>{
+              try {
+                await connectDB();
+                const Data_YeuCauXetNghiem = await Yeucauxetnghiem.findByIdAndUpdate(
+                {_id:id},
+                { $set: { TrangThaiThanhToan: true } },
+                { new: true }
+              )
+                Callback(null, Data_YeuCauXetNghiem);
+              } catch (error){
+                Callback(error);
+              }
+    }
 
 
     Add_Yeucauxetnghiem_M = async (Data , Callback) => {

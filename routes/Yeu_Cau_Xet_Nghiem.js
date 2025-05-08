@@ -8,11 +8,6 @@ router.get ('/Select' , Handle_Yeucauxetnghiem.Select_Yeucauxetnghiem);
 router.post ('/Add' , Handle_Yeucauxetnghiem.Add_Yeucauxetnghiem);
 router.put ('/Edit/:ID' , Handle_Yeucauxetnghiem.Edit_Yeucauxetnghiem);
 router.delete ('/Delete/:ID' , Handle_Yeucauxetnghiem.Delete_Yeucauxetnghiem);
-<<<<<<< HEAD
 router.get('/GetById_PhongTB_date', Handle_Yeucauxetnghiem.Get_ById_PTB_Date);
-
-module.exports = router;    
-=======
-router.get ('/Xacnhanthanhtoan/:ID_Phieukhambenh', Handle_Yeucauxetnghiem.Check_Status);
+router.patch ('/Xacnhanthanhtoan/:ID_YeuCauXetNghiem', Handle_Yeucauxetnghiem.PaymentConfirmation);
 module.exports = router;     
->>>>>>> 6ec1f38 (Upload)

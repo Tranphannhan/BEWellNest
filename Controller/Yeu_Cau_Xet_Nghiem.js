@@ -16,13 +16,29 @@ class Yeucauxetnghiem_Controler {
   };
    
 
-  Check_Status = (req, res, next) => {
-    const Id_PhieuKhamBenhs = req.params.ID_Phieukhambenh;
+  PaymentConfirmation = (req, res, next) => {
+    const Id_YeuCauXetNghiem = req.params.ID_YeuCauXetNghiem;
     
-    Connect_Data_Model.Select_Check_Status_Yeucauxetnghiem_M ( Id_PhieuKhamBenhs , (error, result) => {
+    Connect_Data_Model.Select_Check_Status_Yeucauxetnghiem_M ( Id_YeuCauXetNghiem , (error, result) => {
         if (error) return next(error);
-        const status = result[0].TrangThaiThanhToan == "True" ? "Thanh Toán Thành Công" : "Thanh Toán Thất Bại";
-        res.status(200).json({ message: status, data: result });
+        if (!result || result.length === 0) {
+          return res.status(404).json({ message: "Không tìm thấy Yêu cầu xét nghiệm" });
+        }
+        
+      if(result[0].TrangThaiThanhToan == "true"){
+        return res.status(200).json({
+          message: "Yêu cầu xét nghiệm đã được thanh toán trước đó",
+          data: result
+        })
+      }else{
+        Connect_Data_Model.PaymentConfirmation_M(Id_YeuCauXetNghiem,(error, result)=>{
+          if (error) return next(error);
+          return res.status(200).json({
+            message: "Xác nhận thanh toán yêu cầu xét nghiệm thành công",
+            data: result
+          })
+        })
+      }
     });
   }
 

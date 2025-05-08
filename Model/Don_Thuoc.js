@@ -14,11 +14,24 @@ class Database_Donthuoc {
 
     
     // Check đơn thuốc
-    Select_Check_Status_Donthuoc_M = async (Id_PhieuKhamBenh , Callback) => {
+    Select_Check_Status_Donthuoc_M = async (Id_DonThuoc , Callback) => {
       try {
         await connectDB();
-        const Check_Donthuoc = await Donthuoc.find({Id_PhieuKhamBenh : Id_PhieuKhamBenh})
-          .select ('TrangThaiThanhToan');
+        const Check_Donthuoc = await Donthuoc.find({_id : Id_DonThuoc})
+        Callback(null, Check_Donthuoc);
+      } catch (error){
+        Callback(error);
+      }
+    }
+
+    PaymentConfirmation_M = async (id, Callback) =>{
+      try {
+        await connectDB();
+        const Check_Donthuoc = await Donthuoc.findByIdAndUpdate(
+        {_id:id},
+        { $set: { TrangThaiThanhToan: true } },
+        { new: true }
+      )
         Callback(null, Check_Donthuoc);
       } catch (error){
         Callback(error);
