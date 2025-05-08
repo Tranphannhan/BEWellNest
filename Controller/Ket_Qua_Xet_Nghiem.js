@@ -12,17 +12,17 @@ class Ketquaxetnghiem_Controler {
       }
       res.status(200).json(result);
     });
-  };
+  }; 
 
 
   Add_Ketquaxetnghiem = (req , res , next) => {
-    const Get_Anh_Xet_Nghiem = req.body.Anh_Xet_Nghiem == '' ? "null" : req.body.Anh_Xet_Nghiem;
+    const Get_Anh_Xet_Nghiem = req.file ? req.file.filename : 'null';
     const Data_Add = {
         Id_YeuCauXetNghiem : req.body.Id_YeuCauXetNghiem.trim(),
         Id_PhieuKhamBenh : req.body.Id_PhieuKhamBenh.trim(),
         TenXetNghiem : req.body.TenXetNghiem.trim(),
         KetQua : req.body.KetQua.trim(),
-        Anh_Xet_Nghiem : Get_Anh_Xet_Nghiem
+        Anh_Xet_Nghiem : `http://localhost:5000/image/${Get_Anh_Xet_Nghiem}` 
     }   
 
     if (!Data_Add) return res.send ("Không có dữ liệu");
@@ -31,17 +31,18 @@ class Ketquaxetnghiem_Controler {
         res.send ("Thêm Mới Kết quả Xét Nghiệm Thành Công");
     });
   }  
+    
   
   
   Edit_Ketquaxetnghiem = (req , res, next ) => {
     const {ID} = req.params;
-    const Get_Anh_Xet_Nghiem = req.body.Anh_Xet_Nghiem == '' ? "null" : req.body.Anh_Xet_Nghiem;
+    const Get_Anh_Xet_Nghiem = req.file ? req.file.filename : 'null';
     const Data_Edit = {
         Id_YeuCauXetNghiem : req.body.Id_YeuCauXetNghiem.trim(),
         Id_PhieuKhamBenh : req.body.Id_PhieuKhamBenh.trim(),
         TenXetNghiem : req.body.TenXetNghiem.trim(),
         KetQua : req.body.KetQua.trim(),
-        Anh_Xet_Nghiem : Get_Anh_Xet_Nghiem
+        Anh_Xet_Nghiem : `http://localhost:5000/image/${Get_Anh_Xet_Nghiem}` 
     }
 
     Connect_Data_Model.Edit_Ketquaxetnghiem_M(ID, Data_Edit, (Error, Result) => {
@@ -50,6 +51,7 @@ class Ketquaxetnghiem_Controler {
     });
   };
 
+  
   Delete_Ketquaxetnghiem = (req, res, next) => {
     const { ID } = req.params;
     if (!ID) return res.status(400).json({ message: "Thiếu ID để xóa Kết Quả Xét Nghiệm" }); // ✅ Kiểm tra ID
