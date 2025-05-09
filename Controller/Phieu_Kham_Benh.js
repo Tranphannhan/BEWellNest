@@ -24,11 +24,8 @@ class Phieu_Kham_Benh {
       const Data_Add = {
         Id_TheKhamBenh: req.body.Id_TheKhamBenh.trim(),
         Id_CaKham: req.body.Id_CaKham.trim(),
-        SoPhongKham: req.body.SoPhongKham.trim(),
         Ngay: ngay,
         TrangThaiThanhToan: false,
-        TenCa: req.body.TenCa.trim(),
-        TenBacSi: req.body.TenBacSi.trim(),
         STTKham: 0,
         TrangThai:false
       };
@@ -84,11 +81,8 @@ class Phieu_Kham_Benh {
   Edit_Phieukhambenh = (req, res, next) => {
     const { ID } = req.params;
     const Data_Edit = {
-      SoPhongKham: req.body.SoPhongKham.trim(),
       Ngay: new Date(),
       TrangThaiThanhToan: req.body.TrangThaiThanhToan.trim(),
-      TenCa: req.body.TenCa.trim(),
-      TenBacSi: req.body.TenBacSi.trim(),
       STTKham: req.body.STTKham.trim()
     };
 
@@ -107,6 +101,16 @@ class Phieu_Kham_Benh {
       res.status(200).json({ message: "Xóa phiếu khám bệnh thành công", data: Result }); // ✅ Đã sửa thành chuẩn response JSON
     });
   };
+
+    Get_Not_Yet_Paid = (req, res, next) =>{
+    Connect_Data_Model.Get_Not_yet_paid((err,result)=>{
+      if (err) return res.status(500).json({ message: "Lỗi server", error: err });
+      if (!result || result.length === 0) {
+        return res.status(404).json({ message: "Không tìm thấy yêu cầu nào phù hợp" });
+      }
+      res.status(200).json(result);
+    })
+  }
 }
 
 module.exports = Phieu_Kham_Benh;

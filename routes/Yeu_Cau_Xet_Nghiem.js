@@ -10,4 +10,5 @@ router.put ('/Edit/:ID' , Handle_Yeucauxetnghiem.Edit_Yeucauxetnghiem);
 router.delete ('/Delete/:ID' , Handle_Yeucauxetnghiem.Delete_Yeucauxetnghiem);
 router.get('/GetById_PhongTB_date', Handle_Yeucauxetnghiem.Get_ById_PTB_Date);
 router.patch ('/Xacnhanthanhtoan/:ID_YeuCauXetNghiem', Handle_Yeucauxetnghiem.PaymentConfirmation);
+router.get('/ChuaThanhToan', Handle_Yeucauxetnghiem.Get_Not_Yet_Paid);
 module.exports = router;     

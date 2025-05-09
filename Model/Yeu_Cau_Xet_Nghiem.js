@@ -23,19 +23,20 @@ class Database_Yeu_Cau_Xet_Nghiem {
         }
     } 
 
-    PaymentConfirmation_M = async (id, Callback) =>{
-              try {
-                await connectDB();
-                const Data_YeuCauXetNghiem = await Yeucauxetnghiem.findByIdAndUpdate(
-                {_id:id},
-                { $set: { TrangThaiThanhToan: true } },
-                { new: true }
-              )
-                Callback(null, Data_YeuCauXetNghiem);
-              } catch (error){
-                Callback(error);
-              }
-    }
+    PaymentConfirmation_M = async (id, nextSTT, Callback) => {
+        try {
+          await connectDB();
+          const Data_YeuCauXetNghiem = await Yeucauxetnghiem.findByIdAndUpdate(
+            id, // ✅ truyền trực tiếp id
+            { $set: { TrangThaiThanhToan: true, STT: nextSTT } },
+            { new: true }
+          );
+          Callback(null, Data_YeuCauXetNghiem);
+        } catch (error) {
+          Callback(error);
+        }
+      };
+      
 
 
     Add_Yeucauxetnghiem_M = async (Data , Callback) => {
@@ -99,19 +100,51 @@ class Database_Yeu_Cau_Xet_Nghiem {
             Callback(error);
         }
     }
-
+    // Dùng để load dữ liệu cho mỗi phòng thiết bị khi đã thanh toán và có số thứ tự rồi mới load, đã sắp xếp
     Get_By_PTB_Date_M = async (Id_PhongThietBi, ngay, Callback) => {
         try {
             await connectDB();
             const result = await Yeucauxetnghiem.find({
                 Id_PhongThietBi: Id_PhongThietBi,
                 Ngay: ngay,
-            });
+                TrangThai: false,
+                TrangThaiThanhToan:true
+            }).sort({ STT: 1 });
             Callback(null, result);
         } catch (error) {
             Callback(error);
         }
     };
+    // lấy những yêu cầu xét nghiệm chưa thanh toán để load cho thu ngân xem
+       Get_Not_yet_paid = async (Callback) => {
+    try {
+        await connectDB();
+        const result = await Yeucauxetnghiem.find({
+            TrangThaiThanhToan: false
+        }).populate({
+            path: 'Id_PhieuKhamBenh',
+            select: 'Ngay',
+            populate: [
+                {
+                    path: 'Id_TheKhamBenh',
+                    select: 'HoVaTen SoDienThoai'
+                },
+                {
+                    path: 'Id_CaKham',
+                    select: 'TenCa TenBacSi SoPhong'
+                }
+            ]
+        }).populate({
+            path: 'Id_PhongThietBi',
+            select: 'TenXetNghiem TenPhongThietBi'
+        });
+
+        Callback(null, result);
+    } catch (error) {
+        Callback(error);
+    }
+};
+
 }
 
 module.exports = Database_Yeu_Cau_Xet_Nghiem;

@@ -19,8 +19,6 @@ class Ketquaxetnghiem_Controler {
     const Get_Anh_Xet_Nghiem = req.file ? req.file.filename : 'null';
     const Data_Add = {
         Id_YeuCauXetNghiem : req.body.Id_YeuCauXetNghiem.trim(),
-        Id_PhieuKhamBenh : req.body.Id_PhieuKhamBenh.trim(),
-        TenXetNghiem : req.body.TenXetNghiem.trim(),
         KetQua : req.body.KetQua.trim(),
         Anh_Xet_Nghiem : `http://localhost:5000/image/${Get_Anh_Xet_Nghiem}` 
     }   
@@ -39,8 +37,6 @@ class Ketquaxetnghiem_Controler {
     const Get_Anh_Xet_Nghiem = req.file ? req.file.filename : 'null';
     const Data_Edit = {
         Id_YeuCauXetNghiem : req.body.Id_YeuCauXetNghiem.trim(),
-        Id_PhieuKhamBenh : req.body.Id_PhieuKhamBenh.trim(),
-        TenXetNghiem : req.body.TenXetNghiem.trim(),
         KetQua : req.body.KetQua.trim(),
         Anh_Xet_Nghiem : `http://localhost:5000/image/${Get_Anh_Xet_Nghiem}` 
     }

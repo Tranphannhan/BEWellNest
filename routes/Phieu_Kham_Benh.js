@@ -9,8 +9,6 @@ router.post ('/Add' , Handle_Phieu_Kham_Benh.Add_Phieukhambenh);
 router.put ('/Edit/:ID' , Handle_Phieu_Kham_Benh.Edit_Phieukhambenh);
 router.delete ('/Delete/:ID' , Handle_Phieu_Kham_Benh.Delete_Phieukham);
 router.patch ('/Xacnhanthanhtoan/:Id_PhieuKhamBenh', Handle_Phieu_Kham_Benh.PaymentConfirmation);
-
-// http://localhost:5000/Phieu_Kham_Benh/GetById_CaKham_Date?Id=681b0e9e78c6375f89a6abbf&ngay=2025-06-05
 router.get ('/GetById_CaKham_Date/' , Handle_Phieu_Kham_Benh.Fill_Cakhambenh);
-
+router.get('/ChuaThanhToan', Handle_Phieu_Kham_Benh.Get_Not_Yet_Paid);
 module.exports = router;       

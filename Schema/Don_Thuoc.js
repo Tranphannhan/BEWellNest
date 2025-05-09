@@ -2,9 +2,13 @@ const mongoose = require("mongoose");
 const ObjectId = mongoose.Types.ObjectId;
 
 const Donthuoc_Schema = new mongoose.Schema({
-    Id_PhieuKhamBenh: String,
+     Id_PhieuKhamBenh: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Phieu_Kham_Benh', 
+        },
     TenDonThuoc: String,
-    TrangThaiThanhToan: String
+    TrangThaiThanhToan: Boolean,
+    TrangThai: Boolean
     
     
 }, { collection: "Don_Thuoc" }); 

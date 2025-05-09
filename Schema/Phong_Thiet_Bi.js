@@ -6,4 +6,4 @@ const Phong_Thiet_Bi_Schema = new mongoose.Schema({
     MoTaXetNghiem: String
 }, { collection: "Phong_Thiet_Bi" }); 
 
-module.exports = mongoose.model("Phong_Thiet_Bi", Phong_Thiet_Bi_Schema); 
+module.exports = mongoose.model("Phong_Thiet_Bi", Phong_Thiet_Bi_Schema);

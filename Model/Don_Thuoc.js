@@ -28,7 +28,7 @@ class Database_Donthuoc {
       try {
         await connectDB();
         const Check_Donthuoc = await Donthuoc.findByIdAndUpdate(
-        {_id:id},
+        id,
         { $set: { TrangThaiThanhToan: true } },
         { new: true }
       )
@@ -72,6 +72,27 @@ class Database_Donthuoc {
         Callback(error);
       }
     };
+
+       // lấy những yêu cầu xét nghiệm chưa thanh toán để load cho thu ngân xem
+            Get_Not_yet_paid = async (Callback)=>{
+                try{
+                    await connectDB();
+                    const result = await Donthuoc.find({
+                        TrangThaiThanhToan:false
+                    }).populate({
+                      path: 'Id_PhieuKhamBenh',
+                      select:'Ngay',
+                      populate:{
+                        path: 'Id_TheKhamBenh',
+                        select: 'HoVaTen SoDienThoai'
+                      }
+                    })
+        
+                    Callback(null, result)
+                }catch(error){
+                    Callback(error)
+                }
+            }
 }
 
 module.exports = Database_Donthuoc;

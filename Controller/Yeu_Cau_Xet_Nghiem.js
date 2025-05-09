@@ -53,7 +53,6 @@ class Yeucauxetnghiem_Controler {
       const Data_Add = {
         Id_PhieuKhamBenh: req.body.Id_PhieuKhamBenh.trim(),
         Id_PhongThietBi: req.body.Id_PhongThietBi.trim(),
-        TenXetNghiem: req.body.TenXetNghiem.trim(),
         TrangThaiThanhToan: false,
         Ngay: ngay,
         // Số thức tự mới tạo là 0 vì thanh toán xong thì mới xếp số thứ tự
@@ -75,7 +74,6 @@ class Yeucauxetnghiem_Controler {
     const Data_Edit = {
       Id_PhieuKhamBenh: req.body.Id_PhieuKhamBenh.trim(),
       Id_PhongThietBi: req.body.Id_PhongThietBi.trim(),
-      TenXetNghiem: req.body.TenXetNghiem.trim(),
       TrangThaiThanhToan: req.body.TrangThaiThanhToan.trim(),
       STT: req.body.STT.trim(),
     };
@@ -115,6 +113,16 @@ class Yeucauxetnghiem_Controler {
       res.status(200).json(result);
     });
   };
+
+  Get_Not_Yet_Paid = (req, res, next) =>{
+    Connect_Data_Model.Get_Not_yet_paid((err,result)=>{
+      if (err) return res.status(500).json({ message: "Lỗi server", error: err });
+      if (!result || result.length === 0) {
+        return res.status(404).json({ message: "Không tìm thấy yêu cầu nào phù hợp" });
+      }
+      res.status(200).json(result);
+    })
+  }
 }
 
 module.exports = Yeucauxetnghiem_Controler;

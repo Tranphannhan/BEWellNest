@@ -20,7 +20,7 @@ let indexRouter_Tai_Khoan= require ('./routes/Tai_Khoan');
 let indexRouter_Loai_Tai_Khoan = require ('./routes/Loai_Tai_Khoan');
 let indexRouter_Khoa= require ('./routes/Khoa');
 let indexRouter_Phong_Kham= require ('./routes/Phong_Kham');
-
+let indexRouter_Phong_Thiet_Bi= require ('./routes/Phong_Thiet_Bi');
 
  
 var app = express();
@@ -50,6 +50,7 @@ app.use ('/Tai_Khoan' , indexRouter_Tai_Khoan);
 app.use ('/Loai_Tai_Khoan' , indexRouter_Loai_Tai_Khoan);
 app.use ('/Khoa' , indexRouter_Khoa);
 app.use ('/Phong_Kham' , indexRouter_Phong_Kham);
+app.use ('/Phong_Thiet_Bi' , indexRouter_Phong_Thiet_Bi);
 
 
 

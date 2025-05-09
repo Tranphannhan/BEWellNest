@@ -59,7 +59,7 @@ class Donthuoc_Controler {
     };
 
     // ✅ Kiểm tra dữ liệu hợp lệ
-    if (!data.Id_PhieuKhamBenh || !data.TenDonThuoc || !data.TrangThaiThanhToan) {
+    if (!data.Id_PhieuKhamBenh || !data.TenDonThuoc) {
       return res.status(400).json({ message: "Thiếu dữ liệu cần thiết" }); // ✅ Chuẩn hóa response
     }
 
@@ -101,11 +101,6 @@ class Donthuoc_Controler {
       TrangThaiThanhToan: req.body.TrangThaiThanhToan?.trim()
     };
 
-    // ✅ Kiểm tra dữ liệu hợp lệ
-    if (!data.Id_PhieuKhamBenh || !data.TenDonThuoc || !data.TrangThaiThanhToan) {
-      return res.status(400).json({ message: "Thiếu dữ liệu cần thiết" }); // ✅ Chuẩn hóa response
-    }
-
     Connect_Data_Model.Update_Donthuoc_M(id, data, (error, updatedDonthuoc) => {
       if (error) {
         return res.status(500).json({ message: 'Lỗi khi cập nhật đơn thuốc', error });
@@ -120,7 +115,17 @@ class Donthuoc_Controler {
         updatedDonthuoc
       });
     });
-  };
+  }
+
+   Get_Not_Yet_Paid = (req, res, next) =>{
+    Connect_Data_Model.Get_Not_yet_paid((err,result)=>{
+      if (err) return res.status(500).json({ message: "Lỗi server", error: err });
+      if (!result || result.length === 0) {
+        return res.status(404).json({ message: "Không tìm thấy yêu cầu nào phù hợp" });
+      }
+      res.status(200).json(result);
+    })
+  }
 }
 
 module.exports = Donthuoc_Controler;
