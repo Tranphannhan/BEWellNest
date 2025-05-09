@@ -18,24 +18,25 @@ class Yeucauxetnghiem_Controler {
 
   PaymentConfirmation = (req, res, next) => {
     const Id_YeuCauXetNghiem = req.params.ID_YeuCauXetNghiem;
-    
     Connect_Data_Model.Select_Check_Status_Yeucauxetnghiem_M ( Id_YeuCauXetNghiem , (error, result) => {
         if (error) return next(error);
         if (!result || result.length === 0) {
           return res.status(404).json({ message: "Không tìm thấy Yêu cầu xét nghiệm" });
         }
         
-      if(result[0].TrangThaiThanhToan == "true"){
+      if(result[0].TrangThaiThanhToan === true){
         return res.status(200).json({
           message: "Yêu cầu xét nghiệm đã được thanh toán trước đó",
           data: result
         })
       }else{
-        Connect_Data_Model.PaymentConfirmation_M(Id_YeuCauXetNghiem,(error, result)=>{
-          if (error) return next(error);
-          return res.status(200).json({
-            message: "Xác nhận thanh toán yêu cầu xét nghiệm thành công",
-            data: result
+        Connect_Data_Model.GetNextSTT_M(result[0].Ngay,result[0].Id_PhongThietBi,(error,nextSTT)=>{
+          Connect_Data_Model.PaymentConfirmation_M(Id_YeuCauXetNghiem,nextSTT,(error, result)=>{
+            if (error) return next(error);
+            return res.status(200).json({
+              message: "Xác nhận thanh toán yêu cầu xét nghiệm thành công",
+              data: result
+            })
           })
         })
       }
@@ -56,7 +57,8 @@ class Yeucauxetnghiem_Controler {
         TrangThaiThanhToan: false,
         Ngay: ngay,
         // Số thức tự mới tạo là 0 vì thanh toán xong thì mới xếp số thứ tự
-        STT: 0
+        STT: 0,
+        TrangThai:false
       };
 
       if (!Data_Add) return res.status(400).json({ message: "Không có dữ liệu" });

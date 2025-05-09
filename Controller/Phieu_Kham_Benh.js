@@ -22,14 +22,15 @@ class Phieu_Kham_Benh {
       if (error) return next(error);
   
       const Data_Add = {
-        Id_PhieuKhamBenh: req.body.Id_PhieuKhamBenh.trim(),
+        Id_TheKhamBenh: req.body.Id_TheKhamBenh.trim(),
         Id_CaKham: req.body.Id_CaKham.trim(),
         SoPhongKham: req.body.SoPhongKham.trim(),
         Ngay: ngay,
         TrangThaiThanhToan: false,
         TenCa: req.body.TenCa.trim(),
         TenBacSi: req.body.TenBacSi.trim(),
-        STTKham: 0
+        STTKham: 0,
+        TrangThai:false
       };
   
       if (!Data_Add) return res.status(400).json({ message: "Không có dữ liệu để thêm phiếu khám bệnh" });
@@ -49,19 +50,23 @@ class Phieu_Kham_Benh {
           return res.status(404).json({ message: "Không tìm thấy phiếu khám bệnh" });
         }
 
-      if(result[0].TrangThaiThanhToan == "true"){
+      if(result[0].TrangThaiThanhToan === true){
           return res.status(200).json({
             message: "Phiếu khám bệnh đã được thanh toán trước đó",
             data: result
           })
         }else{
-          Connect_Data_Model.PaymentConfirmation_M(Id_PhieuKhamBenh,(error, result)=>{
-            if (error) return next(error);
-            return res.status(200).json({
-              message: "Xác nhận thanh toán đơn thuốc thành công",
-              data: result
+          Connect_Data_Model.GetNextSTT_M(result[0].Ngay, result[0].Id_CaKham, (error, nextSTT) => { 
+
+            Connect_Data_Model.PaymentConfirmation_M(Id_PhieuKhamBenh,nextSTT,(error, result)=>{
+              if (error) return next(error);
+              return res.status(200).json({
+                message: "Xác nhận thanh toán đơn thuốc thành công",
+                data: result
+              })
             })
-          })
+          });
+        
         }
     });
   };

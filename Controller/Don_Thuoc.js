@@ -27,7 +27,7 @@ class Donthuoc_Controler {
         return res.status(404).json({ message: "Không tìm thấy đơn thuốc" });
       }
 
-      if(result[0].TrangThaiThanhToan == "true"){
+      if(result[0].TrangThaiThanhToan === true){
         return res.status(200).json({
           message: "Đơn thuốc đã được thanh toán trước đó",
           data: result
@@ -53,7 +53,9 @@ class Donthuoc_Controler {
     const data = {
       Id_PhieuKhamBenh: req.body.Id_PhieuKhamBenh,
       TenDonThuoc: req.body.TenDonThuoc?.trim(),
-      TrangThaiThanhToan: req.body.TrangThaiThanhToan?.trim()
+      // mặc định là chưa thanh toán nên false
+      TrangThaiThanhToan: false,
+      TrangThai:false
     };
 
     // ✅ Kiểm tra dữ liệu hợp lệ
