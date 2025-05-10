@@ -122,7 +122,17 @@ class Database_Phieu_Kham_Benh {
                 select: 'HoVaTen SoDienThoai',
             }).populate({
                 path: 'Id_CaKham',
-                select: 'TenCa SoPhong TenBacSi',
+                select: 'TenCa',
+                populate:[
+                    {
+                    path: 'Id_BacSi',
+                    select: 'TenBacSi'
+                        },
+                    {
+                    path: 'Id_PhongKham',
+                    select: 'SoPhongKham'
+                        },
+                ] 
             })
 
             Callback(null, result)

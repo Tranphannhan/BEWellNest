@@ -19,8 +19,6 @@ class Cakham_Controler {
       Id_BacSi: req.body.Id_BacSi,
       Id_PhongKham: req.body.Id_PhongKham?.trim(),
       TenCa: req.body.TenCa?.trim(),
-      SoPhong: req.body.SoPhong?.trim(),
-      TenBacSi: req.body.TenBacSi?.trim()
     };
 
     // ✅ Kiểm tra dữ liệu hợp lệ
@@ -64,8 +62,6 @@ class Cakham_Controler {
       Id_BacSi: req.body.Id_BacSi,
       Id_PhongKham: req.body.Id_PhongKham?.trim(),
       TenCa: req.body.TenCa?.trim(),
-      SoPhong: req.body.SoPhong?.trim(),
-      TenBacSi: req.body.TenBacSi?.trim()
     };
 
     // ✅ Kiểm tra dữ liệu hợp lệ

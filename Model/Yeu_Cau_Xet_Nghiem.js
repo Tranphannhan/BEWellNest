@@ -1,4 +1,5 @@
 
+const { path } = require("../app");
 const connectDB = require("../Model/Db");
 const Yeucauxetnghiem = require("../Schema/Yeu_Cau_Xet_Nghiem"); 
 
@@ -138,25 +139,40 @@ class Database_Yeu_Cau_Xet_Nghiem {
     Get_Not_yet_paid = async (Callback) => {
     try {
         await connectDB();
-        const result = await Yeucauxetnghiem.find({
-            TrangThaiThanhToan: false
-        }).populate({
-            path: 'Id_PhieuKhamBenh',
-            select: 'Ngay',
-            populate: [
-                {
-                    path: 'Id_TheKhamBenh',
-                    select: 'HoVaTen SoDienThoai'
+const result = await Yeucauxetnghiem.find({
+  TrangThaiThanhToan: false
+}).populate([
+  {
+    path: 'Id_PhieuKhamBenh',
+    select: 'Ngay',
+    populate: [
+      {
+        path: 'Id_TheKhamBenh',
+        select: 'HoVaTen SoDienThoai'
+      },
+      {
+        path: 'Id_CaKham',
+        select: 'TenCa',
+        populate:[
+            {
+            path: 'Id_BacSi',
+            select: 'TenBacSi'
                 },
-                {
-                    path: 'Id_CaKham',
-                    select: 'TenCa TenBacSi SoPhong'
-                }
-            ]
-        }).populate({
-            path: 'Id_PhongThietBi',
-            select: 'TenXetNghiem TenPhongThietBi'
-        });
+            {
+            path: 'Id_PhongKham',
+            select: 'SoPhongKham'
+                },
+        ] 
+      }
+    ]
+  },
+  {
+    path: 'Id_PhongThietBi',
+    select: 'TenXetNghiem TenPhongThietBi'
+  }
+]);
+
+
 
         Callback(null, result);
     } catch (error) {

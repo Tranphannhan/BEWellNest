@@ -1,3 +1,4 @@
+const { path } = require("../app");
 const connectDB = require("../Model/Db");
 const Cakham = require("../Schema/Cakham"); 
 
@@ -5,7 +6,17 @@ class Database_Cakham {
     Select_Cakham_M = async (Callback) => {
     try {
       await connectDB();
-      const Select_Cakham = await Cakham.find({});
+      const Select_Cakham = await Cakham.find({}).populate({
+        path:'Id_BacSi',
+        select: 'TenBacSi'
+      }).populate({
+         path:'Id_PhongKham',
+        select: 'SoPhongKham',
+        populate:{
+          path: 'Id_Khoa',
+          select: 'TenKhoa'
+        }
+      });
       Callback(null, Select_Cakham);
     } catch (error) {
       Callback(error);
