@@ -13,6 +13,18 @@ class Cakham_Controler {
       res.status(200).json(result);
     });
   };
+  
+
+  Get_Count_Cakham = (req, res, next) => {
+    const ID_Cakham = req.params.ID_CaKham;
+    const Date = req.query.date;
+
+    Connect_Data_Model.Get_Count_Cakham__M(ID_Cakham, Date, (error, result) => {
+      if (error) return next(error);
+      res.status(200).json({ message: `Số lượng bệnh nhân đăng khám ngày ${Date} là : ${result}` });
+    });
+};
+
 
   add_Cakham = (req, res, next) => {
     const data = {

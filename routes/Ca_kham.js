@@ -7,5 +7,5 @@ router.get ('/' , Handle_Cakham.Select_Cakham);
 router.post('/', Handle_Cakham.add_Cakham);
 router.delete('/:id', Handle_Cakham.deleteCakham);
 router.put('/:id', Handle_Cakham.updateCakham);
-
+router.get ('/SoLuongDangKham/:ID_CaKham' , Handle_Cakham.Get_Count_Cakham);
 module.exports = router;  

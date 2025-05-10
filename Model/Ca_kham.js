@@ -1,6 +1,7 @@
 const { path } = require("../app");
 const connectDB = require("../Model/Db");
 const Cakham = require("../Schema/Cakham"); 
+const Phieukhambenh = require ('../Schema/Phieu_Kham_Benh');
 
 class Database_Cakham {
     Select_Cakham_M = async (Callback) => {
@@ -21,8 +22,26 @@ class Database_Cakham {
     } catch (error) {
       Callback(error);
     }
-
   };
+
+
+  
+  Get_Count_Cakham__M = async (ID_Cakham, Date, Callback) => {
+    try {
+      await connectDB();
+      const count = await Phieukhambenh.countDocuments({
+        Id_CaKham: ID_Cakham,
+        Ngay: Date,
+        TrangThaiThanhToan: true,
+        TrangThai: false,
+      });  
+    
+      Callback(null, count);
+    } catch (error) {
+      Callback(error);
+    }
+  };
+
 
   // Thêm ca khám
   Insert_Cakham_M = async (data, Callback) => {
