@@ -33,7 +33,7 @@ class Database_Yeu_Cau_Xet_Nghiem {
           );
           Callback(null, Data_YeuCauXetNghiem);
         } catch (error) {
-          Callback(error);
+          Callback(error); 
         }
       };
       
@@ -78,10 +78,10 @@ class Database_Yeu_Cau_Xet_Nghiem {
         }
     }
 
+
     GetNextSTT_M = async (ngay, Id_PhongThietBi, Callback) => {
         try {
             await connectDB();
-   
             const Yeu_Cau_Xet_Nghiem = await Yeucauxetnghiem.find({
                 Ngay: ngay,
                 Id_PhongThietBi: Id_PhongThietBi,
@@ -96,10 +96,13 @@ class Database_Yeu_Cau_Xet_Nghiem {
                 const nextSTT = (parseInt(Yeu_Cau_Xet_Nghiem[0].STT) + 1).toString();
                 Callback(null, nextSTT);
             }
+            
         } catch (error) {
             Callback(error);
         }
     }
+
+
     // Dùng để load dữ liệu cho mỗi phòng thiết bị khi đã thanh toán và có số thứ tự rồi mới load, đã sắp xếp
     Get_By_PTB_Date_M = async (Id_PhongThietBi, ngay, Callback) => {
         try {
@@ -115,8 +118,24 @@ class Database_Yeu_Cau_Xet_Nghiem {
             Callback(error);
         }
     };
+
+
+    
+    Upload_Status_handling__M = async (ID  , Callback) => {
+        try {
+            await connectDB();
+            const data = await Yeucauxetnghiem.findByIdAndUpdate(ID,{ $set: { TrangThai: true}},{ new: true });
+          Callback(null, data);
+        } catch (error){
+            Callback(error)
+        }
+    }
+
+
+
+
     // lấy những yêu cầu xét nghiệm chưa thanh toán để load cho thu ngân xem
-       Get_Not_yet_paid = async (Callback) => {
+    Get_Not_yet_paid = async (Callback) => {
     try {
         await connectDB();
         const result = await Yeucauxetnghiem.find({

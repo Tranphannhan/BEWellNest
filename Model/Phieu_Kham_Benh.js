@@ -22,6 +22,7 @@ class Database_Phieu_Kham_Benh {
         }
     }
 
+
     PaymentConfirmation_M = async (id, nextSTT, Callback) => {
         try {
           await connectDB();
@@ -31,11 +32,12 @@ class Database_Phieu_Kham_Benh {
             { new: true }
           );
           Callback(null, data);
+
+
         } catch (error) {
           Callback(error);
         }
-      };
-    
+    };
 
 
     Check_Benhnhan__M = async ( Id_CaKham , Ngay , Callback) => {
@@ -109,25 +111,38 @@ class Database_Phieu_Kham_Benh {
         }
     }
 
-       // lấy những yêu cầu xét nghiệm chưa thanh toán để load cho thu ngân xem
-        Get_Not_yet_paid = async (Callback)=>{
-            try{
-                await connectDB();
-                const result = await Phieu_Kham_Benh.find({
-                    TrangThaiThanhToan:false
-                }).populate({
-                    path: 'Id_TheKhamBenh',
-                    select: 'HoVaTen SoDienThoai',
-                }).populate({
-                    path: 'Id_CaKham',
-                    select: 'TenCa SoPhong TenBacSi',
-                })
-    
-                Callback(null, result)
-            }catch(error){
-                Callback(error)
-            }
+    // lấy những yêu cầu xét nghiệm chưa thanh toán để load cho thu ngân xem
+    Get_Not_yet_paid = async (Callback)=>{
+        try{
+            await connectDB();
+            const result = await Phieu_Kham_Benh.find({
+                TrangThaiThanhToan:false
+            }).populate({
+                path: 'Id_TheKhamBenh',
+                select: 'HoVaTen SoDienThoai',
+            }).populate({
+                path: 'Id_CaKham',
+                select: 'TenCa SoPhong TenBacSi',
+            })
+
+            Callback(null, result)
+        }catch(error){
+            Callback(error)
         }
+    } 
+    
+
+    Upload_Status_handling__M = async (ID  , Callback) => {
+        try {
+            await connectDB();
+            const data = await Phieu_Kham_Benh.findByIdAndUpdate(ID,{ $set: { TrangThai: true}},{ new: true });
+          Callback(null, data);
+        } catch (error){
+            Callback(error)
+        }
+    }
+
+
 }
 
 module.exports = Database_Phieu_Kham_Benh;

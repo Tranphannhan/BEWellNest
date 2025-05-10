@@ -74,25 +74,39 @@ class Database_Donthuoc {
     };
 
        // lấy những yêu cầu xét nghiệm chưa thanh toán để load cho thu ngân xem
-            Get_Not_yet_paid = async (Callback)=>{
-                try{
-                    await connectDB();
-                    const result = await Donthuoc.find({
-                        TrangThaiThanhToan:false
-                    }).populate({
-                      path: 'Id_PhieuKhamBenh',
-                      select:'Ngay',
-                      populate:{
-                        path: 'Id_TheKhamBenh',
-                        select: 'HoVaTen SoDienThoai'
-                      }
-                    })
-        
-                    Callback(null, result)
-                }catch(error){
-                    Callback(error)
-                }
+    Get_Not_yet_paid = async (Callback)=>{
+      try{
+          await connectDB();
+          const result = await Donthuoc.find({
+              TrangThaiThanhToan:false
+          }).populate({
+            path: 'Id_PhieuKhamBenh',
+            select:'Ngay',
+            populate:{
+              path: 'Id_TheKhamBenh',
+              select: 'HoVaTen SoDienThoai'
             }
+          })
+
+          Callback(null, result)
+      }catch(error){
+          Callback(error)
+      }
+  }
+
+  // 
+   Upload_Status_handling__M = async (ID  , Callback) => {
+    try {
+      await connectDB();
+      const data = await Donthuoc.findByIdAndUpdate(ID,{ $set: { TrangThai: true}},{ new: true });
+      Callback(null, data);
+    } catch (error){
+      Callback(error)
+    }
+  }
+
+
+
 }
 
 module.exports = Database_Donthuoc;
