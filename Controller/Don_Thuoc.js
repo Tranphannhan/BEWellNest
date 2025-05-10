@@ -117,7 +117,7 @@ class Donthuoc_Controler {
     });
   }
 
-   Get_Not_Yet_Paid = (req, res, next) =>{
+  Get_Not_Yet_Paid = (req, res, next) =>{
     Connect_Data_Model.Get_Not_yet_paid((err,result)=>{
       if (err) return res.status(500).json({ message: "Lỗi server", error: err });
       if (!result || result.length === 0) {
@@ -125,7 +125,24 @@ class Donthuoc_Controler {
       }
       res.status(200).json(result);
     })
-  }
+  }  
+
+
+  Status_handling = (req , res , next) => {
+    const ID = req.params.ID;
+    Connect_Data_Model.Select_Check_Status_Donthuoc_M (ID , (err , result) => {
+    if (err) return res.status(500).json({ message: "Lỗi server", error: err });
+    if (result[0].TrangThai) return res.status(200).json ({message : "Trạng thái đã được xác nhận trước đó" , error: err });
+    Connect_Data_Model.Upload_Status_handling__M (ID , (err , result) => {
+        if (err) return res.status(500).json({ message: "Lỗi server", error: err });
+        return res.status(200).json({ message: "Xác nhận trạng thái thành công" });
+      });
+    });
+  }  
+  
+
+
+
 }
 
 module.exports = Donthuoc_Controler;

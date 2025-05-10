@@ -11,4 +11,6 @@ router.delete ('/Delete/:ID' , Handle_Yeucauxetnghiem.Delete_Yeucauxetnghiem);
 router.get('/GetById_PhongTB_date', Handle_Yeucauxetnghiem.Get_ById_PTB_Date);
 router.patch ('/Xacnhanthanhtoan/:ID_YeuCauXetNghiem', Handle_Yeucauxetnghiem.PaymentConfirmation);
 router.get('/ChuaThanhToan', Handle_Yeucauxetnghiem.Get_Not_Yet_Paid);
+router.patch ('/XacNhanTrangThai/:ID' , Handle_Yeucauxetnghiem.Status_handling);
 module.exports = router;     
+    

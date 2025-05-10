@@ -9,6 +9,7 @@ router.delete('/:id', Handle_Donthuoc.deleteDonthuoc);
 router.put('/:id', Handle_Donthuoc.updateDonthuoc);
 router.patch ('/Xacnhanthanhtoan/:ID_DonThuoc', Handle_Donthuoc.PaymentConfirmation);
 router.get('/ChuaThanhToan', Handle_Donthuoc.Get_Not_Yet_Paid);
+router.patch ('/XacNhanTrangThai/:ID' , Handle_Donthuoc.Status_handling);
 module.exports = router;
 
-    
+      

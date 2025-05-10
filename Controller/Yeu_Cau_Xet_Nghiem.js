@@ -19,17 +19,19 @@ class Yeucauxetnghiem_Controler {
   PaymentConfirmation = (req, res, next) => {
     const Id_YeuCauXetNghiem = req.params.ID_YeuCauXetNghiem;
     Connect_Data_Model.Select_Check_Status_Yeucauxetnghiem_M ( Id_YeuCauXetNghiem , (error, result) => {
-        if (error) return next(error);
-        if (!result || result.length === 0) {
-          return res.status(404).json({ message: "Không tìm thấy Yêu cầu xét nghiệm" });
-        }
+      if (error) return next(error);
+      if (!result || result.length === 0) {
+        return res.status(404).json({ message: "Không tìm thấy Yêu cầu xét nghiệm" });
+      }
         
       if(result[0].TrangThaiThanhToan === true){
         return res.status(200).json({
           message: "Yêu cầu xét nghiệm đã được thanh toán trước đó",
           data: result
         })
-      }else{
+      }
+      
+      else{
         Connect_Data_Model.GetNextSTT_M(result[0].Ngay,result[0].Id_PhongThietBi,(error,nextSTT)=>{
           Connect_Data_Model.PaymentConfirmation_M(Id_YeuCauXetNghiem,nextSTT,(error, result)=>{
             if (error) return next(error);
@@ -37,10 +39,16 @@ class Yeucauxetnghiem_Controler {
               message: "Xác nhận thanh toán yêu cầu xét nghiệm thành công",
               data: result
             })
+
+
           })
         })
       }
     });
+
+
+
+
   }
 
 
@@ -123,6 +131,23 @@ class Yeucauxetnghiem_Controler {
       res.status(200).json(result);
     })
   }
+
+
+  //    
+  Status_handling = (req , res , next) => {
+    const ID = req.params.ID;
+    Connect_Data_Model.Select_Check_Status_Yeucauxetnghiem_M (ID , (err , result) => {
+      if (err) return res.status(500).json({ message: "Lỗi server 1", error: err });
+      if (result[0].TrangThai) return res.status(200).json ({message : "Trạng thái đã được xác nhận trước đó" , error: err });
+        Connect_Data_Model.Upload_Status_handling__M (ID , (err , result) => {
+        if (err) return res.status(500).json({ message: "Lỗi server 2", error: err });
+          console.error("Lỗi cập nhật xét nghiệm: 2", err);
+          return res.status(200).json({ message: "Xác nhận trạng thái thành công" });
+        });
+      });
+  }
 }
+
+
 
 module.exports = Yeucauxetnghiem_Controler;

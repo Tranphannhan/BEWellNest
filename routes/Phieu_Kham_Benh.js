@@ -11,4 +11,5 @@ router.delete ('/Delete/:ID' , Handle_Phieu_Kham_Benh.Delete_Phieukham);
 router.patch ('/Xacnhanthanhtoan/:Id_PhieuKhamBenh', Handle_Phieu_Kham_Benh.PaymentConfirmation);
 router.get ('/GetById_CaKham_Date/' , Handle_Phieu_Kham_Benh.Fill_Cakhambenh);
 router.get('/ChuaThanhToan', Handle_Phieu_Kham_Benh.Get_Not_Yet_Paid);
-module.exports = router;       
+router.patch ('/XacNhanTrangThai/:ID' , Handle_Phieu_Kham_Benh.Status_handling);
+module.exports = router;           
