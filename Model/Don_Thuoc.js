@@ -1,5 +1,6 @@
 const connectDB = require("../Model/Db");
 const Donthuoc = require("../Schema/Don_Thuoc"); 
+const Phieu_Kham_Benh = require ('../Schema/Phieu_Kham_Benh');
 
 class Database_Donthuoc {
     Select_Donthuoc_M = async (Callback) => {
@@ -23,6 +24,25 @@ class Database_Donthuoc {
         Callback(error);
       }
     }
+
+    // Select - Trạng thái thuốc
+    Select_Status_Donthuoc__M = async (Ngay , Callback) => {
+      try {
+        await connectDB();
+        const KQ_Select1 = await Phieu_Kham_Benh.find ({Ngay : Ngay}).select ('_id');
+        const Arr_ID = KQ_Select1.map (Tm => Tm._id);
+        const KQ_Select2 = await Donthuoc.find ({
+          Id_PhieuKhamBenh :  Arr_ID,
+          TrangThaiThanhToan : true,
+          TrangThai : false
+        })
+
+        Callback (null , KQ_Select2);
+      } catch (error){
+        Callback (error);
+      }
+    }
+
 
     PaymentConfirmation_M = async (id, Callback) =>{
       try {
