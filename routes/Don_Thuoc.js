@@ -10,6 +10,8 @@ router.put('/:id', Handle_Donthuoc.updateDonthuoc);
 router.patch ('/Xacnhanthanhtoan/:ID_DonThuoc', Handle_Donthuoc.PaymentConfirmation);
 router.get('/ChuaThanhToan', Handle_Donthuoc.Get_Not_Yet_Paid);
 router.patch ('/XacNhanTrangThai/:ID' , Handle_Donthuoc.Status_handling);
+// Đây là chức năng tìm kiếm của dược sĩ
+router.get('/TimKiemCuaDS', Handle_Donthuoc.SearchDS);
 module.exports = router;
 
       

@@ -105,6 +105,54 @@ class Database_Donthuoc {
     }
   }
 
+  SearchDS_M = async (search, Callback) => {
+  try {
+    await connectDB();
+
+    const matchConditions = [];
+
+    if (search.sdt) {
+      matchConditions.push({ 'The_Kham_Benh.SoDienThoai': search.sdt });
+    }
+
+    if (search.ten) {
+      matchConditions.push({ 'The_Kham_Benh.HoVaTen': { $regex: search.ten, $options: 'i' } });
+    }
+
+    if (search.date) {
+      matchConditions.push({ 'Phieu_Kham_Benh.Ngay': search.date });
+    }
+
+    matchConditions.push({ TrangThaiThanhToan: true });
+    matchConditions.push({ TrangThai: false });
+
+    const data = await Donthuoc.aggregate([
+      {
+        $lookup: {
+          from: 'Phieu_Kham_Benh',
+          localField: 'Id_PhieuKhamBenh',
+          foreignField: '_id',
+          as: 'Phieu_Kham_Benh'
+        }
+      },
+      { $unwind: '$Phieu_Kham_Benh' },
+      {
+        $lookup: {
+          from: 'The_Kham_Benh',
+          localField: 'Phieu_Kham_Benh.Id_TheKhamBenh',
+          foreignField: '_id',
+          as: 'The_Kham_Benh'
+        }
+      },
+      { $unwind: '$The_Kham_Benh' },
+      ...(matchConditions.length > 0 ? [{ $match: { $and: matchConditions } }] : []),
+    ]);
+
+    Callback(null, data);
+  } catch (error) {
+    Callback(error);
+  }
+};
 
 
 }
