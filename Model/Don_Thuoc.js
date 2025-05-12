@@ -35,7 +35,14 @@ class Database_Donthuoc {
           Id_PhieuKhamBenh :  Arr_ID,
           TrangThaiThanhToan : true,
           TrangThai : false
-        })
+        }).populate({
+            path: 'Id_PhieuKhamBenh',
+            select:'Ngay',
+            populate:{
+              path: 'Id_TheKhamBenh',
+              select: 'HoVaTen SoDienThoai'
+            }
+          })
 
         Callback (null , KQ_Select2);
       } catch (error){
