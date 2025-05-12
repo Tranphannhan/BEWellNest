@@ -1,8 +1,0 @@
-[{
-  "_id": {
-    "$oid": "6803bf3070cd96d5cde6d824"
-  },
-  "TenPhongThietBi": "Phòng Xét nghiệm 1",
-  "TenXetNghiem": "Xét nghiệm máu",
-  "MoTaXetNghiem": "Xét nghiệm công thức máu"
-}]

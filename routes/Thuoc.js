@@ -1,0 +1,10 @@
+var express = require('express');
+var router = express.Router();
+const Loading_Controler_Thuoc = require ('../Controller/Thuoc');
+const Handle_Thuoc = new Loading_Controler_Thuoc ();
+
+router.get ('/' , Handle_Thuoc.Select_Donthuoc);
+router.post ('/Add' , Handle_Thuoc.Add_Donthuoc);
+router.put ('/Edit/:ID' , Handle_Thuoc.Edit_Donthuoc);
+router.delete ('/Delete/:ID' , Handle_Thuoc.Delete_Donthuoc);
+module.exports = router;  
