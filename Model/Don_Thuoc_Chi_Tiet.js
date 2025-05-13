@@ -1,5 +1,6 @@
 const connectDB = require("../Model/Db");
 const Donthuoc_Chitiet = require("../Schema/Don_Thuoc_Chi_Tiet"); 
+const Thuoc = require("../Schema/Thuoc")
 
 class Database_Donthuoc_Chitiet {
     Select_Donthuoc_Chitiet_M = async (Callback) => {
@@ -13,17 +14,36 @@ class Database_Donthuoc_Chitiet {
   
   };
 
-  // Thêm chi tiết đơn thuốc
-  Insert_Donthuoc_Chitiet_M = async (data, Callback) => {
-    try {
-      await connectDB();
-      const newDonthuoc_Chitiet = new Donthuoc_Chitiet(data);
-      const saved = await newDonthuoc_Chitiet.save();
-      Callback(null, saved);
-    } catch (error) {
-      Callback(error);
-    }
-  };
+    Insert_Donthuoc_Chitiet_M = async (data, Callback) => {
+      try {
+        await connectDB();
+
+        // Lấy thông tin thuốc từ DB
+        const thuoc = await Thuoc.findById(data.Id_Thuoc);
+        if (!thuoc) return Callback(new Error("Không tìm thấy thuốc"));
+
+        // Kiểm tra số lượng tồn kho
+        if (thuoc.SoLuong < data.SoLuong) {
+          return Callback(`Số lượng thuốc hiện tại không đủ. Số lượng thuốc chỉ còn: ${thuoc.SoLuong}`);
+        }
+
+        // Trừ số lượng trong kho
+        await Thuoc.findByIdAndUpdate(
+          data.Id_Thuoc,
+          { $inc: { SoLuong: -data.SoLuong } },
+          { new: true }
+        );
+
+        // Lưu chi tiết đơn thuốc
+        const newDonthuoc_Chitiet = new Donthuoc_Chitiet(data);
+        const saved = await newDonthuoc_Chitiet.save();
+
+        Callback(null, saved);
+      } catch (error) {
+        Callback(error);
+      }
+    };
+
 
   // Cập nhật chi tiết đơn thuốc
   Update_Donthuoc_Chitiet_M = async (id, updatedData, Callback) => {

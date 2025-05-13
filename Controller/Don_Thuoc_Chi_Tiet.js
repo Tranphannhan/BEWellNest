@@ -17,14 +17,14 @@ class Donthuoc_Chitiet_Controler {
   add_Donthuoc_Chitiet = (req, res, next) => {
     const data = {
       Id_DonThuoc: req.body.Id_DonThuoc,
-      TenThuoc: req.body.TenThuoc?.trim(),
-      CachDung: req.body.CachDung?.trim(),
-      LieuDung: req.body.LieuDung?.trim(),
-      SoNgayDungThuoc: req.body.SoNgayDungThuoc
+      Id_Thuoc: req.body.Id_Thuoc,
+      DonVi: req.body.DonVi?.trim(),
+      SoLuong: req.body.SoLuong?.trim(),
+      NhacNho: req.body.NhacNho?.trim(),
     };
 
     // ✅ Kiểm tra dữ liệu hợp lệ
-    if (!data.Id_DonThuoc || !data.TenThuoc || !data.CachDung || !data.LieuDung || !data.SoNgayDungThuoc) {
+    if (!data.Id_DonThuoc || !data.Id_Thuoc || !data.SoLuong || !data.DonVi || !data.NhacNho) {
       return res.status(400).json({ message: "Thiếu dữ liệu cần thiết" }); // ✅ Kiểm tra dữ liệu hợp lệ
     }
 
@@ -62,14 +62,14 @@ class Donthuoc_Chitiet_Controler {
     const { id } = req.params;
     const data = {
       Id_DonThuoc: req.body.Id_DonThuoc,
-      TenThuoc: req.body.TenThuoc?.trim(),
-      CachDung: req.body.CachDung?.trim(),
-      LieuDung: req.body.LieuDung?.trim(),
-      SoNgayDungThuoc: req.body.SoNgayDungThuoc
+      Id_Thuoc: req.body.Id_Thuoc,
+      DonVi: req.body.DonVi?.trim(),
+      SoLuong: req.body.SoLuong?.trim(),
+      NhacNho: req.body.NhacNho?.trim(),
     };
 
-    // ✅ Kiểm tra dữ liệu hợp lệ
-    if (!data.Id_DonThuoc || !data.TenThuoc || !data.CachDung || !data.LieuDung || !data.SoNgayDungThuoc) {
+      // ✅ Kiểm tra dữ liệu hợp lệ
+    if (!data.Id_DonThuoc || !data.Id_Thuoc || !data.SoLuong || !data.DonVi || !data.NhacNho) {
       return res.status(400).json({ message: "Thiếu dữ liệu cần thiết" }); // ✅ Kiểm tra dữ liệu hợp lệ
     }
 
