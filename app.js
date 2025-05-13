@@ -22,6 +22,8 @@ let indexRouter_Khoa= require ('./routes/Khoa');
 let indexRouter_Phong_Kham= require ('./routes/Phong_Kham');
 let indexRouter_Phong_Thiet_Bi= require ('./routes/Phong_Thiet_Bi');
 let indexRouter_Thuoc = require ('./routes/Thuoc');
+let indexRouter_Hoadon = require ('./routes/Hoadon');
+
 
 
 
@@ -38,7 +40,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 
 
-   
+     
 
 app.use ('/Bacsi', indexRouter_Bacsi);
 app.use ('/Cakham' , indexRouter_Cakham);
@@ -55,6 +57,8 @@ app.use ('/Khoa' , indexRouter_Khoa);
 app.use ('/Phong_Kham' , indexRouter_Phong_Kham);
 app.use ('/Phong_Thiet_Bi' , indexRouter_Phong_Thiet_Bi);
 app.use ('/Thuoc' , indexRouter_Thuoc);
+app.use ('/Hoadon' , indexRouter_Hoadon);
+
 
 
 

@@ -36,14 +36,30 @@ class Tai_Khoan_Controler {
             TenLoaiTaiKhoan: req.body.TenLoaiTaiKhoan.trim()
         };
 
-        if (!this.Data_Add)
-            return res.status(400).json({ message: "Không có dữ liệu tài khoản" }); // ✅ đã sửa
-
-        Connect_Data_Model.Add_Tai_Khoan_M(this.Data_Add, (Error, Result) => {
+        if (!this.Data_Add) return res.status(400).json({ message: "Không có dữ liệu tài khoản" }); // ✅ đã sửa
+        Connect_Data_Model.Add_Tai_Khoan_M(this.Data_Add,  (Error, Result) => {
             if (Error) return next(Error);
-            res.status(201).json({ message: "Thêm Mới Tài Khoản Thành Công" }); // ✅ đã sửa
+            const Data_Token_ = {
+                Id_LoaiTaiKhoan : this.Data_Add.Id_LoaiTaiKhoan,
+                TenTaiKhoan : this.Data_Add.TenTaiKhoan,
+                TenDangNhap : this.Data_Add.TenDangNhap,
+                TenLoaiTaiKhoan : this.Data_Add.TenLoaiTaiKhoan,
+            }
+
+            const jwt = require('jsonwebtoken');
+            const secretKey = 'your-secret-key';
+            const token = jwt.sign(Data_Token_, secretKey, { expiresIn: '1h' });
+            res.status(201).json({
+                message: "Thêm Mới Tài Khoản Thành Công" ,
+                data : token
+            });
         });
+
+
     }
+
+
+
 
     Edit_Tai_Khoan = async (req, res, next) => {
         this.Password = await Connect_Handle_Password.hashPassword(req.body.MatKhau.trim());
