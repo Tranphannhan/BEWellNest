@@ -23,6 +23,11 @@ let indexRouter_Phong_Kham= require ('./routes/Phong_Kham');
 let indexRouter_Phong_Thiet_Bi= require ('./routes/Phong_Thiet_Bi');
 let indexRouter_Thuoc = require ('./routes/Thuoc');
 let indexRouter_Hoadon = require ('./routes/Hoadon');
+let indexRouter_Nhom_thuoc = require ('./routes/Nhom_Thuoc');
+let indexRouter_Nha_san_xuat = require ('./routes/Nha_San_Xuat');
+
+
+
 
 
 
@@ -58,6 +63,10 @@ app.use ('/Phong_Kham' , indexRouter_Phong_Kham);
 app.use ('/Phong_Thiet_Bi' , indexRouter_Phong_Thiet_Bi);
 app.use ('/Thuoc' , indexRouter_Thuoc);
 app.use ('/Hoadon' , indexRouter_Hoadon);
+app.use ('/Nhomthuoc' , indexRouter_Nhom_thuoc);
+app.use ('/Nhasanxuat' , indexRouter_Nha_san_xuat);
+
+
 
 
 
