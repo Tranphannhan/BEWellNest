@@ -24,6 +24,7 @@ class Phieu_Kham_Benh {
       const Data_Add = {
         Id_TheKhamBenh: req.body.Id_TheKhamBenh.trim(),
         Id_CaKham: req.body.Id_CaKham.trim(),
+        Id_NguoiTiepNhan: req.body.Id_NguoiTiepNhan.trim(),
         Ngay: ngay,
         TrangThaiThanhToan: false,
         STTKham: 0,

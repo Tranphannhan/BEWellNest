@@ -70,8 +70,8 @@ class Donthuoc_Controler {
   add_Donthuoc = (req, res, next) => {
     const data = {
       Id_PhieuKhamBenh: req.body.Id_PhieuKhamBenh,
+      Id_NguoiPhatThuoc: req.body.Id_NguoiPhatThuoc.trim(),
       TenDonThuoc: req.body.TenDonThuoc?.trim(),
-      // mặc định là chưa thanh toán nên false
       TrangThaiThanhToan: false,
       TrangThai:false
     };
@@ -114,9 +114,7 @@ class Donthuoc_Controler {
   updateDonthuoc = (req, res, next) => {
     const { id } = req.params;
     const data = {
-      Id_PhieuKhamBenh: req.body.Id_PhieuKhamBenh,
       TenDonThuoc: req.body.TenDonThuoc?.trim(),
-      TrangThaiThanhToan: req.body.TrangThaiThanhToan?.trim()
     };
 
     Connect_Data_Model.Update_Donthuoc_M(id, data, (error, updatedDonthuoc) => {

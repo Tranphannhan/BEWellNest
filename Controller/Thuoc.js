@@ -17,16 +17,12 @@ class Thuoc_Controler {
 
   Add_Donthuoc = (req, res, next) => {
     const Data_Add = {
+      Id_NhomThuoc: req.body.Id_NhomThuoc.trim(),
+      Id_NhaSanXuat: req.body.Id_NhaSanXuat.trim(),
       TenThuoc: req.body.TenThuoc.trim(),
       MoTa : req.body.MoTa.trim(),
       ThanhPhan: req.body.ThanhPhan.trim(),
-      DangBaoChe: req.body.DangBaoChe.trim(),
       CachDung : req.body.CachDung.trim(),
-      ChiDinhSuDung: req.body.ChiDinhSuDung.trim(),
-      ChongChiDinh: req.body.ChongChiDinh.trim(),
-      TacDungPhu: req.body.TacDungPhu.trim(),
-      NhaSanXuat: req.body.NhaSanXuat.trim(),
-      NhomThuoc: req.body.NhomThuoc.trim(),
       NgaySanXuat: req.body.NgaySanXuat.trim(),
       HanSuDung: req.body.HanSuDung.trim(),
       NgayNhapKho: req.body.NgayNhapKho.trim(),
@@ -39,7 +35,7 @@ class Thuoc_Controler {
     if (!Data_Add) return res.status(400).json({ message: "Không có dữ liệu" });
     Connect_Data_Model.Add_Thuoc__M(Data_Add, (Error, Result) => {
       if (Error) return next(Error);
-      res.status(201).json({ message: "Thêm Mới Đơn Thuốc Thành Công" });
+      res.status(201).json({ message: "Thêm Mới Thuốc Thành Công" });
     });
   };
 
@@ -47,16 +43,12 @@ class Thuoc_Controler {
   Edit_Donthuoc = (req, res, next) => {
     const { ID } = req.params;
     const Data_Edit = {
+      Id_NhomThuoc: req.body.Id_NhomThuoc.trim(),
+      Id_NhaSanXuat: req.body.Id_NhaSanXuat.trim(),
       TenThuoc: req.body.TenThuoc.trim(),
       MoTa : req.body.MoTa.trim(),
       ThanhPhan: req.body.ThanhPhan.trim(),
-      DangBaoChe: req.body.DangBaoChe.trim(),
       CachDung : req.body.CachDung.trim(),
-      ChiDinhSuDung: req.body.ChiDinhSuDung.trim(),
-      ChongChiDinh: req.body.ChongChiDinh.trim(),
-      TacDungPhu: req.body.TacDungPhu.trim(),
-      NhaSanXuat: req.body.NhaSanXuat.trim(),
-      NhomThuoc: req.body.NhomThuoc.trim(),
       NgaySanXuat: req.body.NgaySanXuat.trim(),
       HanSuDung: req.body.HanSuDung.trim(),
       NgayNhapKho: req.body.NgayNhapKho.trim(),
@@ -69,7 +61,7 @@ class Thuoc_Controler {
     if (!Data_Edit) return res.status(400).json({ message: "Không có dữ liệu" });
     Connect_Data_Model.Edit_Dongthuoc__M (ID, Data_Edit, (Error, Result) => {
       if (Error) return next(Error);
-      res.status(200).json({ message: "Cập Nhật Đơn Thuốc Thành Công" });
+      res.status(200).json({ message: "Cập Nhật Thuốc Thành Công" });
     });
   };
 
@@ -79,7 +71,7 @@ class Thuoc_Controler {
     if (!ID) return res.status(400).json({ message: "Không có dữ liệu" });
     Connect_Data_Model.Delete_Donthuoc__M(ID, (Error, Result) => {
       if (Error) return next(Error);
-      res.status(200).json({ message: "Xóa Đơn Thuốc Thành Công" });
+      res.status(200).json({ message: "Xóa Thuốc Thành Công" });
     });
   };
 

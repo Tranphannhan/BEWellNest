@@ -6,6 +6,12 @@ const Donthuoc_Schema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Phieu_Kham_Benh', 
         },
+
+    Id_NguoiPhatThuoc: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Tai_Khoan',
+            },
+
     TenDonThuoc: String,
     TrangThaiThanhToan: Boolean,
     TrangThai: Boolean

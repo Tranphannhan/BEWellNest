@@ -20,6 +20,7 @@ class Hoadon_Controler {
         const data = {
         Id_PhieuKhamBenh: req.body.Id_PhieuKhamBenh?.trim(),
         Id_Dichvu : req.body.Id_Dichvu?.trim(),
+        Id_ThuNgan: req.body.Id_ThuNgan?.trim(),
         TenHoaDon: req.body.TenHoaDon?.trim(),
         TongTien: req.body.TongTien
         };
@@ -35,8 +36,6 @@ class Hoadon_Controler {
     Upload_Hoadon = (req, res, next) => {
         const { ID } = req.params;
         const data = {
-            Id_PhieuKhamBenh: req.body.Id_PhieuKhamBenh?.trim(),
-            Id_Dichvu : req.body.Id_Dichvu?.trim(),
             TenHoaDon: req.body.TenHoaDon?.trim(),
             TongTien: req.body.TongTien
         };

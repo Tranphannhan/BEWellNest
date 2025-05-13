@@ -11,6 +11,12 @@ const Ket_Qua_Xet_Nghiem_Schema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Phieu_Kham_Benh', 
         },
+
+    Id_NguoiXetNghiem: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Tai_Khoan',
+        },
+        
     KetQua : String,  
     Anh_Xet_Nghiem : String
 
