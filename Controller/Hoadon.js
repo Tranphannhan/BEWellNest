@@ -21,8 +21,9 @@ class Hoadon_Controler {
         Id_PhieuKhamBenh: req.body.Id_PhieuKhamBenh?.trim(),
         Id_Dichvu : req.body.Id_Dichvu?.trim(),
         Id_ThuNgan: req.body.Id_ThuNgan?.trim(),
+        Id_GiaDichVu:req.body.Id_GiaDichVu?.trim(),
         TenHoaDon: req.body.TenHoaDon?.trim(),
-        TongTien: req.body.TongTien
+        TongTien: req.body.TongTien.trim()
         };
 
         Connect_Data_Model.Add_Hoadon__M (data, (error, result) => {
@@ -37,7 +38,7 @@ class Hoadon_Controler {
         const { ID } = req.params;
         const data = {
             TenHoaDon: req.body.TenHoaDon?.trim(),
-            TongTien: req.body.TongTien
+            TongTien: req.body.TongTien?.trim()
         };
 
         Connect_Data_Model.Update_Hoadon__M (ID , data, (error, result) => {

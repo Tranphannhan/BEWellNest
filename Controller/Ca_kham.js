@@ -28,13 +28,14 @@ class Cakham_Controler {
 
   add_Cakham = (req, res, next) => {
     const data = {
-      Id_BacSi: req.body.Id_BacSi,
+      Id_BacSi: req.body.Id_BacSi?.trim(),
       Id_PhongKham: req.body.Id_PhongKham?.trim(),
       TenCa: req.body.TenCa?.trim(),
+      TrangThaiHoatDong: true,
     };
 
     // ✅ Kiểm tra dữ liệu hợp lệ
-    if (!data.Id_BacSi || !data.TenCa || !data.SoPhong || !data.TenBacSi) {
+    if (!data.Id_BacSi || !data.Id_PhongKham ) {
       return res.status(400).json({ message: "Thiếu dữ liệu cần thiết" }); // ✅ Kiểm tra dữ liệu hợp lệ
     }
 
@@ -74,12 +75,14 @@ class Cakham_Controler {
       Id_BacSi: req.body.Id_BacSi,
       Id_PhongKham: req.body.Id_PhongKham?.trim(),
       TenCa: req.body.TenCa?.trim(),
+      TrangThaiHoatDong: req.body.TrangThaiHoatDong,
     };
 
-    // ✅ Kiểm tra dữ liệu hợp lệ
-    if (!data.Id_BacSi || !data.TenCa || !data.SoPhong || !data.TenBacSi) {
+   // ✅ Kiểm tra dữ liệu hợp lệ
+    if (!data.Id_BacSi || !data.Id_PhongKham ) {
       return res.status(400).json({ message: "Thiếu dữ liệu cần thiết" }); // ✅ Kiểm tra dữ liệu hợp lệ
     }
+
 
     Connect_Data_Model.Update_Cakham_M(id, data, (error, updatedCakham) => {
       if (error) {

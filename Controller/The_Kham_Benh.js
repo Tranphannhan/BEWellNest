@@ -22,7 +22,10 @@ class The_Kham_Benh_Controler {
       SoDienThoai: req.body.SoDienThoai.trim(),
       SoBaoHiemYTe: req.body.SoBaoHiemYTe.trim(),
       DiaChi: req.body.DiaChi.trim(),
+      SoCCCD: req.body.SoCCCD.trim(),
       SDT_NguoiThan: req.body.SDT_NguoiThan.trim(),
+      LichSuBenh: req.body.LichSuBenh.trim(),
+      QrCode: req.body.QrCode.trim(),
     };
 
     if (!Data_Add) return res.status(400).json({ message: "Không có dữ liệu" });
@@ -42,6 +45,10 @@ class The_Kham_Benh_Controler {
       SoDienThoai: req.body.SoDienThoai.trim(),
       SoBaoHiemYTe: req.body.SoBaoHiemYTe.trim(),
       DiaChi: req.body.DiaChi.trim(),
+      SoCCCD: req.body.SoCCCD.trim(),
+      SDT_NguoiThan: req.body.SDT_NguoiThan.trim(),
+      LichSuBenh: req.body.LichSuBenh.trim(),
+      QrCode: req.body.QrCode.trim(),
     };
 
     if (!Data_Edit) return res.status(400).json({ message: "Không có dữ liệu" });

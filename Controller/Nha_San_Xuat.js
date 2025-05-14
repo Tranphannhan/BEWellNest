@@ -20,7 +20,7 @@ class Nhasanxuat_Controler {
     const Data_Add = {
         Ten: req.body.Ten.trim(),
         DiaChi: req.body.DiaChi.trim(),
-        SoDienThoai: req.body.SoDienThoai
+        SoDienThoai: req.body.SoDienThoai.trim()
     };
 
 

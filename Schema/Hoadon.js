@@ -8,6 +8,7 @@ const HoadonnSchema = new mongoose.Schema({
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'Tai_Khoan',
             },
+    Id_GiaDichVu:ObjectId || null,
     TenHoaDon: String,
     TongTien: Number
 
