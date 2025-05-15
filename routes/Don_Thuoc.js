@@ -17,6 +17,9 @@ router.get('/TimKiemCuaDS', Handle_Donthuoc.SearchDS);
 router.get('/DanhSachPhatThuoc' , Handle_Donthuoc.Select_Status_Donthuoc);
 //http://localhost:5000/Donthuoc/DanhSachPhatThuoc?date=2025-05-10
 
+router.get('/LichSuPhatThuoc' , Handle_Donthuoc.HistoryOfMedicineDispensing);
+//http://localhost:5000/Donthuoc/DanhSachPhatThuoc?date=2025-05-10
+
 module.exports = router;
 
       

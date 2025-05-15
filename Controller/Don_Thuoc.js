@@ -57,11 +57,19 @@ class Donthuoc_Controler {
         data : result
       });
     });
-
-
   }
 
-
+  HistoryOfMedicineDispensing = (req , res , next) => {
+    const Date = req.query.date;
+    Connect_Data_Model.HistoryOfMedicineDispensing_M (Date , (error , result) => {
+      if (error) return next (error);
+      if (result.length === 0) return res.status(200).json ({message : `Chưa có phát cho bệnh nhân nào ở ngày : ${Date}`});
+      res.status(200).json ({
+        message : `Số lượng bênh nhận đã được phát thuốc ngày : ${Date} là : ${result.length}`,
+        data : result
+      });
+    });
+  }
   
    
 

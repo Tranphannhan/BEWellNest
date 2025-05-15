@@ -61,6 +61,41 @@ class Database_Donthuoc {
       }
     }
 
+  HistoryOfMedicineDispensing_M = async (Ngay , Callback) => {
+      try {
+        await connectDB();
+        const KQ_Select1 = await Phieu_Kham_Benh.find ({Ngay : Ngay}).select ('_id');
+        const Arr_ID = KQ_Select1.map (Tm => Tm._id);
+        const KQ_Select2 = await Donthuoc.find ({
+          Id_PhieuKhamBenh :  Arr_ID,
+          TrangThaiThanhToan : true,
+          TrangThai : true
+        }).populate({
+            path: 'Id_PhieuKhamBenh',
+            select:'Ngay',
+            populate:[
+                {
+                  path: 'Id_TheKhamBenh',
+                  select: 'HoVaTen SoDienThoai'
+                },
+                {
+                  path: 'Id_CaKham',
+                  select:'TenCa',
+                  populate:{
+                    path:'Id_BacSi',
+                    select:'TenBacSi'
+                  }
+                }
+            ]
+          })
+
+        Callback (null , KQ_Select2);
+      } catch (error){
+        Callback (error);
+      }
+    }
+
+
 
     PaymentConfirmation_M = async (id, Callback) =>{
       try {

@@ -27,9 +27,10 @@ class Thuoc_Controler {
       HanSuDung: req.body.HanSuDung.trim(),
       NgayNhapKho: req.body.NgayNhapKho.trim(),
       DonVi: req.body.DonVi.trim(),
-      GiaMoiDonVi: req.body.GiaMoiDonVi,
+      GiaMoiDonVi: req.body.GiaMoiDonVi.trim(),
       LoThuoc: req.body.LoThuoc.trim(),
-      SoLuong: req.body.SoLuong
+      SoLuong: req.body.SoLuong.trim(),
+      URLAnhThuoc: req.body.URLAnhThuoc.trim(),
     };
 
     if (!Data_Add) return res.status(400).json({ message: "Không có dữ liệu" });
@@ -53,9 +54,10 @@ class Thuoc_Controler {
       HanSuDung: req.body.HanSuDung.trim(),
       NgayNhapKho: req.body.NgayNhapKho.trim(),
       DonVi: req.body.DonVi.trim(),
-      GiaMoiDonVi: req.body.GiaMoiDonVi,
+      GiaMoiDonVi: req.body.GiaMoiDonVi.trim(),
       LoThuoc: req.body.LoThuoc.trim(),
-      SoLuong: req.body.SoLuong
+      SoLuong: req.body.SoLuong.trim(),
+      URLAnhThuoc: req.body.URLAnhThuoc.trim(),
     };
 
     if (!Data_Edit) return res.status(400).json({ message: "Không có dữ liệu" });

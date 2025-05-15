@@ -14,7 +14,8 @@ const Thuoc_Schema = new mongoose.Schema({
     DonVi : String,
     GiaMoiDonVi : Number,
     LoThuoc : String,
-    SoLuong : Number
+    SoLuong : Number,
+    URLAnhThuoc: String
 
 }, { collection: "Thuoc" }); 
 module.exports = mongoose.model("Thuoc", Thuoc_Schema);
