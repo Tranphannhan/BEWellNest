@@ -46,6 +46,18 @@ class Database_Thuoc {
             Callback(error);
         }
     }
+
+    Get_Pagination_M = async (page,limit,Callback) => {
+        try {
+            const skip = (page - 1) * limit;
+            await connectDB();
+            const Select_Thuoc = await Thuoc.find({}).skip(skip).limit(limit);
+            const total = await Thuoc.countDocuments()
+            Callback(null, {totalItems:total, currentPage: page, totalPages: Math.ceil(total/limit),data:Select_Thuoc});
+        } catch (error) {
+            Callback(error);
+        }   
+    };
 }
 
 module.exports = Database_Thuoc;

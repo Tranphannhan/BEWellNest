@@ -59,15 +59,26 @@ class Donthuoc_Controler {
     });
   }
 
-  HistoryOfMedicineDispensing = (req , res , next) => {
+  // Danh sách phát thuốc nhưng có phân trang
+  MedicineDistributionList_Pagination = (req , res , next) => {
     const Date = req.query.date;
-    Connect_Data_Model.HistoryOfMedicineDispensing_M (Date , (error , result) => {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 7;
+    Connect_Data_Model.MedicineDistributionList_Pagination_M (page,limit,Date , (error , result) => {
       if (error) return next (error);
-      if (result.length === 0) return res.status(200).json ({message : `Chưa có phát cho bệnh nhân nào ở ngày : ${Date}`});
-      res.status(200).json ({
-        message : `Số lượng bênh nhận đã được phát thuốc ngày : ${Date} là : ${result.length}`,
-        data : result
-      });
+      if (result.length === 0) return res.status(200).json ({totalItems:0, currentPage: 0, totalPages: 0,data: null});
+      res.status(200).json(result);
+    });
+  }
+
+  HistoryOfMedicineDispensing_Pagination = (req , res , next) => {
+    const Date = req.query.date;
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 7;
+    Connect_Data_Model.HistoryOfMedicineDispensing_Pagination_M (page,limit,Date , (error , result) => {
+      if (error) return next (error);
+      if (result.length === 0) return res.status(200).json ({totalItems:0, currentPage: 0, totalPages: 0,data: null});
+      res.status(200).json(result);
     });
   }
   

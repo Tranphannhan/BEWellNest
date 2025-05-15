@@ -26,8 +26,49 @@ class Database_Donthuoc {
       }
     }
 
-    // Select - Trạng thái thuốc
-    Select_Status_Donthuoc__M = async (Ngay , Callback) => {
+    // Danh sách phát thuốc nhưng có phân trang
+    MedicineDistributionList_Pagination_M = async (page,limit,Ngay , Callback) => {
+      try {
+        const skip = (page - 1)* limit
+        await connectDB();
+        const KQ_Select1 = await Phieu_Kham_Benh.find ({Ngay : Ngay}).select ('_id');
+        const Arr_ID = KQ_Select1.map (Tm => Tm._id);
+        const KQ_Select2 = await Donthuoc.find ({
+          Id_PhieuKhamBenh :  Arr_ID,
+          TrangThaiThanhToan : true,
+          TrangThai : false
+        }).populate({
+            path: 'Id_PhieuKhamBenh',
+            select:'Ngay',
+            populate:[
+                {
+                  path: 'Id_TheKhamBenh',
+                  select: 'HoVaTen SoDienThoai'
+                },
+                {
+                  path: 'Id_CaKham',
+                  select:'TenCa',
+                  populate:{
+                    path:'Id_BacSi',
+                    select:'TenBacSi'
+                  }
+                }
+            ]
+          }).skip(skip).limit(limit)
+        const total = await Donthuoc.countDocuments({
+          Id_PhieuKhamBenh :  Arr_ID,
+          TrangThaiThanhToan : true,
+          TrangThai : false
+        })
+        Callback (null , {totalItems:total, currentPage: page, totalPages: Math.ceil(total/limit),data:KQ_Select2});
+      } catch (error){
+        Callback (error);
+      }
+    }
+
+
+  
+  Select_Status_Donthuoc__M = async (Ngay , Callback) => {
       try {
         await connectDB();
         const KQ_Select1 = await Phieu_Kham_Benh.find ({Ngay : Ngay}).select ('_id');
@@ -60,9 +101,10 @@ class Database_Donthuoc {
         Callback (error);
       }
     }
-
-  HistoryOfMedicineDispensing_M = async (Ngay , Callback) => {
+  // Danh sách lịch sử phát thuốc nhưng có phân trang
+  HistoryOfMedicineDispensing_Pagination_M = async (page,limit,Ngay , Callback) => {
       try {
+        const skip = (page - 1)* limit
         await connectDB();
         const KQ_Select1 = await Phieu_Kham_Benh.find ({Ngay : Ngay}).select ('_id');
         const Arr_ID = KQ_Select1.map (Tm => Tm._id);
@@ -87,9 +129,13 @@ class Database_Donthuoc {
                   }
                 }
             ]
-          })
-
-        Callback (null , KQ_Select2);
+          }).skip(skip).limit(limit)
+        const total = await Donthuoc.countDocuments({
+          Id_PhieuKhamBenh :  Arr_ID,
+          TrangThaiThanhToan : true,
+          TrangThai : true
+        })
+        Callback (null , {totalItems:total, currentPage: page, totalPages: Math.ceil(total/limit),data:KQ_Select2});
       } catch (error){
         Callback (error);
       }
