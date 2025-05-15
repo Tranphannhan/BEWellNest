@@ -1,4 +1,5 @@
 const connectDB = require("../Model/Db");
+const { populate } = require("../Schema/Bacsi");
 const Donthuoc = require("../Schema/Don_Thuoc"); 
 const Phieu_Kham_Benh = require ('../Schema/Phieu_Kham_Benh');
 
@@ -38,10 +39,20 @@ class Database_Donthuoc {
         }).populate({
             path: 'Id_PhieuKhamBenh',
             select:'Ngay',
-            populate:{
-              path: 'Id_TheKhamBenh',
-              select: 'HoVaTen SoDienThoai'
-            }
+            populate:[
+                {
+                  path: 'Id_TheKhamBenh',
+                  select: 'HoVaTen SoDienThoai'
+                },
+                {
+                  path: 'Id_CaKham',
+                  select:'TenCa',
+                  populate:{
+                    path:'Id_BacSi',
+                    select:'TenBacSi'
+                  }
+                }
+            ]
           })
 
         Callback (null , KQ_Select2);
