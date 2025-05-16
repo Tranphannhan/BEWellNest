@@ -14,6 +14,15 @@ class Database_Bacsi {
     }
   };
 
+
+  Select_Image_Bacsi_M = async (ID) => {
+    await connectDB();
+    const bacsi = await Bac_Si.findById(ID);
+    return bacsi?.Image || null;
+  };
+
+
+
   // Thêm bác sĩ
   Insert_Bacsi_M = async (data, Callback) => {
     try {

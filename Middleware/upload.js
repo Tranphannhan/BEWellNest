@@ -1,4 +1,4 @@
-   
+     
 const multer = require("multer");
 const path = require("path");
 
@@ -11,9 +11,12 @@ const storage = multer.diskStorage({
   },  
 });    
 
-const uploadMiddleware_Ketquaxetnghiem = multer({ storage });
+
+const Upload_Image__  = multer({ storage });
 
 module.exports = {  
-  uploadMiddleware_Ketquaxetnghiem,
+  Upload_Image__,
 };
+
+ 
   

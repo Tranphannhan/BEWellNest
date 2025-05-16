@@ -7,7 +7,6 @@ const Upload  = require ('../Middleware/upload');
 router.get ('/' , Handle_Ket_Qua_Xet_Nghiem.Select_Ketquaxetnghiem);
 router.delete ('/Delete/:ID' , Handle_Ket_Qua_Xet_Nghiem.Delete_Ketquaxetnghiem);
 
-// router.post ('/Add' , Handle_Ket_Qua_Xet_Nghiem.Add_Ketquaxetnghiem);
-router.post ('/Add' ,  Upload.uploadMiddleware_Ketquaxetnghiem.single("Anh_Xet_Nghiem"), Handle_Ket_Qua_Xet_Nghiem.Add_Ketquaxetnghiem);
-router.put ('/Edit/:ID' , Upload.uploadMiddleware_Ketquaxetnghiem.single("Anh_Xet_Nghiem"), Handle_Ket_Qua_Xet_Nghiem.Edit_Ketquaxetnghiem);
-module.exports = router;
+router.post ('/Add' ,  Upload.Upload_Image__.single("Image"), Handle_Ket_Qua_Xet_Nghiem.Add_Ketquaxetnghiem);
+router.put ('/Edit/:ID' , Upload.Upload_Image__.single("Image"), Handle_Ket_Qua_Xet_Nghiem.Edit_Ketquaxetnghiem);
+module.exports = router;    

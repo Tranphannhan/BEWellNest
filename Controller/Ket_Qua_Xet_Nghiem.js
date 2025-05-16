@@ -14,7 +14,7 @@ class Ketquaxetnghiem_Controler {
     });
   }; 
 
-
+  
   Add_Ketquaxetnghiem = (req , res , next) => {
     const Get_Anh_Xet_Nghiem = req.file ? req.file.filename : 'null';
     const Data_Add = {

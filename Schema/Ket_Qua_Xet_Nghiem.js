@@ -18,7 +18,7 @@ const Ket_Qua_Xet_Nghiem_Schema = new mongoose.Schema({
         },
         
     KetQua : String,  
-    Anh_Xet_Nghiem : String
+    Image : String
 
 }, { collection: "Ket_Qua_Xet_Nghiem" }); 
 module.exports = mongoose.model("Ket_Qua_Xet_Nghiem", Ket_Qua_Xet_Nghiem_Schema);
