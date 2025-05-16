@@ -2,13 +2,15 @@ const Connect_Select_Tai_Khoan = require("../Model/Tai_Khoan");
 const Connect_Data_Model = new Connect_Select_Tai_Khoan();     
 const Handle_Password = require('../Middleware/Password_encryption');
 const Connect_Handle_Password = new Handle_Password();
+const bcrypt = require('bcrypt');
+
 
 class Tai_Khoan_Controler {
-    constructor(Password, ID, Image , Data_Add){
+    constructor(Password, ID, Image , Data){
         this.Password = Password;
         this.ID = ID;
         this.Image = Image;
-        this.Data_Add = Data_Add;
+        this.Data = Data;
     }
 
     Runviews = (req, res, next) => {
@@ -29,8 +31,8 @@ class Tai_Khoan_Controler {
         this.Password = await Connect_Handle_Password.hashPassword(req.body.MatKhau.trim());
         this.Image =  req.file ? req.file.filename : 'default.webp';
         
-        if (!this.Password) return res.status(400).json({ message: "Thêm Tài Khoản Thất Bại" }); // ✅ đã sửa
-        this.Data_Add = {
+        if (!this.Password) return res.status(400).json({ message: "Thêm Tài Khoản Thất Bại" });
+        this.Data = {
             Id_LoaiTaiKhoan: req.body.Id_LoaiTaiKhoan.trim(),
             TenTaiKhoan: req.body.TenTaiKhoan.trim(),
             MatKhau: this.Password,
@@ -40,12 +42,45 @@ class Tai_Khoan_Controler {
         };
 
 
-        if (!this.Data_Add) return res.status(400).json({ message: "Không có dữ liệu tài khoản" }); 
-        Connect_Data_Model.Add_Tai_Khoan_M(this.Data_Add,  (Error, Result) => {
+        if (!this.Data) return res.status(400).json({ message: "Không có dữ liệu tài khoản" }); 
+        Connect_Data_Model.Add_Tai_Khoan_M(this.Data,  (Error, Result) => {
             if (Error) return next(Error);
             res.status(201).json(Result)
         });
     }
+
+
+    Check_Login = async (req , res , next) => {
+        const Password_Login  = req.body.MatKhau.trim();
+        const SDT_Login  = req.body.SoDienThoai.trim();
+        if (!Password_Login || !SDT_Login) return res.status(400).json ({message : "Đăng Nhập Tài Khoản Thất Bại"});
+    
+        Connect_Data_Model.Check_Login__M  (SDT_Login , async (error , result) => {
+            if (error) return next (error);
+            if (!result) return res.status(200).json ({message : "Không Tìm Thất Tài Khoản Đăng Nhập Vui Lòng Đăng Nhập Lại"});
+            const isMatch = await bcrypt.compare(Password_Login, result.MatKhau);
+            if (!isMatch) return  res.status (200).json ({message : 'Đăng Nhập Thất Bại' ,Data_Token_ : false });
+            
+            const Data_Token_ = {
+                _id : result._id,
+                _Id_LoaiTaiKhoan : result.Id_LoaiTaiKhoan,
+                _TenTaiKhoan :  result.TenTaiKhoan,
+                _SoDienThoai : result.SoDienThoai,
+                _SoCCCD : result.SoCCCD,
+                _Image : result.Image
+            }
+
+            const jwt = require('jsonwebtoken');
+            const secretKey = 'your-secret-key';
+            const token = jwt.sign(Data_Token_, secretKey, { expiresIn: '1h' });
+            res.status (200).json ({
+                Data_Token_  : token,
+                message : 'Đăng Nhập Tài Khoản Thành Công'
+            });
+        });
+    }
+
+
 
       
 
@@ -55,8 +90,7 @@ class Tai_Khoan_Controler {
         this.Image =  req.file ? req.file.filename : false;
         if (!this.Password || !this.ID) return res.status(400).json({ message: "Cập Nhật Tài Khoản Thất Bại" });
 
-
-        this.Data_Edit = {
+        this.Data = {
             Id_LoaiTaiKhoan: req.body.Id_LoaiTaiKhoan.trim(),
             TenTaiKhoan: req.body.TenTaiKhoan.trim(),
             MatKhau: this.Password,
@@ -66,14 +100,11 @@ class Tai_Khoan_Controler {
         };
 
         if (!this.Image){
-            delete this.Data_Edit.Image;
+            delete this.Data.Image;
         }
 
-
-        if (!this.Data_Edit)
-            return res.status(400).json({ message: "Không có dữ liệu" });
-
-        Connect_Data_Model.Edit_Tai_Khoan_M(this.ID, this.Data_Edit, (Error, Result) => {
+        if (!this.Data) return res.status(400).json({ message: "Không có dữ liệu" });
+        Connect_Data_Model.Edit_Tai_Khoan_M(this.ID, this.Data, (Error, Result) => {
             if (Error) return next(Error);
             res.status(200).json({ message: "Cập Nhật Tài Khoản Thành Công" }); 
         });
@@ -84,12 +115,10 @@ class Tai_Khoan_Controler {
     
     Delete_Tai_Khoan = (req, res, next) => {
         this.ID = req.params.ID;
-        if (!this.ID)
-            return res.status(400).json({ message: "Xóa Tài Khoản Thất Bại" }); // ✅ đã sửa
-
+        if (!this.ID) return res.status(400).json({ message: "Xóa Tài Khoản Thất Bại" }); 
         Connect_Data_Model.Delete_Tai_Khoan_M(this.ID, (Error, Result) => {
             if (Error) return next(Error);
-            res.status(200).json({ message: "Xóa Tài Khoản Thành Công" }); // ✅ đã sửa
+            res.status(200).json({ message: "Xóa Tài Khoản Thành Công" }); 
         });
     }
 }

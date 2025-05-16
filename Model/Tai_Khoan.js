@@ -8,9 +8,7 @@ class Database_Taikhoan {
             await connectDB();
             const Select_Taikhoan = await Taikhoan.find({});
             Callback(null, Select_Taikhoan);
-        } 
-        
-        catch (error) {
+        } catch (error) {
             Callback(error);
         }   
     };
@@ -22,12 +20,23 @@ class Database_Taikhoan {
             const Add_New = new Taikhoan (Data);
             const Result = await Add_New.save();
             Callback (null , Result);
-        }
-
-        catch (error) {
+        } catch (error) {
             Callback(error);
         }
     }
+
+
+    Check_Login__M = async (SDT_Login , Callback) => {
+        try {
+            await connectDB ();
+            const Result_Request = await Taikhoan.findOne ({SoDienThoai : SDT_Login})
+                .select('_id Id_LoaiTaiKhoan TenTaiKhoan SoDienThoai SoCCCD Image MatKhau');
+                Callback (null , Result_Request);
+        } catch {
+            Callback(error);
+        }
+    }
+
 
 
     Edit_Tai_Khoan_M = async (id , Data , Callback) => {
@@ -35,9 +44,7 @@ class Database_Taikhoan {
             await connectDB();
             const Result = await Taikhoan.findByIdAndUpdate (id , Data ,  { new: true });
             Callback (null , Result);
-        }
-
-        catch (error) {
+        } catch (error) {
             Callback(error);
         }
     }
@@ -48,9 +55,7 @@ class Database_Taikhoan {
             await connectDB();
             const Result = await Taikhoan.findByIdAndDelete (id);
             Callback (null , Result);
-        }
-
-        catch (error) {
+        } catch (error) {
             Callback(error);
         }
     }
