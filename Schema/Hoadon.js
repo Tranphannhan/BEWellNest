@@ -9,6 +9,11 @@ const HoadonnSchema = new mongoose.Schema({
                 ref: 'Tai_Khoan',
             },
     Id_GiaDichVu:ObjectId || null,
+    LoaiHoaDon: {
+        type: String,
+        enum: ['Kham', 'Thuoc', 'XetNghiem'], 
+        required: true
+    },
     TenHoaDon: String,
     TongTien: Number
 

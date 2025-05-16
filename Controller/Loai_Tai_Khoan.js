@@ -17,6 +17,7 @@ class Loai_Tai_Khoan {
   Add_Loai_Tai_Khoan = (req, res, next) => {
     const Data_Add = {
       TenLoaiTaiKhoan: req.body.TenLoaiTaiKhoan.trim(),
+      VaiTro: req.body.VaiTro.trim()
     };
 
     if (!Data_Add.TenLoaiTaiKhoan) {
@@ -33,6 +34,7 @@ class Loai_Tai_Khoan {
     const { ID } = req.params;
     const Data_Edit = {
       TenLoaiTaiKhoan: req.body.TenLoaiTaiKhoan.trim(),
+      VaiTro: req.body.VaiTro.trim()
     };
 
     if (!Data_Edit.TenLoaiTaiKhoan) {

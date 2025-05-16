@@ -214,10 +214,10 @@ class Database_Donthuoc {
   }
 
   // 
-   Upload_Status_handling__M = async (ID  , Callback) => {
+   Upload_Status_handling__M = async (Id_NguoiPhatThuoc,ID  , Callback) => {
     try {
       await connectDB();
-      const data = await Donthuoc.findByIdAndUpdate(ID,{ $set: { TrangThai: true}},{ new: true });
+      const data = await Donthuoc.findByIdAndUpdate(ID,{ $set: { TrangThai: true, Id_NguoiPhatThuoc: Id_NguoiPhatThuoc}},{ new: true });
       Callback(null, data);
     } catch (error){
       Callback(error)

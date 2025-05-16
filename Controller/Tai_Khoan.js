@@ -34,8 +34,8 @@ class Tai_Khoan_Controler {
             Id_LoaiTaiKhoan: req.body.Id_LoaiTaiKhoan.trim(),
             TenTaiKhoan: req.body.TenTaiKhoan.trim(),
             MatKhau: this.Password,
-            TenDangNhap: req.body.TenDangNhap.trim(),
-            TenLoaiTaiKhoan: req.body.TenLoaiTaiKhoan,
+            SoDienThoai: req.body.SoDienThoai.trim(),
+            SoCCCD: req.body.SoCCCD.trim(),
             Image : `http://localhost:5000/image/${this.Image}`
         };
 
@@ -43,21 +43,7 @@ class Tai_Khoan_Controler {
         if (!this.Data_Add) return res.status(400).json({ message: "Không có dữ liệu tài khoản" }); 
         Connect_Data_Model.Add_Tai_Khoan_M(this.Data_Add,  (Error, Result) => {
             if (Error) return next(Error);
-            const Data_Token_ = {
-                Id_LoaiTaiKhoan : this.Data_Add.Id_LoaiTaiKhoan,
-                TenTaiKhoan : this.Data_Add.TenTaiKhoan,
-                TenDangNhap : this.Data_Add.TenDangNhap,
-                TenLoaiTaiKhoan : this.Data_Add.TenLoaiTaiKhoan,
-                Image : `http://localhost:5000/image/${this.Image}`
-            }
-
-            const jwt = require('jsonwebtoken');
-            const secretKey = 'your-secret-key';
-            const token = jwt.sign(Data_Token_, secretKey, { expiresIn: '1h' });
-            res.status(201).json({
-                message: "Thêm Mới Tài Khoản Thành Công" ,
-                data : token
-            });
+            res.status(201).json(Result)
         });
     }
 
@@ -71,11 +57,11 @@ class Tai_Khoan_Controler {
 
 
         this.Data_Edit = {
-           Id_LoaiTaiKhoan: req.body.Id_LoaiTaiKhoan.trim(),
+            Id_LoaiTaiKhoan: req.body.Id_LoaiTaiKhoan.trim(),
             TenTaiKhoan: req.body.TenTaiKhoan.trim(),
             MatKhau: this.Password,
-            TenDangNhap: req.body.TenDangNhap.trim(),
-            TenLoaiTaiKhoan: req.body.TenLoaiTaiKhoan,
+            SoDienThoai: req.body.SoDienThoai.trim(),
+            SoCCCD: req.body.SoCCCD.trim(),
             Image : `http://localhost:5000/image/${this.Image}`
         };
 

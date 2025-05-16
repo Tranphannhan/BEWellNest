@@ -5,8 +5,8 @@ const Tai_Khoan_Schema = new mongoose.Schema({
     Id_LoaiTaiKhoan : ObjectId,
     TenTaiKhoan : String,
     MatKhau : String,
-    TenDangNhap : String,  
-    TenLoaiTaiKhoan : String,
+    SoDienThoai : String,
+    SoCCCD: String,
     Image : String
 
 }, { collection: "Tai_Khoan" }); 

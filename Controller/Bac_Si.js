@@ -34,7 +34,7 @@ class Bacsi_Controler {
       NamSinh: req.body['NamSinh']?.trim() ? Number(req.body['NamSinh'].trim()) : null,
       Matkhau : Matkhau_Mahoa,
       Image : Image,
-      VaiTro : 'Bác Sĩ',
+      VaiTro : 'BacSi',
       TrangThaiHoatDong : true
     };
 
@@ -61,7 +61,7 @@ class Bacsi_Controler {
         NamSinh: req.body['NamSinh']?.trim() ? Number(req.body['NamSinh'].trim()) : null,
         Matkhau : Matkhau_Mahoa,
         Image : Image,
-        VaiTro : 'Bác Sĩ',
+        VaiTro : 'BacSi',
         TrangThaiHoatDong : true
       };
 

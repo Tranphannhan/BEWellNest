@@ -22,8 +22,9 @@ class Hoadon_Controler {
         Id_Dichvu : req.body.Id_Dichvu?.trim(),
         Id_ThuNgan: req.body.Id_ThuNgan?.trim(),
         Id_GiaDichVu:req.body.Id_GiaDichVu?.trim(),
+        LoaiHoaDon: req.body.LoaiHoaDon.trim(),
         TenHoaDon: req.body.TenHoaDon?.trim(),
-        TongTien: req.body.TongTien.trim()
+        TongTien: req.body.TongTien
         };
 
         Connect_Data_Model.Add_Hoadon__M (data, (error, result) => {

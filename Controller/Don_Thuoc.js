@@ -89,7 +89,6 @@ class Donthuoc_Controler {
   add_Donthuoc = (req, res, next) => {
     const data = {
       Id_PhieuKhamBenh: req.body.Id_PhieuKhamBenh,
-      Id_NguoiPhatThuoc: req.body.Id_NguoiPhatThuoc.trim(),
       TenDonThuoc: req.body.TenDonThuoc?.trim(),
       TrangThaiThanhToan: false,
       TrangThai:false
@@ -165,10 +164,15 @@ class Donthuoc_Controler {
 
   Status_handling = (req , res , next) => {
     const ID = req.params.ID;
+    const Id_NguoiPhatThuoc = req.query.Id_NguoiPhatThuoc;
+    if(!ID || !Id_NguoiPhatThuoc){
+      return res.status(500).json({massage:"Thiếu Id_Donthuoc, Id_NguoiPhatThuoc"})
+    }
     Connect_Data_Model.Select_Check_Status_Donthuoc_M (ID , (err , result) => {
     if (err) return res.status(500).json({ message: "Lỗi server", error: err });
+
     if (result[0].TrangThai) return res.status(200).json ({message : "Trạng thái đã được xác nhận trước đó" , error: err });
-    Connect_Data_Model.Upload_Status_handling__M (ID , (err , result) => {
+    Connect_Data_Model.Upload_Status_handling__M (Id_NguoiPhatThuoc , ID , (err , result) => {
         if (err) return res.status(500).json({ message: "Lỗi server", error: err });
         return res.status(200).json({ message: "Xác nhận trạng thái thành công" });
       });

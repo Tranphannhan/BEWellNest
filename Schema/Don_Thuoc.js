@@ -8,7 +8,7 @@ const Donthuoc_Schema = new mongoose.Schema({
         },
 
     Id_NguoiPhatThuoc: {
-                type: mongoose.Schema.Types.ObjectId,
+                type: mongoose.Schema.Types.ObjectId || null,
                 ref: 'Tai_Khoan',
             },
 
