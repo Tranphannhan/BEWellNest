@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const Loading_Controler_Donthuoc = require ('../Controller/Don_Thuoc');
+const { kiemTraVaiTroDuocSi } = require('../Middleware/authenticate');
 const Handle_Donthuoc = new Loading_Controler_Donthuoc ();
 
 router.get ('/' , Handle_Donthuoc.Select_Donthuoc);
@@ -11,10 +12,10 @@ router.patch ('/Xacnhanthanhtoan/:ID_DonThuoc', Handle_Donthuoc.PaymentConfirmat
 router.get('/ChuaThanhToan', Handle_Donthuoc.Get_Not_Yet_Paid);
 router.patch ('/XacNhanTrangThai/:ID' , Handle_Donthuoc.Status_handling);
 // Đây là chức năng tìm kiếm của dược sĩ
-router.get('/TimKiemCuaDS', Handle_Donthuoc.SearchDS);
+router.get('/TimKiemCuaDS/Pagination', Handle_Donthuoc.SearchDS);
 
 
-router.get('/DanhSachPhatThuoc' , Handle_Donthuoc.Select_Status_Donthuoc);
+router.get('/DanhSachPhatThuoc' ,kiemTraVaiTroDuocSi, Handle_Donthuoc.Select_Status_Donthuoc);
 //http://localhost:5000/Donthuoc/DanhSachPhatThuoc?date=2025-05-10
 
 router.get('/DanhSachPhatThuoc/Pagination' , Handle_Donthuoc.MedicineDistributionList_Pagination);

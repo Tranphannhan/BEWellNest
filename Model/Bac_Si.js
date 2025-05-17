@@ -27,7 +27,6 @@ class Database_Bacsi {
         await connectDB ();
         const Result_Request = await Bac_Si.findOne ({SoDienThoai : SDT_Login}).populate({
           path:"ID_Khoa",
-          
         });
         Callback (null , Result_Request);
     } catch {

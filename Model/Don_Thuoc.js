@@ -224,8 +224,9 @@ class Database_Donthuoc {
     }
   }
 
-  SearchDS_M = async (search, Callback) => {
+  SearchDS_M = async (page,limit,search, Callback) => {
   try {
+    const skip= (page - 1)* limit;
     await connectDB();
 
     const matchConditions = [];
@@ -265,9 +266,9 @@ class Database_Donthuoc {
       },
       { $unwind: '$The_Kham_Benh' },
       ...(matchConditions.length > 0 ? [{ $match: { $and: matchConditions } }] : []),
-    ]);
-
-    Callback(null, data);
+    ]).skip(skip).limit(limit);
+    const total = data.length
+    Callback(null, {totalItems:total, currentPage: page, totalPages: Math.ceil(total/limit),data:data});
   } catch (error) {
     Callback(error);
   }

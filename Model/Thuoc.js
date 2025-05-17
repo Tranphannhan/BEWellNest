@@ -13,6 +13,34 @@ class Database_Thuoc {
         }   
     };
 
+    Get_Detail_M = async (Id ,Callback) => {
+        try {
+            await connectDB();
+            const Select_Thuoc = await Thuoc.find({_id: Id}).populate([
+                {path:"Id_NhomThuoc"},
+                {path:"Id_NhaSanXuat"}
+            ]);
+            Callback(null, Select_Thuoc);
+        } catch (error) {
+            Callback(error);
+        }   
+    };
+
+    Get_TakeInGroups_M = async (page, limit, Id,Callback) => {
+        try {
+            const skip = (page - 1) * limit
+            await connectDB();
+            const Select_Thuoc = await Thuoc.find({Id_NhomThuoc: Id}).populate([
+                {path:"Id_NhomThuoc"},
+                {path:"Id_NhaSanXuat"}
+            ]).skip(skip).limit(limit);
+            const total = await Thuoc.countDocuments({Id_NhomThuoc: Id})
+            Callback(null, {totalItems:total, currentPage: page, totalPages: Math.ceil(total/limit),data:Select_Thuoc});
+        } catch (error) {
+            Callback(error);
+        }   
+    };
+
 
     Add_Thuoc__M = async (Data , Callback) => {
         try {
@@ -58,6 +86,7 @@ class Database_Thuoc {
             Callback(error);
         }   
     };
+
 }
 
 module.exports = Database_Thuoc;

@@ -181,7 +181,9 @@ class Donthuoc_Controler {
   
   SearchDS = (req,res,next) =>{
     const query = req.query;
-    Connect_Data_Model.SearchDS_M(query,(err , result)=>{
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 7;
+    Connect_Data_Model.SearchDS_M(page,limit,query,(err , result)=>{
       if (err) return res.status(500).json({ message: "Lỗi server", error: err });
       res.status(200).json(result)
     })

@@ -9,7 +9,7 @@ class Thuoc_Controler {
   Select_Donthuoc = (req, res, next) => {
     Connect_Data_Model.Select_Thuoc__M ((error, result) => {
       if (error) return next(error);
-      if (result.length < 1) return res.status(404).json({ message: "Dữ liệu Thẻ Khám Bệnh Rỗng" });
+      if (result.length < 1) return res.status(404).json({ message: "Dữ liệu Rỗng" });
       res.status(200).json(result);
     });
   };
@@ -19,7 +19,7 @@ class Thuoc_Controler {
     const limit = parseInt(req.query.limit) || 7;
     Connect_Data_Model.Get_Pagination_M (page,limit,(error, result) => {
       if (error) return next(error);
-      if (result.length < 1) return res.status(404).json({ message: "Dữ liệu Thẻ Khám Bệnh Rỗng" });
+      if (result.length < 1) return res.status(404).json({ message: "Dữ liệu Rỗng" });
       res.status(200).json(result);
     });
   };
@@ -87,7 +87,25 @@ class Thuoc_Controler {
     });
   };
 
+  Get_Detail = (req, res, next) => {
+    const Id = req.params.ID
+    Connect_Data_Model.Get_Detail_M (Id ,(error, result) => {
+      if (error) return next(error);
+      if (result.length < 1) return res.status(404).json({ message: "Dữ liệu Rỗng" });
+      res.status(200).json(result);
+    });
+  };
 
+  Get_TakeInGroups = (req, res, next) => {
+    const Id = req.params.Id_NhomThuoc
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 7;
+    Connect_Data_Model.Get_TakeInGroups_M (page, limit ,Id ,(error, result) => {
+      if (error) return next(error);
+      if (result.length < 1) return res.status(404).json({ message: "Dữ liệu Rỗng" });
+      res.status(200).json(result);
+    });
+  };
 }
 
 module.exports = Thuoc_Controler;
