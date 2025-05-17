@@ -6,7 +6,21 @@ class Database_Taikhoan {
     Select_Tai_Khoan_M = async (Callback) => {
         try {
             await connectDB();
-            const Select_Taikhoan = await Taikhoan.find({});
+            const Select_Taikhoan = await Taikhoan.find({}).populate({
+                path:"Id_LoaiTaiKhoan"
+            });
+            Callback(null, Select_Taikhoan);
+        } catch (error) {
+            Callback(error);
+        }   
+    };
+
+    Get_ByLoai_M = async (Id_Loai,Callback) => {
+        try {
+            await connectDB();
+            const Select_Taikhoan = await Taikhoan.find({Id_LoaiTaiKhoan: Id_Loai}).populate({
+                path:"Id_LoaiTaiKhoan"
+            });
             Callback(null, Select_Taikhoan);
         } catch (error) {
             Callback(error);
@@ -40,6 +54,25 @@ class Database_Taikhoan {
         }
     }
 
+      Check_SoDienThoai_register = async (SoDienThoai) => {
+        try {
+            await connectDB();
+
+            const data = await Taikhoan.findOne({ SoDienThoai: SoDienThoai });
+
+            // Nếu đã tìm thấy => số điện thoại đã tồn tại => return false
+            if (data) {
+            return false;
+            }
+
+            // Nếu không tìm thấy => số điện thoại chưa tồn tại => return true
+            return true;
+
+        } catch (error) {
+                console.error("Lỗi kiểm tra số điện thoại:", error);
+                throw error;
+            }
+        }
 
 
     Edit_Tai_Khoan_M = async (id , Data , Callback) => {

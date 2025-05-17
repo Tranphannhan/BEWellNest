@@ -6,7 +6,21 @@ class Database_Phong_Kham {
     Select_Phong_Kham_M = async (Callback) => {
         try {
             await connectDB();
-            const result = await Phong_Kham.find({});
+            const result = await Phong_Kham.find({}).populate({
+                path:"Id_Khoa"
+            });
+            Callback(null, result);
+        } catch (error) {
+            Callback(error);
+        }
+    };
+
+    Get_ByKhoa_M = async (Id_Khoa,Callback) => {
+        try {
+            await connectDB();
+            const result = await Phong_Kham.find({Id_Khoa:Id_Khoa}).populate({
+                path:"Id_Khoa"
+            });
             Callback(null, result);
         } catch (error) {
             Callback(error);

@@ -7,7 +7,9 @@ class The_Kham_Benh_Controler {
   };
 
   Select_Thekhambenh = (req, res, next) => {
-    Connect_Data_Model.Select_The_khambenh_M((error, result) => {
+    const page =parseInt(req.query.page ) || 1;
+    const limit =parseInt(req.query.limit)  || 7;
+    Connect_Data_Model.Select_The_khambenh_M(page,limit,(error, result) => {
       if (error) return next(error);
       if (result.length < 1) return res.status(404).json({ message: "Dữ liệu Thẻ Khám Bệnh Rỗng" });
       res.status(200).json(result);

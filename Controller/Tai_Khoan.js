@@ -26,6 +26,16 @@ class Tai_Khoan_Controler {
         });
     };  
 
+    Get_ByLoai = (req, res, next) => {
+        const Id_Loai = req.params.ID;
+        Connect_Data_Model.Get_ByLoai_M(Id_Loai,(error, result) => {
+            if (error) return next(error);
+            if (result.length < 1)
+                return res.status(404).json({ message: "Dữ liệu Tài Khoản Rỗng" });
+            res.status(200).json(result);
+        });
+    };  
+
 
     Add_Tai_Khoan = async (req, res, next) => {
         this.Password = await Connect_Handle_Password.hashPassword(req.body.MatKhau.trim());
@@ -43,6 +53,11 @@ class Tai_Khoan_Controler {
 
 
         if (!this.Data) return res.status(400).json({ message: "Không có dữ liệu tài khoản" }); 
+
+        const Continue = await Connect_Data_Model.Check_SoDienThoai_register(this.Data.SoDienThoai);
+
+        if(Continue === false) return res.status(500).json({message:"Số điện thoại này đã được đăng ký rồi"})
+
         Connect_Data_Model.Add_Tai_Khoan_M(this.Data,  (Error, Result) => {
             if (Error) return next(Error);
             res.status(201).json(Result)

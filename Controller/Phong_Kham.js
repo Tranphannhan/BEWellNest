@@ -16,6 +16,17 @@ class Phong_Kham_Controler {
     });
   };
 
+  Get_ByKhoa = (req, res, next) => {
+    const Id_Khoa = req.params.ID
+    Connect_Data_Model.Get_ByKhoa_M(Id_Khoa,(error, result) => {
+      if (error) return next(error);
+      if (!result || result.length === 0) { // ✅ kiểm tra rỗng
+        return res.status(404).json({ message: "Dữ liệu phòng khám rỗng" }); // ✅ đã sửa
+      }
+      res.status(200).json(result);
+    });
+  };
+
   add_Phong_Kham = (req, res, next) => {
     const data = {
       Id_Khoa: req.body.Id_Khoa,

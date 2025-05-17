@@ -6,6 +6,7 @@ const Upload  = require ('../Middleware/upload');
     
   
 router.get ('/' , Handle_Tai_Khoan.Select_Tai_Khoan);
+router.get ('/LayTheoLoai/:ID' , Handle_Tai_Khoan.Get_ByLoai);
 router.post ('/Add' , Upload.Upload_Image__.single("Image"), Handle_Tai_Khoan.Add_Tai_Khoan);
 router.put ('/Edit/:ID' , Upload.Upload_Image__.single("Image") , Handle_Tai_Khoan.Edit_Tai_Khoan);
 router.delete ('/Delete/:ID' , Handle_Tai_Khoan.Delete_Tai_Khoan);

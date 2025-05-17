@@ -3,11 +3,13 @@ const connectDB = require("../Model/Db");
 const The_Kham_Benh = require("../Schema/The_Kham_Benh"); 
 
 class Database_The_Kham_Benh {
-    Select_The_khambenh_M = async (Callback) => {
+    Select_The_khambenh_M = async (page,limit,Callback) => {
         try {
+            const skip = (page - 1)* limit;
             await connectDB();
-            const Select_The_Kham_Benh = await The_Kham_Benh.find({});
-            Callback(null, Select_The_Kham_Benh);
+            const data = await The_Kham_Benh.find({}).skip(skip).limit(limit);
+            const total = await The_Kham_Benh.countDocuments()
+            Callback(null,  {totalItems:total, currentPage: page, totalPages: Math.ceil(total/limit),data:data});
         } 
         
         catch (error) {

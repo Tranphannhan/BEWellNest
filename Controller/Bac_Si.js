@@ -21,6 +21,28 @@ class Bacsi_Controler {
       res.status(200).json(result);
     });
   };
+
+  Get_Dettail = (req, res, next) => {
+    const id = req.params.ID;
+    Connect_Data_Model.Get_Dettail_M(id,(error, result) => {
+      if (error) return next(error);
+      if (!result || result.length < 1) { 
+        return res.status(404).json({ message: "Không có bác sĩ nào trong hệ thống" }); 
+      }
+      res.status(200).json(result);
+    });
+  };
+
+  Get_ByKhoa = (req, res, next) => {
+    const id = req.params.ID;
+    Connect_Data_Model.Get_ByKhoa_M(id,(error, result) => {
+      if (error) return next(error);
+      if (!result || result.length < 1) { 
+        return res.status(404).json({ message: "Không có bác sĩ nào trong hệ thống" }); 
+      }
+      res.status(200).json(result);
+    });
+  };
     
             
   add_Bacsi = async (req, res, next) => {
@@ -35,11 +57,12 @@ class Bacsi_Controler {
       HocVi: req.body.HocVi?.trim(),
       NamSinh: req.body['NamSinh']?.trim() ? Number(req.body['NamSinh'].trim()) : null,
       Matkhau : Matkhau_Mahoa,
-      Image : Image,
+      Image : Image, 
       VaiTro : 'BacSi',
       TrangThaiHoatDong : true
     };
-
+    const Continue = await Connect_Data_Model.Check_SoDienThoai_register(data.SoDienThoai)
+    if(Continue === false) return res.status(500).json({message:"Số điện thoại này đã được đăng ký rồi"})
     Connect_Data_Model.Insert_Bacsi_M(data, (err, result) => {
       if (err) return res.status(500).json({ message: "Thêm bác sĩ thất bại", error: err });
       res.status(201).json({ message: "Thêm bác sĩ thành công", data: result }); 
@@ -99,11 +122,11 @@ class Bacsi_Controler {
         GioiTinh: req.body.GioiTinh?.trim(),
         SoDienThoai: req.body.SoDienThoai?.trim(),
         HocVi: req.body.HocVi?.trim(),
-        NamSinh: req.body['NamSinh']?.trim() ? Number(req.body['NamSinh'].trim()) : null,
+        NamSinh: req.body.Namsinh,
         Matkhau : Matkhau_Mahoa,
         Image : Image,
         VaiTro : 'BacSi',
-        TrangThaiHoatDong : true
+        TrangThaiHoatDong : req.body.TrangThaiHoatDong?.trim(),
       };
 
       if (!Image) {
