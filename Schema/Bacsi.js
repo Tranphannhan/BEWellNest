@@ -2,7 +2,11 @@ const mongoose = require("mongoose");
 const ObjectId = mongoose.Types.ObjectId;
 
 const BacSiSchema = new mongoose.Schema({
-    ID_Khoa : ObjectId,
+    ID_Khoa :  {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Khoa', 
+            },
+    
     TenBacSi: String,
     GioiTinh: String,
     SoDienThoai: String,

@@ -26,11 +26,14 @@ class Database_Taikhoan {
     }
 
 
-    Check_Login__M = async (SDT_Login , Callback) => {
+    Check_Login__M = async (SDT_Login, Id_LoaiTaiKhoan, Callback) => {
         try {
             await connectDB ();
-            const Result_Request = await Taikhoan.findOne ({SoDienThoai : SDT_Login})
-                .select('_id Id_LoaiTaiKhoan TenTaiKhoan SoDienThoai SoCCCD Image MatKhau');
+            const Result_Request = await Taikhoan.findOne ({SoDienThoai : SDT_Login, Id_LoaiTaiKhoan: Id_LoaiTaiKhoan})
+                .select('_id Id_LoaiTaiKhoan TenTaiKhoan SoDienThoai SoCCCD Image MatKhau').populate({
+                    path:'Id_LoaiTaiKhoan',
+                    
+                });
                 Callback (null , Result_Request);
         } catch {
             Callback(error);

@@ -53,9 +53,10 @@ class Tai_Khoan_Controler {
     Check_Login = async (req , res , next) => {
         const Password_Login  = req.body.MatKhau.trim();
         const SDT_Login  = req.body.SoDienThoai.trim();
-        if (!Password_Login || !SDT_Login) return res.status(400).json ({message : "Đăng Nhập Tài Khoản Thất Bại"});
+        const Id_LoaiTaiKhoan = req.params.Id_LoaiTaiKhoan;
+        if (!Password_Login || !SDT_Login || !Id_LoaiTaiKhoan) return res.status(400).json ({message : "Đăng Nhập Tài Khoản Thất Bại"});
     
-        Connect_Data_Model.Check_Login__M  (SDT_Login , async (error , result) => {
+        Connect_Data_Model.Check_Login__M  (SDT_Login ,Id_LoaiTaiKhoan , async (error , result) => {
             if (error) return next (error);
             if (!result) return res.status(200).json ({message : "Không Tìm Thất Tài Khoản Đăng Nhập Vui Lòng Đăng Nhập Lại"});
             const isMatch = await bcrypt.compare(Password_Login, result.MatKhau);
@@ -71,7 +72,7 @@ class Tai_Khoan_Controler {
             } 
 
             const jwt = require('jsonwebtoken');
-            const secretKey = 'your-secret-key';
+            const secretKey = 'WellNest_User';
             const token = jwt.sign(Data_Token_, secretKey, { expiresIn: '1h' });
             res.status (200).json ({
                 Data_Token_  : token,

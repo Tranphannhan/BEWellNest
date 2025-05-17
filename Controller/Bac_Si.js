@@ -55,10 +55,10 @@ class Bacsi_Controler {
 
     Connect_Data_Model.Check_Login__M  (SDT_Login , async (error , result) => {
       if (error) return next (error);
-      if (!result) return res.status(200).json ({message : "Không Tìm Thất Tài Khoản Đăng Nhập Vui Lòng Đăng Nhập Lại"});
+      if (!result) return res.status(200).json ({message : "Không Tìm Thấy Tài Khoản Đăng Nhập Vui Lòng Đăng Nhập Lại"});
       if (result.TrangThaiHoatDong === false) return  res.status(200).json ({message : "Tài khoản đã ngừng hoạt động vui lòng liên hệ đến quản trị viên"});
       const isMatch = await bcrypt.compare(Password_Login, result.Matkhau);
-      if (!isMatch) return  res.status (200).json ({message : 'Đăng Nhập Thất Bại' , Data_Token_ : false });
+      if (!isMatch) return  res.status (200).json ({message : 'Mật khẩu không chính xác' , Data_Token_ : false });
 
       const Data_Token_ = {
         _id : result._id,
@@ -73,7 +73,7 @@ class Bacsi_Controler {
       }   
 
       const jwt = require('jsonwebtoken');
-      const secretKey = 'your-secret-key';
+      const secretKey = 'WellNest_User';
       const token = jwt.sign(Data_Token_, secretKey, { expiresIn: '1h' });
       res.status (200).json ({
           Data_Token_  : token,

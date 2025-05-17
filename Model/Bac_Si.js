@@ -25,7 +25,10 @@ class Database_Bacsi {
   Check_Login__M = async (SDT_Login , Callback) => {
     try {
         await connectDB ();
-        const Result_Request = await Bac_Si.findOne ({SoDienThoai : SDT_Login});
+        const Result_Request = await Bac_Si.findOne ({SoDienThoai : SDT_Login}).populate({
+          path:"ID_Khoa",
+          
+        });
         Callback (null , Result_Request);
     } catch {
         Callback(error);
