@@ -68,7 +68,7 @@ class Tai_Khoan_Controler {
                 _SoDienThoai : result.SoDienThoai,
                 _SoCCCD : result.SoCCCD,
                 _Image : result.Image
-            }
+            } 
 
             const jwt = require('jsonwebtoken');
             const secretKey = 'your-secret-key';

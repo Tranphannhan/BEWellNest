@@ -2,6 +2,8 @@ const Connect_Bacsi_M = require("../Model/Bac_Si");
 const Connect_Data_Model = new Connect_Bacsi_M();
 const Handle_Password = require('../Middleware/Password_encryption');
 const Connect_Handle_Password = new Handle_Password();
+const bcrypt = require('bcrypt');
+
 
 
 class Bacsi_Controler {
@@ -43,6 +45,44 @@ class Bacsi_Controler {
       res.status(201).json({ message: "Thêm bác sĩ thành công", data: result }); 
     });
   };
+
+
+
+  Check_Login = async (req , res , next) => {
+    const Password_Login  = req.body.MatKhau.trim();
+    const SDT_Login  = req.body.SoDienThoai.trim();
+    if (!Password_Login || !SDT_Login) return res.status(400).json ({message : "Đăng Nhập Tài Khoản Thất Bại"});
+
+    Connect_Data_Model.Check_Login__M  (SDT_Login , async (error , result) => {
+      if (error) return next (error);
+      if (!result) return res.status(200).json ({message : "Không Tìm Thất Tài Khoản Đăng Nhập Vui Lòng Đăng Nhập Lại"});
+      if (result.TrangThaiHoatDong === false) return  res.status(200).json ({message : "Tài khoản đã ngừng hoạt động vui lòng liên hệ đến quản trị viên"});
+      const isMatch = await bcrypt.compare(Password_Login, result.Matkhau);
+      if (!isMatch) return  res.status (200).json ({message : 'Đăng Nhập Thất Bại' , Data_Token_ : false });
+
+      const Data_Token_ = {
+        _id : result._id,
+        _ID_Khoa : result.ID_Khoa,
+        _TenBacSi :  result.TenBacSi,
+        _GioiTinh : result.GioiTinh,
+        _SoDienThoai : result.SoDienThoai,
+        _HocVi : result.HocVi,
+        _NamSinh : result.NamSinh,
+        _Image : result.Image,
+        _TrangThaiHoatDong : result.TrangThaiHoatDong
+      }   
+
+      const jwt = require('jsonwebtoken');
+      const secretKey = 'your-secret-key';
+      const token = jwt.sign(Data_Token_, secretKey, { expiresIn: '1h' });
+      res.status (200).json ({
+          Data_Token_  : token,
+          message : 'Đăng Nhập Tài Khoản Thành Công'
+      });
+    });
+  }
+
+
 
 
  

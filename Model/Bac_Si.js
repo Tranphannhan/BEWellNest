@@ -22,6 +22,17 @@ class Database_Bacsi {
   };
 
 
+  Check_Login__M = async (SDT_Login , Callback) => {
+    try {
+        await connectDB ();
+        const Result_Request = await Bac_Si.findOne ({SoDienThoai : SDT_Login});
+        Callback (null , Result_Request);
+    } catch {
+        Callback(error);
+    }
+  }
+
+
 
   // Thêm bác sĩ
   Insert_Bacsi_M = async (data, Callback) => {
