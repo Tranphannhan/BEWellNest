@@ -4,6 +4,8 @@ const Loading_Controler_Ket_Qua_Xet_Nghiem = require ('../Controller/Ket_Qua_Xet
 const Handle_Ket_Qua_Xet_Nghiem = new Loading_Controler_Ket_Qua_Xet_Nghiem ();
 const Upload  = require ('../Middleware/upload');
 
+// Lấy yêu cầu xét nghiệm theo Id_YeuCauXetNghiem (Huân Làm)
+// Lấy Detail
 router.get ('/' , Handle_Ket_Qua_Xet_Nghiem.Select_Ketquaxetnghiem);
 router.delete ('/Delete/:ID' , Handle_Ket_Qua_Xet_Nghiem.Delete_Ketquaxetnghiem);
 

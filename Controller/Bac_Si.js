@@ -13,7 +13,23 @@ class Bacsi_Controler {
 
 
   Select_Bacsi = (req, res, next) => {
-    Connect_Data_Model.Select_Bacsi_M((error, result) => {
+    const limit = parseInt(req.query.limit)||7;
+    const page = parseInt(req.query.page)||1;
+    Connect_Data_Model.Select_Bacsi_M(page,limit,(error, result) => {
+      if (error) return next(error);
+      if (!result || result.length < 1) { 
+        return res.status(404).json({ message: "Không có bác sĩ nào trong hệ thống" }); 
+      }
+      res.status(200).json(result);
+    });
+  };
+
+  Get_ByTrangThaiHoatDong = (req, res, next) => {
+    const TrangThaiHoatDong = req.query.TrangThaiHoatDong;
+    if(!TrangThaiHoatDong) return res.status(500).json({ message: "Vui lòng cho trạng thái hoạt động vào" }); 
+    const limit = parseInt(req.query.limit)||7;
+    const page = parseInt(req.query.page)||1;
+    Connect_Data_Model.Get_ByTrangThaiHoatDong_M(page,limit,TrangThaiHoatDong,(error, result) => {
       if (error) return next(error);
       if (!result || result.length < 1) { 
         return res.status(404).json({ message: "Không có bác sĩ nào trong hệ thống" }); 
@@ -35,7 +51,9 @@ class Bacsi_Controler {
 
   Get_ByKhoa = (req, res, next) => {
     const id = req.params.ID;
-    Connect_Data_Model.Get_ByKhoa_M(id,(error, result) => {
+    const limit = parseInt(req.query.limit)||7;
+    const page = parseInt(req.query.page)||1;
+    Connect_Data_Model.Get_ByKhoa_M(page,limit,id,(error, result) => {
       if (error) return next(error);
       if (!result || result.length < 1) { 
         return res.status(404).json({ message: "Không có bác sĩ nào trong hệ thống" }); 

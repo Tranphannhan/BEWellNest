@@ -3,6 +3,7 @@ var router = express.Router();
 const Loading_Controler_Thuoc = require ('../Controller/Thuoc');
 const Handle_Thuoc = new Loading_Controler_Thuoc ();
 
+// Lấy Detail
 router.get ('/' , Handle_Thuoc.Select_Donthuoc);
 router.get ('/LayTheoNhom/Pagination/:Id_NhomThuoc' , Handle_Thuoc.Get_TakeInGroups);
 router.get ('/Detail/:ID' , Handle_Thuoc.Get_Detail);

@@ -4,15 +4,37 @@ const Bac_Si = require("../Schema/Bacsi");
 
 class Database_Bacsi {
   // Lấy danh sách bác sĩ
-  Select_Bacsi_M = async (Callback) => {
+  Select_Bacsi_M = async (page,limit,Callback) => {
     try {
+      const skip = (page - 1)* limit
       await connectDB();
-      const Select_Bacsi = await Bac_Si.find({});
-      Callback(null, Select_Bacsi);
+      const Select_Bacsi = await Bac_Si.find({}).populate({
+        path:"ID_Khoa"
+      }).skip(skip).limit(limit);
+
+      const total = await Bac_Si.countDocuments()
+
+      Callback(null, {totalItems:total, currentPage: page, totalPages: Math.ceil(total/limit),data:Select_Bacsi});
     } catch (error) {
       Callback(error);
     }
   };
+
+  Get_ByTrangThaiHoatDong_M = async (page,limit,TrangThaiHoatDong,Callback) => {
+    try {
+      const skip = (page - 1)* limit
+      await connectDB();
+      const Select_Bacsi = await Bac_Si.find({TrangThaiHoatDong:TrangThaiHoatDong}).populate({
+        path:"ID_Khoa"
+      }).skip(skip).limit(limit);
+
+      const total = await Bac_Si.countDocuments({TrangThaiHoatDong:TrangThaiHoatDong})
+      Callback(null, {totalItems:total, currentPage: page, totalPages: Math.ceil(total/limit),data:Select_Bacsi});
+    } catch (error) {
+      Callback(error);
+    }
+  };
+
 
   Get_Dettail_M = async (id,Callback) => {
     try {
@@ -26,13 +48,17 @@ class Database_Bacsi {
     }
   };
 
-  Get_ByKhoa_M = async (id,Callback) => {
+  Get_ByKhoa_M = async (page,limit,id,Callback) => {
     try {
+      const skip = (page - 1)* limit
       await connectDB();
       const Select_Bacsi = await Bac_Si.find({ID_Khoa:id}).populate({
         path:"ID_Khoa"
-      });
-      Callback(null, Select_Bacsi);
+      }).skip(skip).limit(limit);
+
+      const total = await Bac_Si.countDocuments({ID_Khoa:id})
+      
+      Callback(null, {totalItems:total, currentPage: page, totalPages: Math.ceil(total/limit),data:Select_Bacsi});
     } catch (error) {
       Callback(error);
     }

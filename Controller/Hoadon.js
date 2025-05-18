@@ -8,7 +8,9 @@ class Hoadon_Controler {
 
 
     Select_Hoadon = (req, res, next) => {
-        Connect_Data_Model.Select_Hoadon__M((error, result) => {
+        const limit = parseInt(req.query.limit)||7;
+        const page = parseInt(req.query.page)||1;
+        Connect_Data_Model.Select_Hoadon__M(page,limit,(error, result) => {
         if (error) return next(error);
         if (result.length === 0) return res.status(404).json({ message: "Không có hóa đơn nào hệ thống" }); 
         res.status(200).json(result);

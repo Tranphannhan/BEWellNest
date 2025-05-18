@@ -3,7 +3,7 @@ var router = express.Router();
 const Loading_Controler_Khoa = require ('../Controller/Khoa');
 const Handle_Khoa = new Loading_Controler_Khoa ();
 
-router.get ('/' , Handle_Khoa.Select_Khoa);
+router.get ('/' , Handle_Khoa.Select_Khoa); // Thêm Pagination
 router.post('/', Handle_Khoa.add_Khoa);
 router.delete('/:id', Handle_Khoa.deleteKhoa);
 router.put('/:id', Handle_Khoa.updateKhoa);

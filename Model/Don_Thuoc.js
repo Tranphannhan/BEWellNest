@@ -4,11 +4,30 @@ const Donthuoc = require("../Schema/Don_Thuoc");
 const Phieu_Kham_Benh = require ('../Schema/Phieu_Kham_Benh');
 
 class Database_Donthuoc {
-    Select_Donthuoc_M = async (Callback) => {
+    Select_Donthuoc_M = async (page,limit,Callback) => {
       try {
+        const skip = (page - 1)* limit;
         await connectDB();
-        const Select_Donthuoc = await Donthuoc.find({});
-        Callback(null, Select_Donthuoc);
+        const Select_Donthuoc = await Donthuoc.find({}).populate({
+            path: 'Id_PhieuKhamBenh',
+            select:'Ngay',
+            populate:[
+                {
+                  path: 'Id_TheKhamBenh',
+                  select: 'HoVaTen SoDienThoai'
+                },
+                {
+                  path: 'Id_CaKham',
+                  select:'TenCa',
+                  populate:{
+                    path:'Id_BacSi',
+                    select:'TenBacSi'
+                  }
+                }
+            ]
+          }).skip(skip).limit(limit);
+        const total = await Donthuoc.countDocuments()
+        Callback(null, {totalItems:total, currentPage: page, totalPages: Math.ceil(total/limit),data:Select_Donthuoc});
       } catch (error) {
         Callback(error);
       }
@@ -29,7 +48,7 @@ class Database_Donthuoc {
     // Danh sách phát thuốc nhưng có phân trang
     MedicineDistributionList_Pagination_M = async (page,limit,Ngay , Callback) => {
       try {
-        const skip = (page - 1)* limit
+        const skip = (page - 1)* limit;
         await connectDB();
         const KQ_Select1 = await Phieu_Kham_Benh.find ({Ngay : Ngay}).select ('_id');
         const Arr_ID = KQ_Select1.map (Tm => Tm._id);

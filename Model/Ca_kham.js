@@ -2,10 +2,12 @@ const { path } = require("../app");
 const connectDB = require("../Model/Db");
 const Cakham = require("../Schema/Cakham"); 
 const Phieukhambenh = require ('../Schema/Phieu_Kham_Benh');
+const Phong_Kham = require ('../Schema/Phong_Kham')
 
 class Database_Cakham {
-    Select_Cakham_M = async (Callback) => {
+    Select_Cakham_M = async (page,limit,Callback) => {
     try {
+      const skip = (page - 1)* limit
       await connectDB();
       const Select_Cakham = await Cakham.find({}).populate({
         path:'Id_BacSi',
@@ -17,13 +19,42 @@ class Database_Cakham {
           path: 'Id_Khoa',
           select: 'TenKhoa'
         }
-      });
-      Callback(null, Select_Cakham);
+      }).skip(skip).limit(limit);
+
+      const total = await Cakham.countDocuments()
+
+       Callback(null, {totalItems:total, currentPage: page, totalPages: Math.ceil(total/limit),data:Select_Cakham});
     } catch (error) {
       Callback(error);
     }
   };
 
+  Get_ByKhoa_M = async (page,limit,Id_Khoa,Callback) => {
+    try {
+      await connectDB();
+      const skip = (page - 1)* limit
+      const ID_PhongDuocLoc = await Phong_Kham.find({Id_Khoa:Id_Khoa}).select('_id');
+      const ID2 = ID_PhongDuocLoc.map(data => data._id)
+      const Select_Cakham = await Cakham.find({
+        Id_PhongKham: ID2
+      }).populate({
+        path:'Id_BacSi',
+        select: 'TenBacSi'
+      }).populate({
+         path:'Id_PhongKham',
+        select: 'SoPhongKham',
+        populate:{
+          path: 'Id_Khoa',
+          select: 'TenKhoa'
+        }
+      }).skip(skip).limit(limit);
+
+      const total = await Cakham.countDocuments({Id_PhongKham:ID2})
+      Callback(null, {totalItems:total, currentPage: page, totalPages: Math.ceil(total/limit),data:Select_Cakham});
+    } catch (error) {
+      Callback(error);
+    }
+  };
 
   
   Get_Count_Cakham__M = async (ID_Cakham, Date, Callback) => {

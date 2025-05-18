@@ -5,7 +5,9 @@ class Cakham_Controler {
   Runviews = (req, res, next) => res.status(200).json({ message: "Loadding Thành Công" }); // ✅ Chuẩn hóa phản hồi
 
   Select_Cakham = (req, res, next) => {
-    Connect_Data_Model.Select_Cakham_M((error, result) => {
+    const limit = parseInt(req.query.limit)|| 7;
+    const page = parseInt(req.query.page)|| 1;
+    Connect_Data_Model.Select_Cakham_M(page,limit,(error, result) => {
       if (error) return next(error);
       if (!result || result.length < 1) { // ✅ Kiểm tra dữ liệu rỗng
         return res.status(404).json({ message: "Dữ liệu ca khám rỗng" }); // ✅ Chuẩn hóa phản hồi
@@ -23,8 +25,22 @@ class Cakham_Controler {
       if (error) return next(error);
       res.status(200).json({ message: `Số lượng bệnh nhân đăng khám ngày ${Date} là : ${result}` });
     });
-};
+  };
 
+
+  Get_ByKhoa = (req, res, next) => {
+    const Id_Khoa = req.params.ID
+    if(!Id_Khoa) return res.status(500).json({ message: "Cần truyền Id_Khoa vào đẻ lọc" });
+    const limit = parseInt(req.query.limit)||7;
+    const page = parseInt(req.query.page)||1;
+    Connect_Data_Model.Get_ByKhoa_M(page,limit,Id_Khoa,(error, result) => {
+      if (error) return next(error);
+      if (!result || result.length < 1) { // ✅ Kiểm tra dữ liệu rỗng
+        return res.status(404).json({ message: "Dữ liệu ca khám rỗng" }); // ✅ Chuẩn hóa phản hồi
+      }
+      res.status(200).json(result);
+    });
+  };
 
   add_Cakham = (req, res, next) => {
     const data = {

@@ -5,7 +5,9 @@ class Donthuoc_Controler {
   Runviews = (req, res, next) => res.status(200).json({ message: "Loadding Thành Công" }); // ✅ Chuẩn hóa phản hồi
 
   Select_Donthuoc = (req, res, next) => {
-    Connect_Data_Model.Select_Donthuoc_M((error, result) => {
+    const limit = parseInt(req.query.limit)|| 7;
+    const page = parseInt(req.query.page)|| 1;
+    Connect_Data_Model.Select_Donthuoc_M(page, limit,(error, result) => {
       if (error) return next(error);
       if (!result || result.length < 1) { 
         return res.status(404).json({ message: "Dữ liệu Đơn Thuốc rỗng" }); // ✅ Chuẩn hóa response

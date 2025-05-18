@@ -3,6 +3,8 @@ var router = express.Router();
 const Loading_Controler_Yeucauxetnghiem = require ('../Controller/Yeu_Cau_Xet_Nghiem');
 const Handle_Yeucauxetnghiem = new Loading_Controler_Yeucauxetnghiem ();
 
+// load Yêu cầu theo Id_PhieuKhamBenh (Huân)
+// Lấy Detail
 router.get ('/' , Handle_Yeucauxetnghiem.Select_Yeucauxetnghiem);
 router.post ('/Add' , Handle_Yeucauxetnghiem.Add_Yeucauxetnghiem);
 router.put ('/Edit/:ID' , Handle_Yeucauxetnghiem.Edit_Yeucauxetnghiem);

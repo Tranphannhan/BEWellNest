@@ -1,13 +1,23 @@
 
+const { path } = require("../app");
 const connectDB = require("../Model/Db");
 const Hoadon = require("../Schema/Hoadon"); 
 
 class Database_Hoadon {
-    Select_Hoadon__M = async (Callback) => {
+    Select_Hoadon__M = async (page,limit,Callback) => {
         try {
+            const skip = (page - 1) * limit
             await connectDB();
-            const Select_Hoadon = await Hoadon.find({});
-            Callback(null, Select_Hoadon);
+            const Select_Hoadon = await Hoadon.find({}).populate({
+                path:"Id_PhieuKhamBenh",
+                select:"Ngay",
+                populate:{
+                    path:"Id_TheKhamBenh",
+                    select:"HoVaTen"
+                }
+            }).skip(skip).limit(limit);
+            const total = await Hoadon.countDocuments()
+            Callback(null,  {totalItems:total, currentPage: page, totalPages: Math.ceil(total/limit),data:Select_Hoadon});
         } catch (error) {
             Callback(error);
         }    

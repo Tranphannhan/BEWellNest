@@ -4,7 +4,9 @@ const Loading_Controler_Donthuoc = require ('../Controller/Don_Thuoc');
 const { kiemTraVaiTroDuocSi } = require('../Middleware/authenticate');
 const Handle_Donthuoc = new Loading_Controler_Donthuoc ();
 
-router.get ('/' , Handle_Donthuoc.Select_Donthuoc);
+// lấy đơn thuốc theo Id_PhieuKhamBenh (Huân)
+// Lấy Detail
+router.get ('/Pagination' , Handle_Donthuoc.Select_Donthuoc);
 router.post('/', Handle_Donthuoc.add_Donthuoc);
 router.delete('/:id', Handle_Donthuoc.deleteDonthuoc);
 router.put('/:id', Handle_Donthuoc.updateDonthuoc);
