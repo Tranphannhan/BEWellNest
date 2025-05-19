@@ -30,9 +30,25 @@ class Ketquaxetnghiem_Controler {
         res.send ("Thêm Mới Kết quả Xét Nghiệm Thành Công");
     });
   }  
-    
+   
+  Detail_Xet_Nghiem = (req , res , next) => {
+    const ID  =  req.params.ID;
+    Connect_Data_Model.Detail__M (ID  , (error , result) => {
+      if (error) return next(error);
+      res.status(200).json(result);
+    });
+  }   
+
+  GET_YeuCauXetNghiem = (req , res , next) => {
+    const Id_YeuCauXetNghiem  =  req.params.ID;
+    Connect_Data_Model.GET_YeuCauXetNghiem__M (Id_YeuCauXetNghiem , (error , result) => {
+      if (error) return next(error);
+      res.status(200).json(result);
+    });
+  }         
+
   
-  
+
   Edit_Ketquaxetnghiem = (req , res, next ) => {
     const {ID} = req.params;
     const Get_Anh_Xet_Nghiem = req.file ? req.file.filename : 'null';

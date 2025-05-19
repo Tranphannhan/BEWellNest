@@ -3,17 +3,24 @@ const Phong_Kham = require("../Schema/Phong_Kham");
 
 class Database_Phong_Kham {
     // Lấy danh sách phòng khám
-    Select_Phong_Kham_M = async (Callback) => {
+    Select_Phong_Kham_M = async (  limit , page  , Callback) => {
         try {
+            const skip = (page - 1) * limit;
             await connectDB();
-            const result = await Phong_Kham.find({}).populate({
+            const Select_Phongkham = await Phong_Kham.find({}).populate({
                 path:"Id_Khoa"
-            });
-            Callback(null, result);
+            }) 
+            
+            .skip(skip)  
+            .limit(limit);
+            const total = await Phong_Kham.countDocuments ();
+            Callback(null,  {totalItems:total, currentPage: page, totalPages: Math.ceil(total/limit),data:Select_Phongkham});
         } catch (error) {
             Callback(error);
         }
     };
+
+
 
     Get_ByKhoa_M = async (Id_Khoa,Callback) => {
         try {

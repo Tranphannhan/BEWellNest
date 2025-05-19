@@ -45,9 +45,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 
-      
+        
        
-
 app.use ('/Bacsi', indexRouter_Bacsi);
 app.use ('/Cakham' , indexRouter_Cakham);
 app.use ('/Donthuoc' , indexRouter_Donthuoc);
@@ -67,7 +66,6 @@ app.use ('/Hoadon' , indexRouter_Hoadon);
 app.use ('/Nhomthuoc' , indexRouter_Nhom_thuoc);
 app.use ('/Nhasanxuat' , indexRouter_Nha_san_xuat);
 app.use ('/Giadichvu' , indexRouter_Giadichvu);
-
 
 
 

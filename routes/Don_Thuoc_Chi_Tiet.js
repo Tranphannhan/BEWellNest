@@ -8,5 +8,5 @@ router.get ('/' , Handle_Donthuoc_Chitiet.Select_Donthuoc_Chitiet);
 router.post('/Add', Handle_Donthuoc_Chitiet.add_Donthuoc_Chitiet);
 router.delete('/:id', Handle_Donthuoc_Chitiet.deleteDonthuoc_Chitiet);
 router.put('/:id', Handle_Donthuoc_Chitiet.updateDonthuoc_Chitiet);
-
+router.get ('/LayTheoDonThuoc/:ID' , Handle_Donthuoc_Chitiet.Detail_Donthuoc);
 module.exports = router;

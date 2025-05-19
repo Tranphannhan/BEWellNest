@@ -13,6 +13,96 @@ class Database_Yeu_Cau_Xet_Nghiem {
             Callback(error);
         }   
     };    
+  
+    Detail__M = async (_id , Callback) => {
+        try {
+            await connectDB ();
+            const Select_Detail = await Yeucauxetnghiem.find ({_id}).populate([
+                {
+                    path: 'Id_PhieuKhamBenh',
+                    select: 'Ngay',
+                    populate: [
+                    {
+                        path: 'Id_TheKhamBenh',
+                        select: 'HoVaTen SoDienThoai'
+                    },
+                    {
+                        path: 'Id_CaKham',
+                        select: 'TenCa',
+                        populate:[
+                            {
+                            path: 'Id_BacSi',
+                            select: 'TenBacSi'
+                                },
+                            {
+                            path: 'Id_PhongKham',
+                            select: 'SoPhongKham'
+                                },
+                        ] 
+                    }
+                    ]
+                },
+                {
+                    path: 'Id_PhongThietBi',
+                    select: 'TenXetNghiem TenPhongThietBi'
+                }
+                ])
+            
+            
+            ;
+            Callback(null, Select_Detail);
+        } catch (error) {
+            Callback(error);
+        }   
+    }
+   
+
+   
+    GET_LayTheoPhieuKhamBenh__M = async (Id_PhieuKhamBenh , Callback) => {
+        try {
+            await connectDB ();
+            const Select_Detail = await Yeucauxetnghiem.find ({Id_PhieuKhamBenh}).populate([
+                {
+                    path: 'Id_PhieuKhamBenh',
+                    select: 'Ngay',
+                    populate: [
+                    {
+                        path: 'Id_TheKhamBenh',
+                        select: 'HoVaTen SoDienThoai'
+                    },
+                    {
+                        path: 'Id_CaKham',
+                        select: 'TenCa',
+                        populate:[
+                            {
+                            path: 'Id_BacSi',
+                            select: 'TenBacSi'
+                                },
+                            {
+                            path: 'Id_PhongKham',
+                            select: 'SoPhongKham'
+                                },
+                        ] 
+                    }
+                    ]
+                },
+                {
+                    path: 'Id_PhongThietBi',
+                    select: 'TenXetNghiem TenPhongThietBi'
+                }
+                ])
+            
+            
+            ;
+            Callback(null, Select_Detail);
+        } catch (error) {
+            Callback(error);
+        }   
+    }
+
+
+
+
 
     Select_Check_Status_Yeucauxetnghiem_M = async (Id_YeuCauXetNghiem , Callback) => {
         try {

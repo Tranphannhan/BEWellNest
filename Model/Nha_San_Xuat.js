@@ -3,15 +3,20 @@ const connectDB = require("./Db");
 const Nhasanxuat = require("../Schema/Nha_San_Xuat"); 
    
 class Database_Nhasanxuat {
-    Select_Nhasanxuat__M = async (Callback) => {
+    Select_Nhasanxuat__M = async (page ,limit , Callback) => {
         try {
+            const skip = (page - 1) * limit;
             await connectDB();
-            const Select__Nhasanxuat = await Nhasanxuat.find({});
-            Callback(null, Select__Nhasanxuat);
+            const Select__Nhasanxuat = await Nhasanxuat.find({})
+                .skip(skip)  
+                .limit(limit);
+
+            const total = await Nhasanxuat.countDocuments ();   
+            Callback(null, {totalItems:total, currentPage: page, totalPages: Math.ceil(total/limit),data:Select__Nhasanxuat});
         } catch (error) {
             Callback(error);
         }   
-    };
+    };    
 
 
     Add_Nhasanxuat__M = async (Data , Callback) => {

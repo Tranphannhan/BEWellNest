@@ -11,6 +11,7 @@ class Database_Phieu_Kham_Benh {
             Callback(error);
         }   
     };   
+    
 
     Select_Check_Status_Phieukhambenh_M = async (Id_PhieuKhamBenh , Callback) => {
         try {
@@ -20,6 +21,61 @@ class Database_Phieu_Kham_Benh {
         } catch (error){
             Callback(error);
         }
+    }
+
+     Detail__M = async (_id , Callback) => {
+        try {
+            await connectDB ();
+            const Select_Detail = await Phieu_Kham_Benh.find ({_id}).populate({
+                path: 'Id_TheKhamBenh',
+                select: 'HoVaTen SoDienThoai',
+                }).populate({
+                    path: 'Id_CaKham',
+                    select: 'TenCa',
+                    populate:[
+                        {
+                        path: 'Id_BacSi',
+                        select: 'TenBacSi'
+                            },
+                        {
+                        path: 'Id_PhongKham',
+                        select: 'SoPhongKham'
+                            },
+                    ] 
+                })
+            ;
+            Callback(null, Select_Detail);
+        } catch (error) {
+            Callback(error);
+        }   
+    }
+
+
+    GET_LayTheoTheKhamBenh__M  = async (Id_TheKhamBenh , Callback) => {
+        try {
+            await connectDB ();
+            const Select_Detail = await Phieu_Kham_Benh.find ({Id_TheKhamBenh}).populate({
+                path: 'Id_TheKhamBenh',
+                select: 'HoVaTen SoDienThoai',
+                }).populate({
+                    path: 'Id_CaKham',
+                    select: 'TenCa',
+                    populate:[
+                        {
+                        path: 'Id_BacSi',
+                        select: 'TenBacSi'
+                            },
+                        {
+                        path: 'Id_PhongKham',
+                        select: 'SoPhongKham'
+                            },
+                    ] 
+                })
+            ;
+            Callback(null, Select_Detail);
+        } catch (error) {
+            Callback(error);
+        }   
     }
 
 
@@ -40,13 +96,13 @@ class Database_Phieu_Kham_Benh {
     };
 
 
-    Check_Benhnhan__M = async ( Id_CaKham , Ngay , Callback) => {
+    Check_Benhnhan__M = async ( Id_CaKham , Ngay , TrangThai , Callback) => {
         try {
             await connectDB();
             const Check_Donthuoc = await Phieu_Kham_Benh.find({
                 Id_CaKham : Id_CaKham ,
                 Ngay : Ngay,
-                TrangThai: false,
+                TrangThai: TrangThai,
                 TrangThaiThanhToan: true
             }).sort({ STTKham: 1 });
             Callback(null, Check_Donthuoc);
@@ -54,6 +110,7 @@ class Database_Phieu_Kham_Benh {
             Callback(error);
         }
     }
+
 
 
     Add_Phieukhambenh_M = async (Data , Callback) => {

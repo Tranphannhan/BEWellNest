@@ -13,11 +13,29 @@ class Kham_Lam_Sang {
       res.status(200).json(result);
     });
   };
+  
+  
+  Detail_Kham_Lam_Sang = (req , res , next) => {
+    const ID  =  req.params.ID;
+    Connect_Data_Model.Detail__M (ID  , (error , result) => {
+      if (error) return next(error);
+      res.status(200).json(result);
+    });
+  } 
+
+  GET_PhieuKhamBenh  = (req , res , next) => {
+    const ID  =  req.params.ID;
+    Connect_Data_Model.GET_PhieuKhamBenh__M (ID  , (error , result) => {
+      if (error) return next(error);
+      res.status(200).json(result);
+    });
+  } 
+     
 
   Add_Kham_Lam_Sang = (req, res, next) => {
     const Data_Add = {
       Id_PhieuKhamBenh: req.body.Id_PhieuKhamBenh.trim(),
-      TrieuChung: req.body.TrieuChung.trim(),
+      TrieuChung : req.body.TrieuChung.trim(),
       KetQua: req.body.KetQua.trim(),
     };
 
@@ -29,25 +47,25 @@ class Kham_Lam_Sang {
       if (Error) return next(Error);
       res.status(201).json({ message: "Thêm Mới Kham_Lam_Sang Thành Công", data: Result }); // ✅ Chuẩn hóa response
     });
-  };
+  };    
 
   Edit_Kham_Lam_Sang = (req, res, next) => {
     const { ID } = req.params;
     const Data_Edit = {
-      Id_PhieuKhamBenh: req.body.Id_PhieuKhamBenh.trim(),
       TrieuChung: req.body.TrieuChung.trim(),
       KetQua: req.body.KetQua.trim(),
     };
 
-    if (!Data_Edit.Id_PhieuKhamBenh || !Data_Edit.TrieuChung || !Data_Edit.KetQua) { // ✅ Kiểm tra dữ liệu hợp lệ
+    if (!Data_Edit.TrieuChung || !Data_Edit.KetQua) { // ✅ Kiểm tra dữ liệu hợp lệ
       return res.status(400).json({ message: "Thiếu dữ liệu cần thiết" }); // ✅ Chuẩn hóa response
-    }
+    } 
 
     Connect_Data_Model.Edit_Kham_Lam_Sang_M(ID, Data_Edit, (Error, Result) => {
       if (Error) return next(Error);
       res.status(200).json({ message: "Cập Nhật Kham_Lam_Sang Thành Công", data: Result }); // ✅ Chuẩn hóa response
     });
   };
+
 
   Delete_Kham_Lam_Sang = (req, res, next) => {
     const { ID } = req.params;

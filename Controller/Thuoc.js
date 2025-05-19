@@ -13,6 +13,7 @@ class Thuoc_Controler {
       res.status(200).json(result);
     });
   };
+  
 
   Get_Pagination = (req, res, next) => {
     const page = parseInt(req.query.page) || 1;

@@ -2,15 +2,22 @@ const connectDB = require("../Model/Db");
 const Khoa = require("../Schema/Khoa"); 
 
 class Database_Khoa {
-    Select_Khoa_M = async (Callback) => {
+    Select_Khoa_M = async (page ,  limit , Callback) => {
       try {
+        const skip = (page - 1) * limit;
         await connectDB();
-        const Select_Khoa = await Khoa.find({});
-        Callback(null, Select_Khoa);
+        const Select_Khoa = await Khoa.find({})
+          .skip(skip)  
+          .limit(limit);
+            
+        const total = await Khoa.countDocuments ();   
+        Callback(null,  {totalItems:total, currentPage: page, totalPages: Math.ceil(total/limit),data:Select_Khoa});
       } catch (error) {
         Callback(error);
       }
     };
+
+    
 
     // Thêm khoa
     Insert_Khoa_M = async (data, Callback) => {

@@ -18,13 +18,18 @@ class Tai_Khoan_Controler {
     }
 
     Select_Tai_Khoan = (req, res, next) => {
-        Connect_Data_Model.Select_Tai_Khoan_M((error, result) => {
+        const limit = parseInt (req.query.limit) || 7;
+        const page = parseInt (req.query.page) || 1;
+
+        Connect_Data_Model.Select_Tai_Khoan_M(limit , page ,(error, result) => {
             if (error) return next(error);
             if (result.length < 1)
                 return res.status(404).json({ message: "Dữ liệu Tài Khoản Rỗng" });
             res.status(200).json(result);
         });
     };  
+
+
 
     Get_ByLoai = (req, res, next) => {
         const Id_Loai = req.params.ID;

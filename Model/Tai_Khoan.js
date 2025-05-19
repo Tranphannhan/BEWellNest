@@ -15,16 +15,19 @@ class Database_Taikhoan {
         }   
     };
 
-    Get_ByLoai_M = async (Id_Loai,Callback) => {
+    Get_ByLoai_M = async (limit , page , Id_Loai,Callback) => {
         try {
             await connectDB();
             const Select_Taikhoan = await Taikhoan.find({Id_LoaiTaiKhoan: Id_Loai}).populate({
                 path:"Id_LoaiTaiKhoan"
-            });
-            Callback(null, Select_Taikhoan);
+            })  
+            .skip(skip)  
+            .limit(limit);
+            const total = await Taikhoan.countDocuments (); 
+            Callback(null,  {totalItems:total, currentPage: page, totalPages: Math.ceil(total/limit),data:Select_Taikhoan});
         } catch (error) {
             Callback(error);
-        }   
+        }
     };
 
 

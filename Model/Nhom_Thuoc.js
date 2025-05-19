@@ -3,15 +3,21 @@ const connectDB = require("./Db");
 const NhomThuoc = require("../Schema/Nhom_Thuoc"); 
    
 class Database_Nhom_Thuoc {
-    Select_Nhom_Thuoc__M = async (Callback) => {
+    Select_Nhom_Thuoc__M = async (limit , page  , Callback) => {
         try {
+            const skip = (page - 1) * limit;
             await connectDB();
-            const Select_Nhome_NhomThuoc = await NhomThuoc.find({});
-            Callback(null, Select_Nhome_NhomThuoc);
+            const Select_Nhome_NhomThuoc = await NhomThuoc.find({})
+            .skip(skip)  
+            .limit(limit);
+
+            const total = await NhomThuoc.countDocuments ();   
+            Callback(null, {totalItems:total, currentPage: page, totalPages: Math.ceil(total/limit),data: Select_Nhome_NhomThuoc});
         } catch (error) {
             Callback(error);
         }   
     };
+
 
 
     Add_Nhom_NhomThuoc__M = async (Data , Callback) => {

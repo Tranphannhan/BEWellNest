@@ -5,9 +5,13 @@ class Thuoc_Controler {
   Runviews = (req, res, next) => {
     res.status(200).json({ message: "Loadding Thành Công" });
   };  
+   
 
   Select_Nhomthuoc = (req, res, next) => {
-    Connect_Data_Model.Select_Nhom_Thuoc__M ((error, result) => {
+    const limit = parseInt (req.query.limit) || 7;
+    const page = parseInt (req.query.page) || 1;
+
+    Connect_Data_Model.Select_Nhom_Thuoc__M (limit , page , (error, result) => {
       if (error) return next(error);
       if (result.length < 1) return res.status(404).json({ message: "Dữ liệu Nhóm Thuốc Rỗng" });
       res.status(200).json(result);

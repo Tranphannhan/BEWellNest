@@ -4,8 +4,6 @@ const Loading_Controler_Donthuoc = require ('../Controller/Don_Thuoc');
 const { kiemTraVaiTroDuocSi } = require('../Middleware/authenticate');
 const Handle_Donthuoc = new Loading_Controler_Donthuoc ();
 
-// lấy đơn thuốc theo Id_PhieuKhamBenh (Huân)
-// Lấy Detail
 router.get ('/Pagination' , Handle_Donthuoc.Select_Donthuoc);
 router.post('/', Handle_Donthuoc.add_Donthuoc);
 router.delete('/:id', Handle_Donthuoc.deleteDonthuoc);
@@ -25,6 +23,12 @@ router.get('/DanhSachPhatThuoc/Pagination' , Handle_Donthuoc.MedicineDistributio
 
 router.get('/LichSuPhatThuoc/Pagination' , Handle_Donthuoc.HistoryOfMedicineDispensing_Pagination);
 //http://localhost:5000/Donthuoc/DanhSachPhatThuoc?date=2025-05-10
+
+
+router.get ('/Detail/:ID' , Handle_Donthuoc.Detail_Donthuoc); 
+router.get ('/LayTheoPhieuKhamBenh/:ID' , Handle_Donthuoc.GET_Phieu_Kham_Benh);
+
+   
 
 module.exports = router;
 

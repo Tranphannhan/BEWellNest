@@ -5,7 +5,10 @@ class Khoa_Controler {
   Runviews = (req, res, next) => res.status(200).json({ message: "Loadding Thành Công" }); // ✅ Đã sửa thành chuẩn response JSON
 
   Select_Khoa = (req, res, next) => {
-    Connect_Data_Model.Select_Khoa_M((error, result) => {
+    const limit = parseInt (req.query.limit) || 7;
+    const page = parseInt (req.query.page) || 1;
+      
+    Connect_Data_Model.Select_Khoa_M(page ,  limit ,(error, result) => {
       if (error) return next(error);
       if (!result || result.length < 1) { // ✅ Kiểm tra dữ liệu rỗng
         return res.status(404).json({ message: "Dữ liệu khoa rỗng" }); // ✅ Đã sửa thành chuẩn response JSON
@@ -13,6 +16,7 @@ class Khoa_Controler {
       res.status(200).json(result);
     });
   };
+         
 
   add_Khoa = (req, res, next) => {
     const data = {

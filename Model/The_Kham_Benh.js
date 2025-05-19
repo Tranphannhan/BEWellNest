@@ -18,6 +18,17 @@ class Database_The_Kham_Benh {
     };
 
 
+    Detail__M = async (_id , Callback) => {
+        try {
+            await connectDB ();
+            const Select_Detail = await The_Kham_Benh.find ({_id});
+            Callback(null, Select_Detail);
+        } catch (error) {
+            Callback(error);
+        }   
+    }
+
+
     Add_Thekhambenh_M = async (Data , Callback) => {
         try {
             await connectDB();

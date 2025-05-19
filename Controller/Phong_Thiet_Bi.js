@@ -6,8 +6,13 @@ class Phong_Thiet_Bi_Controler {
     res.status(200).json({ message: "Loadding Thành Công" }); // ✅ đã sửa
   };
 
+
+
   Select_Phong_Thiet_Bi = (req, res, next) => {
-    Connect_Data_Model.Select_Phong_Thiet_Bi_M((error, result) => {
+    const limit = parseInt (req.query.limit) || 7;
+    const page = parseInt (req.query.page) || 1;
+
+    Connect_Data_Model.Select_Phong_Thiet_Bi_M(limit ,page , (error, result) => {
       if (error) return next(error);
       if (!result || result.length === 0) { // ✅ kiểm tra rỗng
         return res.status(404).json({ message: "Dữ liệu phòng thiết bị rỗng" }); // ✅ đã sửa
@@ -15,6 +20,7 @@ class Phong_Thiet_Bi_Controler {
       res.status(200).json(result);
     });
   };
+
 
   add_Phong_Thiet_Bi = (req, res, next) => {
     const data = {

@@ -14,6 +14,17 @@ class Donthuoc_Chitiet_Controler {
     });
   };
 
+  Detail_Donthuoc = (req, res, next) => {
+    const ID  =  req.params.ID;
+    Connect_Data_Model.Detail__M (ID  , (error , result) => {
+    if (error) return next(error);
+      res.status(200).json(result);
+    });
+  }
+    
+
+
+
   add_Donthuoc_Chitiet = (req, res, next) => {
     const data = {
       Id_DonThuoc: req.body.Id_DonThuoc,

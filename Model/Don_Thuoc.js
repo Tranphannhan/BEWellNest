@@ -45,6 +45,65 @@ class Database_Donthuoc {
       }
     }
 
+      
+    Detail__M  = async (_id , Callback) => {
+        try {
+            await connectDB ();
+            const Select_Detail = await Donthuoc.find ({_id}).populate({
+            path: 'Id_PhieuKhamBenh',
+            select:'Ngay',
+            populate:[
+                {
+                  path: 'Id_TheKhamBenh',
+                  select: 'HoVaTen SoDienThoai'
+                },
+                {
+                  path: 'Id_CaKham',
+                  select:'TenCa',
+                  populate:{
+                    path:'Id_BacSi',
+                    select:'TenBacSi'
+                  }
+                }
+            ]
+          })
+            Callback(null, Select_Detail);
+        } catch (error) {
+            Callback(error);
+        }   
+    }
+
+
+    GET_Phieu_Kham_Benh__M  = async (Id_PhieuKhamBenh , Callback) => {
+        try {
+            await connectDB ();
+            const Select_Detail = await Donthuoc.find ({Id_PhieuKhamBenh}).populate({
+            path: 'Id_PhieuKhamBenh',
+            select:'Ngay',
+            populate:[
+                {
+                  path: 'Id_TheKhamBenh',
+                  select: 'HoVaTen SoDienThoai'
+                },
+                {
+                  path: 'Id_CaKham',
+                  select:'TenCa',
+                  populate:{
+                    path:'Id_BacSi',
+                    select:'TenBacSi'
+                  }
+                }
+            ]
+          })
+            Callback(null, Select_Detail);
+        } catch (error) {
+            Callback(error);
+        }   
+    }
+
+
+
+
     // Danh sách phát thuốc nhưng có phân trang
     MedicineDistributionList_Pagination_M = async (page,limit,Ngay , Callback) => {
       try {

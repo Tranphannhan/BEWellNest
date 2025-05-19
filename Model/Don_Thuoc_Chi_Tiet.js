@@ -14,6 +14,19 @@ class Database_Donthuoc_Chitiet {
   
   };
 
+  Detail__M = async (Id_DonThuoc , Callback) => {
+    try {
+        await connectDB ();
+        const Select_Detail = await Donthuoc_Chitiet.find ({Id_DonThuoc});
+        Callback(null, Select_Detail);
+    } catch (error) {
+        Callback(error);
+    }   
+  }
+
+
+
+
     Insert_Donthuoc_Chitiet_M = async (data, Callback) => {
       try {
         await connectDB();

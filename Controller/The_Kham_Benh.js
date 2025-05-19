@@ -16,6 +16,16 @@ class The_Kham_Benh_Controler {
     });
   };
 
+
+  Detail_Phieukham = (req, res, next) => {
+    const ID  =  req.params.ID;
+    Connect_Data_Model.Detail__M (ID  , (error , result) => {
+      if (error) return next(error);
+      res.status(200).json(result);
+    });
+  }
+
+
   Add_Thekhambenh = (req, res, next) => {
     const Data_Add = {
       HoVaTen: req.body.HoVaTen.trim(),

@@ -17,6 +17,23 @@ class Donthuoc_Controler {
   };
 
 
+  Detail_Donthuoc =  (req, res, next) => {
+    const ID  =  req.params.ID;
+    Connect_Data_Model.Detail__M (ID  , (error , result) => {
+    if (error) return next(error);
+      res.status(200).json(result);
+    });
+  }    
+   
+
+  GET_Phieu_Kham_Benh = (req, res, next) => {
+    const ID  =  req.params.ID;
+    Connect_Data_Model.GET_Phieu_Kham_Benh__M (ID  , (error , result) => {
+    if (error) return next(error);
+      res.status(200).json(result);
+    });
+  }    
+
 
   PaymentConfirmation = (req, res, next) => {
     const Id_DonThuoc = req.params.ID_DonThuoc;

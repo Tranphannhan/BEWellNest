@@ -14,6 +14,9 @@ class Database_Ketqua_Xet_Nghiem {
     };
 
 
+     
+
+
     Add_Ketquaxetnghiem_M = async (Data , Callback) => {
         try {
             await connectDB();
@@ -24,6 +27,29 @@ class Database_Ketqua_Xet_Nghiem {
             Callback(error);
         }
     }
+
+
+    Detail__M = async (_id , Callback) => {
+        try {
+            await connectDB ();
+            const Select_Detail = await Ketquaxetnghiem.find ({_id});
+            Callback(null, Select_Detail);
+        } catch (error) {
+            Callback(error);
+        }   
+    }
+
+
+    GET_YeuCauXetNghiem__M = async (Id_YeuCauXetNghiem , Callback) => {
+        try {
+            await connectDB ();
+            const Select = await Ketquaxetnghiem.find ({Id_YeuCauXetNghiem});
+            Callback(null, Select);
+        } catch (error) {
+            Callback(error);
+        }   
+    }
+    
 
 
     Edit_Ketquaxetnghiem_M = async (id , Data , Callback) => {

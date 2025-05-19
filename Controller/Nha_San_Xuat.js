@@ -8,12 +8,15 @@ class Nhasanxuat_Controler {
 
      
   Select_Nhasanxuat = (req, res, next) => {
-    Connect_Data_Model.Select_Nhasanxuat__M ((error, result) => {
+    const limit = parseInt (req.query.limit) || 7;
+    const page = parseInt (req.query.page) || 1;
+    
+    Connect_Data_Model.Select_Nhasanxuat__M (page ,limit ,  (error, result) => {
         if (error) return next(error);
         if (result.length < 1) return res.status(404).json({ message: "Dữ liệu Nhà Sản Xuất Rỗng" });
         res.status(200).json(result);
     });
-  };
+  };         
 
 
   Add_Nhasanxuat = (req, res, next) => {

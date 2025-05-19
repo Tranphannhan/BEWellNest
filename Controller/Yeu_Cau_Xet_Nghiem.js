@@ -14,7 +14,24 @@ class Yeucauxetnghiem_Controler {
       res.status(200).json(result);
     });
   };
-   
+     
+
+  Detail =  (req, res, next) => {
+    const ID  =  req.params.ID;
+    Connect_Data_Model.Detail__M (ID  , (error , result) => {
+      if (error) return next(error);
+      res.status(200).json(result);
+    });
+  }
+ 
+  GET_LayTheoPhieuKhamBenh =  (req, res, next) => {
+    const ID  =  req.params.ID;
+    Connect_Data_Model.GET_LayTheoPhieuKhamBenh__M (ID  , (error , result) => {
+      if (error) return next(error);
+      res.status(200).json(result);
+    });
+  }
+
 
   PaymentConfirmation = (req, res, next) => {
     const Id_YeuCauXetNghiem = req.params.ID_YeuCauXetNghiem;

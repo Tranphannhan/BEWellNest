@@ -14,6 +14,24 @@ class Phieu_Kham_Benh {
     });
   };
 
+
+  Detail_Phieukham = (req , res , next) => {
+    const ID  =  req.params.ID;
+    Connect_Data_Model.Detail__M (ID  , (error , result) => {
+      if (error) return next(error);
+      res.status(200).json(result);
+    });
+  }   
+
+  GET_LayTheoTheKhamBenh = (req , res , next) => {
+    const ID  =  req.params.ID;
+    Connect_Data_Model.GET_LayTheoTheKhamBenh__M (ID  , (error , result) => {
+      if (error) return next(error);
+      res.status(200).json(result);
+    });
+  }   
+
+
   Add_Phieukhambenh = (req, res, next) => {
     const ngay = new Date().toISOString().split('T')[0]; // Lấy ngày hiện tại dạng YYYY-MM-DD
   
@@ -69,15 +87,19 @@ class Phieu_Kham_Benh {
     });
   };
   
+
   Fill_Cakhambenh = (req, res, next) => {
     const id = req.query.Id;
     const ngay = req.query.ngay;
+    const TrangThai = req.query.TrangThai || false;
   
-    Connect_Data_Model.Check_Benhnhan__M(id, ngay, (error, result) => {
+    Connect_Data_Model.Check_Benhnhan__M (id, ngay, TrangThai ,(error, result) => {
       if (error) return next(error);
       res.status(200).json({ data: result });
     });
   };
+
+
   
   Edit_Phieukhambenh = (req, res, next) => {
     const { ID } = req.params;
