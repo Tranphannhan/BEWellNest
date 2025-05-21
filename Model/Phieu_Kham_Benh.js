@@ -1,3 +1,4 @@
+const { path } = require("../app");
 const connectDB = require("../Model/Db");
 const Phieu_Kham_Benh = require("../Schema/Phieu_Kham_Benh"); 
 
@@ -86,7 +87,25 @@ class Database_Phieu_Kham_Benh {
             id, 
             { $set: { TrangThaiThanhToan: true, STTKham: nextSTT } },
             { new: true }
-          );
+          ).populate([
+            {path:"Id_TheKhamBenh",
+                select:"HoVaTen"
+            },
+            {path:"Id_CaKham",
+                select:"TenCa",
+                populate:[
+                    {
+                          path:"Id_PhongKham"
+                
+                    },
+                    {
+                         path:"Id_BacSi",
+                         select:"TenBacSi"
+                    }
+                ]
+                  
+            }
+          ]);
           Callback(null, data);
 
 

@@ -43,8 +43,7 @@ class Yeucauxetnghiem_Controler {
         
       if(result[0].TrangThaiThanhToan === true){
         return res.status(200).json({
-          message: "Yêu cầu xét nghiệm đã được thanh toán trước đó",
-          data: result
+          message: "Yêu cầu xét nghiệm đã được thanh toán trước đó"
         })
       }
       

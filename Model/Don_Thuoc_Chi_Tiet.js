@@ -17,7 +17,10 @@ class Database_Donthuoc_Chitiet {
   Detail__M = async (Id_DonThuoc , Callback) => {
     try {
         await connectDB ();
-        const Select_Detail = await Donthuoc_Chitiet.find ({Id_DonThuoc});
+        const Select_Detail = await Donthuoc_Chitiet.find ({Id_DonThuoc}).populate({
+          path:"Id_Thuoc",
+          select:"TenThuoc DonVi GiaMoiDonVi CachDung"
+        });
         Callback(null, Select_Detail);
     } catch (error) {
         Callback(error);

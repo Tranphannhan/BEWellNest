@@ -3,8 +3,11 @@ const ObjectId = mongoose.Types.ObjectId;
 
 const Donthuoc_Chitiet_Schema = new mongoose.Schema({
     Id_DonThuoc: ObjectId,
-    Id_Thuoc:ObjectId,
-    DonVi:String,
+    Id_Thuoc: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Thuoc', 
+            },
+    
     SoLuong:Number,
     NhacNho:String
     

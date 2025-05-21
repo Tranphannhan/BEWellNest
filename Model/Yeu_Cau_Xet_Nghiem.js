@@ -121,7 +121,18 @@ class Database_Yeu_Cau_Xet_Nghiem {
             id, // ✅ truyền trực tiếp id
             { $set: { TrangThaiThanhToan: true, STT: nextSTT } },
             { new: true }
-          );
+          ).populate([
+                {
+            path:"Id_PhongThietBi"
+            },
+            {path:"Id_PhieuKhamBenh",
+                select:'TrangThaiThanhToan',
+                populate:{
+                    path:"Id_TheKhamBenh",
+                    select:"HoVaTen"
+                }
+            }
+          ]);
           Callback(null, Data_YeuCauXetNghiem);
         } catch (error) {
           Callback(error); 

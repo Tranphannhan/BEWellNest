@@ -29,7 +29,6 @@ class Donthuoc_Chitiet_Controler {
     const data = {
       Id_DonThuoc: req.body.Id_DonThuoc,
       Id_Thuoc: req.body.Id_Thuoc,
-      DonVi: req.body.DonVi?.trim(),
       SoLuong: req.body.SoLuong?.trim(),
       NhacNho: req.body.NhacNho?.trim(),
     };
@@ -72,9 +71,6 @@ class Donthuoc_Chitiet_Controler {
   updateDonthuoc_Chitiet = (req, res, next) => {
     const { id } = req.params;
     const data = {
-      Id_DonThuoc: req.body.Id_DonThuoc,
-      Id_Thuoc: req.body.Id_Thuoc,
-      DonVi: req.body.DonVi?.trim(),
       SoLuong: req.body.SoLuong?.trim(),
       NhacNho: req.body.NhacNho?.trim(),
     };

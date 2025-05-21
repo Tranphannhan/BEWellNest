@@ -15,7 +15,7 @@ router.patch ('/XacNhanTrangThai/:ID' , Handle_Donthuoc.Status_handling);
 router.get('/TimKiemCuaDS/Pagination', Handle_Donthuoc.SearchDS);
 
 
-router.get('/DanhSachPhatThuoc' ,kiemTraVaiTroDuocSi, Handle_Donthuoc.Select_Status_Donthuoc);
+router.get('/DanhSachPhatThuoc' , Handle_Donthuoc.Select_Status_Donthuoc);
 //http://localhost:5000/Donthuoc/DanhSachPhatThuoc?date=2025-05-10
 
 router.get('/DanhSachPhatThuoc/Pagination' , Handle_Donthuoc.MedicineDistributionList_Pagination);
