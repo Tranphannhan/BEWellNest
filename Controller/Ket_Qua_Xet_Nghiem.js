@@ -16,20 +16,31 @@ class Ketquaxetnghiem_Controler {
 
   
   Add_Ketquaxetnghiem = (req , res , next) => {
-    const Get_Anh_Xet_Nghiem = req.file ? req.file.filename : 'null';
+    const Check_Image = req.file ? req.file.filename : false;
+    if (!Check_Image) return res.status(400).json ({message : "Lỗi khi upload hình ảnh"});
+
     const Data_Add = {
         Id_YeuCauXetNghiem : req.body.Id_YeuCauXetNghiem.trim(),
+        Id_PhieuKhamBenh : req.body.Id_PhieuKhamBenh.trim(),
         Id_NguoiXetNghiem: req.body.Id_NguoiXetNghiem.trim(),
+        MaXetNghiem : req.body.MaXetNghiem.trim(),
+        TenXetNghiem : req.body.TenXetNghiem.trim(),
         KetQua : req.body.KetQua.trim(),
-        Anh_Xet_Nghiem : `http://localhost:5000/image/${Get_Anh_Xet_Nghiem}` 
+        DonViTinh : req.body.DonViTinh.trim(),
+        ChiSoBinhThuong : req.body.ChiSoBinhThuong.trim(),
+        GhiChu : req.body.GhiChu.trim(),
+        NgayXetNghiem : req.body.NgayXetNghiem.trim(),
+        Image : `http://localhost:5000/image/${Check_Image}` 
     }   
 
     if (!Data_Add) return res.send ("Không có dữ liệu");
     Connect_Data_Model.Add_Ketquaxetnghiem_M (Data_Add , (Error , Result) => {
         if (Error) return next(Error);
-        res.send ("Thêm Mới Kết quả Xét Nghiệm Thành Công");
+        res.status(400).json({ message : "Thêm Mới Kết quả Xét Nghiệm Thành Công"});
     });
   }  
+
+
    
   Detail_Xet_Nghiem = (req , res , next) => {
     const ID  =  req.params.ID;
@@ -48,32 +59,36 @@ class Ketquaxetnghiem_Controler {
   }         
 
   
-
-  Edit_Ketquaxetnghiem = (req , res, next ) => {
-    const {ID} = req.params;
-    const Get_Anh_Xet_Nghiem = req.file ? req.file.filename : 'null';
+   
+  Edit_Ketquaxetnghiem = (req, res, next) => {
+    const { ID } = req.params;
+    if (!ID) return res.status(400).json({ message: "Edit Thất Bại" });
+    const Check_Image = req.file ? req.file.filename : false;
     const Data_Edit = {
-        KetQua : req.body.KetQua.trim(),
-        Anh_Xet_Nghiem : `http://localhost:5000/image/${Get_Anh_Xet_Nghiem}` 
-    }
+      KetQua: req.body.KetQua.trim(),
+      Image: `http://localhost:5000/image/${Check_Image}`,
+    };
 
+    if (!Check_Image) delete Data_Edit.Image;
     Connect_Data_Model.Edit_Ketquaxetnghiem_M(ID, Data_Edit, (Error, Result) => {
       if (Error) return next(Error);
-      res.status(200).json({ message: "Cập Nhật Kết Quả Yêu Cầu Xét Nghiệm Thành Công", data: Result }); // ✅ Chuẩn hóa response
+      res.status(200).json({
+        message: "Cập Nhật Kết Quả Yêu Cầu Xét Nghiệm Thành Công",
+        data: Result,
+      });
     });
   };
+
+
 
   
   Delete_Ketquaxetnghiem = (req, res, next) => {
     const { ID } = req.params;
-    if (!ID) return res.status(400).json({ message: "Thiếu ID để xóa Kết Quả Xét Nghiệm" }); // ✅ Kiểm tra ID
-
+    if (!ID) return res.status(400).json({ message: "Thiếu ID để xóa Kết Quả Xét Nghiệm" });
     Connect_Data_Model.Delete_Ketquaxetnghiem_M(ID, (Error, Result) => {
       if (Error) return next(Error);
-      if (!Result) {
-        return res.status(404).json({ message: "Không tìm thấy Kết Quả Xét Nghiệm để xóa" }); // ✅ Chuẩn hóa response
-      }
-      res.status(200).json({ message: "Xóa Kết Quả Yêu Cầu Xét Nghiệm Thành Công", data: Result }); // ✅ Chuẩn hóa response
+      if (!Result) return res.status(404).json({ message: "Không tìm thấy Kết Quả Xét Nghiệm để xóa" }); 
+      res.status(200).json({ message: "Xóa Kết Quả Yêu Cầu Xét Nghiệm Thành Công", data: Result });
     });
   };
 }

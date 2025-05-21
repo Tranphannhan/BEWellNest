@@ -21,25 +21,25 @@ class Phong_Thiet_Bi_Controler {
     });
   };
 
-
+      
   add_Phong_Thiet_Bi = (req, res, next) => {
+    const Image = req.file ? req.file.filename : false;
+    if (!Image) return res.status(400).json ({message : 'Upload ảnh lên thất bại'})
     const data = {
       TenPhongThietBi: req.body.TenPhongThietBi?.trim(),
       TenXetNghiem: req.body.TenXetNghiem?.trim(),
-      MoTaXetNghiem: req.body.MoTaXetNghiem?.trim()
+      MoTaXetNghiem: req.body.MoTaXetNghiem?.trim(),
+      Image : `http://localhost:5000/image/${Image}`
     };
 
-    if (!data.TenPhongThietBi || !data.TenXetNghiem || !data.MoTaXetNghiem) {
-      return res.status(400).json({ message: "Thiếu dữ liệu để thêm phòng thiết bị" }); // ✅ đã thêm
-    }
-
+    if (!data.TenPhongThietBi || !data.TenXetNghiem || !data.MoTaXetNghiem || !data.Image) return res.status(400).json({ message: "Thiếu dữ liệu để thêm phòng thiết bị" });
     Connect_Data_Model.Insert_Phong_Thiet_Bi_M(data, (err, result) => {
-      if (err) {
-        return res.status(500).json({ message: "Thêm phòng thiết bị thất bại", error: err }); // ✅ đã sửa
-      }
-      res.status(201).json({ message: "Thêm phòng thiết bị thành công", data: result }); // ✅ đã sửa
+      if (err) return res.status(500).json({ message: "Thêm phòng thiết bị thất bại", error: err }); 
+      res.status(201).json({ message: "Thêm phòng thiết bị thành công", data: result }); 
     });
   };
+
+
 
   deletePhong_Thiet_Bi = (req, res) => {
     const { id } = req.params;

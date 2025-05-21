@@ -16,8 +16,15 @@ const Ket_Qua_Xet_Nghiem_Schema = new mongoose.Schema({
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'Tai_Khoan',
         },
-        
+           
+       
+    MaXetNghiem :   String,
+    TenXetNghiem : String, 
     KetQua : String,  
+    DonViTinh : String,
+    ChiSoBinhThuong : String,
+    GhiChu : String,
+    NgayXetNghiem : String,
     Image : String
 
 }, { collection: "Ket_Qua_Xet_Nghiem" }); 
