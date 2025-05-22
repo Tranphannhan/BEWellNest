@@ -26,10 +26,7 @@ let indexRouter_Hoadon = require ('./routes/Hoadon');
 let indexRouter_Nhom_thuoc = require ('./routes/Nhom_Thuoc');
 let indexRouter_Nha_san_xuat = require ('./routes/Nha_San_Xuat');
 let indexRouter_Giadichvu = require ('./routes/Gia_Dich_Vu');
-
-
-
-
+let indexRouter_Loaica = require ('./routes/Loaica');
 
 
 
@@ -66,6 +63,8 @@ app.use ('/Hoadon' , indexRouter_Hoadon);
 app.use ('/Nhomthuoc' , indexRouter_Nhom_thuoc);
 app.use ('/Nhasanxuat' , indexRouter_Nha_san_xuat);
 app.use ('/Giadichvu' , indexRouter_Giadichvu);
+app.use ('/Loaica' , indexRouter_Loaica);
+
 
 
 

@@ -79,6 +79,9 @@ class Database_Phieu_Kham_Benh {
         }   
     }
 
+ 
+   
+
 
     PaymentConfirmation_M = async (id, nextSTT, Callback) => {
         try {
@@ -153,6 +156,19 @@ class Database_Phieu_Kham_Benh {
             Callback(error);
         }
     }
+
+
+    BoQuaPhieuKham__ = async (id , Data_Edit , Callback ) => {
+        try {
+            await connectDB();
+            const Result = await Phieu_Kham_Benh.findByIdAndUpdate (id , Data_Edit ,  { new: true });
+            Callback (null , Result);
+        } catch (error) {
+            Callback(error);
+        }
+    }
+
+         
 
     Delete_Phieukhambenh_M =  async (id , Callback) => {
         try {

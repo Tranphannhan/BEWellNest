@@ -24,12 +24,13 @@ class Phieu_Kham_Benh {
   }   
 
   GET_LayTheoTheKhamBenh = (req , res , next) => {
-    const ID  =  req.params.ID;
+    const ID  = req.params.ID;
     Connect_Data_Model.GET_LayTheoTheKhamBenh__M (ID  , (error , result) => {
       if (error) return next(error);
       res.status(200).json(result);
     });
-  }   
+  }      
+
 
 
   Add_Phieukhambenh = (req, res, next) => {
@@ -46,7 +47,8 @@ class Phieu_Kham_Benh {
         Ngay: ngay,
         TrangThaiThanhToan: false,
         STTKham: 0,
-        TrangThai:false
+        TrangThai: false ,
+        TrangThaiHoatDong : true
       };
   
       if (!Data_Add) return res.status(400).json({ message: "Không có dữ liệu để thêm phiếu khám bệnh" });
@@ -56,6 +58,18 @@ class Phieu_Kham_Benh {
       });
     });
   };
+
+
+
+  BoQuaPhieuKham = (req , res , next) => {
+    const ID  = req.params.ID;
+    const Data_Edit = {TrangThaiHoatDong : false}
+    Connect_Data_Model.BoQuaPhieuKham__ (ID , Data_Edit , (error , result) => {
+      if (error) return next(error);
+      res.status(201).json({ message: "Cập Nhật Trạng Thái Hoạt Động Thành Công", data: result });
+    });
+  }
+
   
   // chức năng xác nhận thanh toán
   PaymentConfirmation = (req, res, next) => {

@@ -20,7 +20,8 @@ const Phieu_Kham_Benh_Schema = new mongoose.Schema({
     Ngay : String,  
     TrangThaiThanhToan : Boolean,
     STTKham : String,
-    TrangThai: Boolean
+    TrangThai: Boolean,
+    TrangThaiHoatDong : Boolean     
     
 }, { collection: "Phieu_Kham_Benh" }); 
 module.exports = mongoose.model("Phieu_Kham_Benh", Phieu_Kham_Benh_Schema);
