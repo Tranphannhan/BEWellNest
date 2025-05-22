@@ -21,7 +21,7 @@ class Tai_Khoan_Controler {
         const limit = parseInt (req.query.limit) || 7;
         const page = parseInt (req.query.page) || 1;
 
-        Connect_Data_Model.Select_Tai_Khoan_M(limit , page ,(error, result) => {
+        Connect_Data_Model.Select_Tai_Khoan_M(page , limit ,(error, result) => {
             if (error) return next(error);
             if (result.length < 1)
                 return res.status(404).json({ message: "Dữ liệu Tài Khoản Rỗng" });
@@ -33,7 +33,9 @@ class Tai_Khoan_Controler {
 
     Get_ByLoai = (req, res, next) => {
         const Id_Loai = req.params.ID;
-        Connect_Data_Model.Get_ByLoai_M(Id_Loai,(error, result) => {
+        const limit = parseInt (req.query.limit) || 7;
+        const page = parseInt (req.query.page) || 1;
+        Connect_Data_Model.Get_ByLoai_M(limit,page,Id_Loai,(error, result) => {
             if (error) return next(error);
             if (result.length < 1)
                 return res.status(404).json({ message: "Dữ liệu Tài Khoản Rỗng" });

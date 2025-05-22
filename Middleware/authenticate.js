@@ -13,16 +13,16 @@ exports.kiemTraVaiTroDuocSi = async (req,res,next) =>{
   
 }
 
-exports.kiemTraVaiTroKiThuatVien = async (req,res,next) =>{
+exports.kiemTraVaiTroBacSiXetNghiem = async (req,res,next) =>{
     const token = req.header('token')
     if(!token){
         return res.status(401).json({message:'Bạn không có quyền truy cập do chưa có token', status:false})
     }
     const decoded = jwt.verify(token,'WellNest_User')
-    if(decoded._Id_LoaiTaiKhoan.VaiTro === 'KiThuatVien' || decoded._Id_LoaiTaiKhoan.VaiTro === 'Admin'){
+    if(decoded._Id_LoaiTaiKhoan.VaiTro === 'BacSiXetNghiem' || decoded._Id_LoaiTaiKhoan.VaiTro === 'Admin'){
         next()
     }else{
-        return res.status(401).json({message:"Chỉ kĩ thuật viên và quản trị viên mới được phép truy cập.", status:false})
+        return res.status(401).json({message:"Chỉ bác sĩ xét nghiệm và quản trị viên mới được phép truy cập.", status:false})
     }
   
 }

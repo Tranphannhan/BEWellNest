@@ -16,9 +16,9 @@ class Ketquaxetnghiem_Controler {
 
   
   Add_Ketquaxetnghiem = (req , res , next) => {
-    const Check_Image = req.file ? req.file.filename : false;
-    if (!Check_Image) return res.status(400).json ({message : "Lỗi khi upload hình ảnh"});
-
+    const Image = req.file ? req.file.filename : "AnhMacDinhKetQuaXetNghiem.png";
+    
+    const ngay = new Date().toISOString().split('T')[0];
     const Data_Add = {
         Id_YeuCauXetNghiem : req.body.Id_YeuCauXetNghiem.trim(),
         Id_PhieuKhamBenh : req.body.Id_PhieuKhamBenh.trim(),
@@ -29,8 +29,8 @@ class Ketquaxetnghiem_Controler {
         DonViTinh : req.body.DonViTinh.trim(),
         ChiSoBinhThuong : req.body.ChiSoBinhThuong.trim(),
         GhiChu : req.body.GhiChu.trim(),
-        NgayXetNghiem : req.body.NgayXetNghiem.trim(),
-        Image : `http://localhost:5000/image/${Check_Image}` 
+        NgayXetNghiem : ngay,
+        Image : `http://localhost:5000/image/${Image}` 
     }   
 
     if (!Data_Add) return res.send ("Không có dữ liệu");

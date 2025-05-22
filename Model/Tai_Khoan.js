@@ -3,13 +3,15 @@ const connectDB = require("../Model/Db");
 const Taikhoan = require("../Schema/Tai_Khoan"); 
 
 class Database_Taikhoan {
-    Select_Tai_Khoan_M = async (Callback) => {
+    Select_Tai_Khoan_M = async (page,limit,Callback) => {
         try {
             await connectDB();
+            const skip = (page - 1)* limit;
             const Select_Taikhoan = await Taikhoan.find({}).populate({
                 path:"Id_LoaiTaiKhoan"
-            });
-            Callback(null, Select_Taikhoan);
+            }).skip(skip).limit(limit);
+            const total = await Taikhoan.countDocuments(); 
+            Callback(null, {totalItems:total, currentPage: page, totalPages: Math.ceil(total/limit),data:Select_Taikhoan});
         } catch (error) {
             Callback(error);
         }   
@@ -18,12 +20,13 @@ class Database_Taikhoan {
     Get_ByLoai_M = async (limit , page , Id_Loai,Callback) => {
         try {
             await connectDB();
+             const skip = (page - 1)* limit;
             const Select_Taikhoan = await Taikhoan.find({Id_LoaiTaiKhoan: Id_Loai}).populate({
                 path:"Id_LoaiTaiKhoan"
             })  
             .skip(skip)  
             .limit(limit);
-            const total = await Taikhoan.countDocuments (); 
+            const total = await Taikhoan.countDocuments ({Id_LoaiTaiKhoan: Id_Loai}); 
             Callback(null,  {totalItems:total, currentPage: page, totalPages: Math.ceil(total/limit),data:Select_Taikhoan});
         } catch (error) {
             Callback(error);

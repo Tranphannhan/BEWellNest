@@ -5,7 +5,7 @@ const Loai_Tai_Khoan_Schema = new mongoose.Schema({
     TenLoaiTaiKhoan : String,
     VaiTro: {
         type: String,
-        enum: ['ThuNgan', 'TiepNhan', 'QuanLyKhoThuoc', 'Admin', 'KiThuatVien','DuocSi'], 
+        enum: ['ThuNgan', 'TiepNhan', 'QuanLyKhoThuoc', 'Admin', 'BacSiXetNghiem','DuocSi'], 
         required: true
     }
 
