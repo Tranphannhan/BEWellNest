@@ -21,6 +21,7 @@ const Phieu_Kham_Benh_Schema = new mongoose.Schema({
     TrangThaiThanhToan : Boolean,
     STTKham : String,
     TrangThai: Boolean,
+    // sửa thành enum: 'Kham/XetNghiem/BoQua'
     TrangThaiHoatDong : Boolean     
     
 }, { collection: "Phieu_Kham_Benh" }); 

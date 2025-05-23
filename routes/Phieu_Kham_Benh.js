@@ -17,7 +17,7 @@ router.get('/ChuaThanhToan', Handle_Phieu_Kham_Benh.Get_Not_Yet_Paid);
 router.patch ('/XacNhanTrangThai/:ID' , Handle_Phieu_Kham_Benh.Status_handling);
 router.get ('/Detail/:ID' , Handle_Phieu_Kham_Benh.Detail_Phieukham); 
 router.get ('/LayTheoTheKhamBenh/:ID' , Handle_Phieu_Kham_Benh.GET_LayTheoTheKhamBenh); 
-router.patch ('/BoQuaPhieuKham/:ID' , Handle_Phieu_Kham_Benh.BoQuaPhieuKham); 
+router.patch ('/BoQuaPhieuKham/:ID/TrangThaiHoatDong="Kham/XetNghiem/BoQua' , Handle_Phieu_Kham_Benh.BoQuaPhieuKham); 
 
     
 
