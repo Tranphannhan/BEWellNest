@@ -16,7 +16,9 @@ router.get ('/GetById_CaKham_Date/Pagination' , Handle_Phieu_Kham_Benh.Fill_Cakh
 router.get('/ChuaThanhToan', Handle_Phieu_Kham_Benh.Get_Not_Yet_Paid); 
 router.patch ('/XacNhanTrangThai/:ID' , Handle_Phieu_Kham_Benh.Status_handling);
 router.get ('/Detail/:ID' , Handle_Phieu_Kham_Benh.Detail_Phieukham); 
-router.get ('/LayTheoTheKhamBenh/:ID' , Handle_Phieu_Kham_Benh.GET_LayTheoTheKhamBenh); 
+router.get ('/LayTheoTheKhamBenh/:ID' , Handle_Phieu_Kham_Benh.GET_LayTheoTheKhamBenh);
+
+// sửa lại API này
 router.patch ('/BoQuaPhieuKham/:ID/TrangThaiHoatDong="Kham/XetNghiem/BoQua' , Handle_Phieu_Kham_Benh.BoQuaPhieuKham); 
 
     
