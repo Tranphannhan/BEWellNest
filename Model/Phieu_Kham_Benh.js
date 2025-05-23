@@ -167,15 +167,20 @@ class Database_Phieu_Kham_Benh {
     }
 
 
-    BoQuaPhieuKham__ = async (id , Data_Edit , Callback ) => {
+    BoQuaPhieuKham__M = async (id, Status, Callback) => {
         try {
             await connectDB();
-            const Result = await Phieu_Kham_Benh.findByIdAndUpdate (id , Data_Edit ,  { new: true });
-            Callback (null , Result);
+            const Result = await Phieu_Kham_Benh.findByIdAndUpdate(
+                id,
+                { TrangThaiHoatDong: Status },
+                { new: true, runValidators: true } 
+            );
+            Callback(null, Result);
         } catch (error) {
             Callback(error);
         }
-    }
+    };
+
 
          
 

@@ -15,14 +15,19 @@ const Phieu_Kham_Benh_Schema = new mongoose.Schema({
     Id_NguoiTiepNhan: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Tai_Khoan',
-        },
-        
+        },  
+                
     Ngay : String,  
     TrangThaiThanhToan : Boolean,
-    STTKham : String,
+    STTKham : String,  
     TrangThai: Boolean,
+
     // sửa thành enum: 'Kham/XetNghiem/BoQua'
-    TrangThaiHoatDong : Boolean     
-    
+    TrangThaiHoatDong: {
+        type: String,  
+        enum: ['Kham', 'XetNghiem', 'BoQua'], 
+        required: true
+    },
+
 }, { collection: "Phieu_Kham_Benh" }); 
 module.exports = mongoose.model("Phieu_Kham_Benh", Phieu_Kham_Benh_Schema);

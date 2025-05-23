@@ -12,10 +12,12 @@ const Yeu_Cau_Xet_Nghiem_Schema = new mongoose.Schema({
     },
 
     TrangThaiThanhToan : Boolean,  
-    Ngay : String,
+    Ngay : String,   
     STT : String,
     // Trang thái đã xét nghiệm hay chưa (Không được sửa)
-    TrangThai: Boolean
+    TrangThai: Boolean,
+    TrangThaiHoatDong : Boolean
+
     // Thêm TrangThaiHoatDong kiểu: Boolen Mặc định là true
     // Thêm chức năng boqua
 

@@ -56,7 +56,7 @@ class Database_Yeu_Cau_Xet_Nghiem {
         }   
     }
    
-
+  
    
     GET_LayTheoPhieuKhamBenh__M = async (Id_PhieuKhamBenh , Callback) => {
         try {
@@ -147,6 +147,19 @@ class Database_Yeu_Cau_Xet_Nghiem {
             Callback(error);
         }
     }
+    
+
+    Boquatrangthaihoatdong__M = async (_id, Callback) => {
+        try {
+            await connectDB();    
+            const Result = await Yeucauxetnghiem.findByIdAndUpdate( _id, {TrangThaiHoatDong : false}, { new: true });
+            Callback(null, Result);
+        } catch (error) {
+            Callback(error);
+        }
+    };
+
+
 
 
     Edit_Yeucauxetnghiem_M = async (_id, Data_Edit, Callback) => {
@@ -163,9 +176,8 @@ class Database_Yeu_Cau_Xet_Nghiem {
             Callback(error);
         }
     };
-    
 
-
+   
     Delete_Yeucauxetnghiem_M =  async (id , Callback) => {
         try {
             await connectDB();

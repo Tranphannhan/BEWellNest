@@ -30,39 +30,42 @@ class Kham_Lam_Sang {
       res.status(200).json(result);
     });
   } 
-     
-
+           
+    
   Add_Kham_Lam_Sang = (req, res, next) => {
     const Data_Add = {
       Id_PhieuKhamBenh: req.body.Id_PhieuKhamBenh.trim(),
       TrieuChung : req.body.TrieuChung.trim(),
+      ChiSoSinhTon : req.body.ChiSoSinhTon.trim(),
+      ChuanDoanSoBo : req.body.ChuanDoanSoBo.trim(),
+      GhiChu : req.body.GhiChu.trim(),
+      HuongXuLy : req.body.HuongXuLy.trim(),
       KetQua: req.body.KetQua.trim(),
     };
-
-    if (!Data_Add.Id_PhieuKhamBenh || !Data_Add.TrieuChung || !Data_Add.KetQua) { // ✅ Kiểm tra dữ liệu hợp lệ
-      return res.status(400).json({ message: "Thiếu dữ liệu cần thiết" }); // ✅ Chuẩn hóa response
-    }
 
     Connect_Data_Model.Add_Kham_Lam_Sang_M(Data_Add, (Error, Result) => {
       if (Error) return next(Error);
-      res.status(201).json({ message: "Thêm Mới Kham_Lam_Sang Thành Công", data: Result }); // ✅ Chuẩn hóa response
+      res.status(201).json({ message: "Thêm Mới Kham_Lam_Sang Thành Công", data: Result });
     });
   };    
 
+       
+    
   Edit_Kham_Lam_Sang = (req, res, next) => {
     const { ID } = req.params;
     const Data_Edit = {
-      TrieuChung: req.body.TrieuChung.trim(),
+      Id_PhieuKhamBenh: req.body.Id_PhieuKhamBenh.trim(),
+      TrieuChung : req.body.TrieuChung.trim(),
+      ChiSoSinhTon : req.body.ChiSoSinhTon.trim(),
+      ChuanDoanSoBo : req.body.ChuanDoanSoBo.trim(),
+      GhiChu : req.body.GhiChu.trim(),
+      HuongXuLy : req.body.HuongXuLy.trim(),
       KetQua: req.body.KetQua.trim(),
     };
 
-    if (!Data_Edit.TrieuChung || !Data_Edit.KetQua) { // ✅ Kiểm tra dữ liệu hợp lệ
-      return res.status(400).json({ message: "Thiếu dữ liệu cần thiết" }); // ✅ Chuẩn hóa response
-    } 
-
     Connect_Data_Model.Edit_Kham_Lam_Sang_M(ID, Data_Edit, (Error, Result) => {
       if (Error) return next(Error);
-      res.status(200).json({ message: "Cập Nhật Kham_Lam_Sang Thành Công", data: Result }); // ✅ Chuẩn hóa response
+      res.status(200).json({ message: "Cập Nhật Kham_Lam_Sang Thành Công", data: Result }); 
     });
   };
 

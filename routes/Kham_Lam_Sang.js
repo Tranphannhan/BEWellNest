@@ -10,7 +10,4 @@ router.put ('/Edit/:ID' , Handle_Kham_Lam_Sang.Edit_Kham_Lam_Sang);
 router.delete ('/Delete/:ID' , Handle_Kham_Lam_Sang.Delete_Kham_Lam_Sang);
 router.get ('/Detail/:ID' , Handle_Kham_Lam_Sang.Detail_Kham_Lam_Sang);
 router.get ('/LayTheoPhieuKhamBenh/:ID' , Handle_Kham_Lam_Sang.GET_PhieuKhamBenh); 
-
-   
-
 module.exports = router;      

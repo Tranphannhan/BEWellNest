@@ -32,7 +32,6 @@ class Phieu_Kham_Benh {
   }      
 
 
-
   Add_Phieukhambenh = (req, res, next) => {
     const ngay = new Date().toISOString().split('T')[0]; // Lấy ngày hiện tại dạng YYYY-MM-DD
   
@@ -48,7 +47,7 @@ class Phieu_Kham_Benh {
         TrangThaiThanhToan: false,
         STTKham: 0,
         TrangThai: false ,
-        TrangThaiHoatDong : true
+        TrangThaiHoatDong : "Kham"
       };
   
       if (!Data_Add) return res.status(400).json({ message: "Không có dữ liệu để thêm phiếu khám bệnh" });
@@ -60,11 +59,11 @@ class Phieu_Kham_Benh {
   };
 
 
-
+   
   BoQuaPhieuKham = (req , res , next) => {
     const ID  = req.params.ID;
-    const Data_Edit = {TrangThaiHoatDong : false}
-    Connect_Data_Model.BoQuaPhieuKham__ (ID , Data_Edit , (error , result) => {
+    const Status = req.query.TrangThaiHoatDong;
+    Connect_Data_Model.BoQuaPhieuKham__M (ID , Status , (error , result) => {
       if (error) return next(error);
       res.status(201).json({ message: "Cập Nhật Trạng Thái Hoạt Động Thành Công", data: result });
     });

@@ -73,7 +73,6 @@ class Yeucauxetnghiem_Controler {
 
     Connect_Data_Model.GetNextSTT_M(ngay, req.body.Id_PhongThietBi.trim(), (error, nextSTT) => {
       if (error) return next(error);
-
       const Data_Add = {
         Id_PhieuKhamBenh: req.body.Id_PhieuKhamBenh.trim(),
         Id_PhongThietBi: req.body.Id_PhongThietBi.trim(),
@@ -81,17 +80,28 @@ class Yeucauxetnghiem_Controler {
         Ngay: ngay,
         // Số thức tự mới tạo là 0 vì thanh toán xong thì mới xếp số thứ tự
         STT: 0,
-        TrangThai:false
+        TrangThai : false,
+        TrangThaiHoatDong : true
       };
 
       if (!Data_Add) return res.status(400).json({ message: "Không có dữ liệu" });
-
       Connect_Data_Model.Add_Yeucauxetnghiem_M(Data_Add, (Error, Result) => {
         if (Error) return next(Error);
         res.status(201).json({ message: "Thêm Mới Yêu Cầu Khám Bệnh Thành Công" });
       });
+
     });
   };
+   
+    
+  Boquatrangthaihoatdong = (req, res, next) => {
+    const { ID } = req.params;
+    Connect_Data_Model.Boquatrangthaihoatdong__M (ID , (Error, Result) => {
+      if (Error) return next(Error);
+      res.status(200).json({ message: "Cập Nhật Trạng Thái Thành Công" });
+    });
+  };
+
 
   Edit_Yeucauxetnghiem = (req, res, next) => {
     const { ID } = req.params;

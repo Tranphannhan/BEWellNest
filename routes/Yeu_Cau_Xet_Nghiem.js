@@ -17,8 +17,9 @@ router.get('/ChuaThanhToan', Handle_Yeucauxetnghiem.Get_Not_Yet_Paid);
 router.patch ('/XacNhanTrangThai/:ID' , Handle_Yeucauxetnghiem.Status_handling);
 router.get ('/Detail/:ID' , Handle_Yeucauxetnghiem.Detail);
 router.get ('/LayTheoPhieuKhamBenh/:ID' , Handle_Yeucauxetnghiem.GET_LayTheoPhieuKhamBenh);
-
-  
+router.patch ('/Boqua/:ID' , Handle_Yeucauxetnghiem.Boquatrangthaihoatdong);
+   
+    
 
 module.exports = router;     
     
