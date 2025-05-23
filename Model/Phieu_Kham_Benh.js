@@ -118,16 +118,25 @@ class Database_Phieu_Kham_Benh {
     };
 
 
-    Check_Benhnhan__M = async ( Id_CaKham , Ngay , TrangThai , Callback) => {
+    Check_Benhnhan__M = async ( page,limit,Id_CaKham , Ngay , TrangThai , Callback) => {
         try {
             await connectDB();
+            const skip = (page - 1)* limit;
             const Check_Donthuoc = await Phieu_Kham_Benh.find({
                 Id_CaKham : Id_CaKham ,
                 Ngay : Ngay,
                 TrangThai: TrangThai,
                 TrangThaiThanhToan: true
-            }).sort({ STTKham: 1 });
-            Callback(null, Check_Donthuoc);
+            }).populate({
+                path:"Id_TheKhamBenh"
+            }).sort({ STTKham: 1 }).skip(skip).limit(limit);
+            const total = await Phieu_Kham_Benh.countDocuments({
+                Id_CaKham : Id_CaKham ,
+                Ngay : Ngay,
+                TrangThai: TrangThai,
+                TrangThaiThanhToan: true
+            })
+            Callback(null, {totalItems:total, currentPage: page, totalPages: Math.ceil(total/limit),data:Check_Donthuoc});
         } catch (error){
             Callback(error);
         }

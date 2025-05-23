@@ -122,12 +122,14 @@ class Yeucauxetnghiem_Controler {
 
   Get_ById_PTB_Date = (req, res, next) => {
     const { Id_PhongThietBi, ngay } = req.query;
-
+    const limit = parseInt(req.query.limit)||7;
+    const page = parseInt(req.query.page)||1;
+    const TrangThai = req.query.TrangThai || false;
     if (!Id_PhongThietBi || !ngay) {
       return res.status(400).json({ message: "Không có ngày hoặc Id_PhongThietBi" });
     }
 
-    Connect_Data_Model.Get_By_PTB_Date_M(Id_PhongThietBi, ngay, (err, result) => {
+    Connect_Data_Model.Get_By_PTB_Date_M(page,limit,TrangThai,Id_PhongThietBi, ngay, (err, result) => {
       if (err) return res.status(500).json({ message: "Lỗi server", error: err });
 
       if (!result || result.length === 0) {

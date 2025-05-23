@@ -29,11 +29,12 @@ class Cakham_Controler {
 
 
   Get_ByKhoa = (req, res, next) => {
-    const Id_Khoa = req.params.ID
+    const Id_Khoa = req.params.ID;
+    const Id_LoaiCa = req.query.Id_LoaiCa || null;
     if(!Id_Khoa) return res.status(500).json({ message: "Cần truyền Id_Khoa vào đẻ lọc" });
     const limit = parseInt(req.query.limit)||7;
     const page = parseInt(req.query.page)||1;
-    Connect_Data_Model.Get_ByKhoa_M(page,limit,Id_Khoa,(error, result) => {
+    Connect_Data_Model.Get_ByKhoa_M(page,limit,Id_LoaiCa,Id_Khoa,(error, result) => {
       if (error) return next(error);
       if (!result || result.length < 1) { // ✅ Kiểm tra dữ liệu rỗng
         return res.status(404).json({ message: "Dữ liệu ca khám rỗng" }); // ✅ Chuẩn hóa phản hồi
@@ -46,12 +47,13 @@ class Cakham_Controler {
     const data = {
       Id_BacSi: req.body.Id_BacSi?.trim(),
       Id_PhongKham: req.body.Id_PhongKham?.trim(),
+      Id_LoaiCa: req.body.Id_LoaiCa?.trim(),
       TenCa: req.body.TenCa?.trim(),
       TrangThaiHoatDong: true,
     };
 
     // ✅ Kiểm tra dữ liệu hợp lệ
-    if (!data.Id_BacSi || !data.Id_PhongKham ) {
+    if (!data.Id_BacSi || !data.Id_PhongKham ||  !data.Id_LoaiCa) {
       return res.status(400).json({ message: "Thiếu dữ liệu cần thiết" }); // ✅ Kiểm tra dữ liệu hợp lệ
     }
 
@@ -90,6 +92,7 @@ class Cakham_Controler {
     const data = {
       Id_BacSi: req.body.Id_BacSi,
       Id_PhongKham: req.body.Id_PhongKham?.trim(),
+      Id_LoaiCa: req.body.Id_LoaiCa?.trim(),
       TenCa: req.body.TenCa?.trim(),
       TrangThaiHoatDong: req.body.TrangThaiHoatDong,
     };

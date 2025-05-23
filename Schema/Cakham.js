@@ -11,6 +11,10 @@ const Cakham_Schema = new mongoose.Schema({
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'Phong_Kham', 
             },
+    Id_LoaiCa: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Loai_Ca', 
+            },
     TenCa: String,
     TrangThaiHoatDong:Boolean,
 }, { collection: "Ca_Kham" }); 

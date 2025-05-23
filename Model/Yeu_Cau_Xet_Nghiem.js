@@ -24,7 +24,7 @@ class Database_Yeu_Cau_Xet_Nghiem {
                     populate: [
                     {
                         path: 'Id_TheKhamBenh',
-                        select: 'HoVaTen SoDienThoai'
+                        select: 'HoVaTen SoDienThoai GioiTinh'
                     },
                     {
                         path: 'Id_CaKham',
@@ -85,10 +85,6 @@ class Database_Yeu_Cau_Xet_Nghiem {
                         ] 
                     }
                     ]
-                },
-                {
-                    path: 'Id_PhongThietBi',
-                    select: 'TenXetNghiem TenPhongThietBi'
                 }
                 ])
             
@@ -206,16 +202,49 @@ class Database_Yeu_Cau_Xet_Nghiem {
 
 
     // Dùng để load dữ liệu cho mỗi phòng thiết bị khi đã thanh toán và có số thứ tự rồi mới load, đã sắp xếp
-    Get_By_PTB_Date_M = async (Id_PhongThietBi, ngay, Callback) => {
+    Get_By_PTB_Date_M = async (page,limit,TrangThai,Id_PhongThietBi, ngay, Callback) => {
         try {
             await connectDB();
+            const skip = (page - 1)* limit;
             const result = await Yeucauxetnghiem.find({
                 Id_PhongThietBi: Id_PhongThietBi,
                 Ngay: ngay,
-                TrangThai: false,
+                TrangThai: TrangThai,
                 TrangThaiThanhToan:true
-            }).sort({ STT: 1 });
-            Callback(null, result);
+            }).sort({ STT: 1 }).populate([
+  {
+    path: 'Id_PhieuKhamBenh',
+    select: 'Ngay',
+    populate: [
+      {
+        path: 'Id_TheKhamBenh',
+        select: 'HoVaTen SoDienThoai'
+      },
+      {
+        path: 'Id_CaKham',
+        select: 'TenCa',
+        populate:[
+            {
+            path: 'Id_BacSi',
+            select: 'TenBacSi'
+                },
+            {
+            path: 'Id_PhongKham',
+            select: 'SoPhongKham'
+                },
+        ] 
+      }
+    ]
+  }
+]).skip(skip).limit(limit);
+
+            const total = await Yeucauxetnghiem.countDocuments({
+                Id_PhongThietBi: Id_PhongThietBi,
+                Ngay: ngay,
+                TrangThai: TrangThai,
+                TrangThaiThanhToan:true
+            })
+            Callback(null, {totalItems:total, currentPage: page, totalPages: Math.ceil(total/limit),data:result});
         } catch (error) {
             Callback(error);
         }

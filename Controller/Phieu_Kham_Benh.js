@@ -106,8 +106,9 @@ class Phieu_Kham_Benh {
     const id = req.query.Id;
     const ngay = req.query.ngay;
     const TrangThai = req.query.TrangThai || false;
-  
-    Connect_Data_Model.Check_Benhnhan__M (id, ngay, TrangThai ,(error, result) => {
+    const limit = parseInt(req.query.limit)||7;
+    const page = parseInt(req.query.page)||1;
+    Connect_Data_Model.Check_Benhnhan__M (page,limit,id, ngay, TrangThai ,(error, result) => {
       if (error) return next(error);
       res.status(200).json({ data: result });
     });
