@@ -1,10 +1,13 @@
 const { text } = require("express");
 const mongoose = require("mongoose");
-const ObjectId = mongoose.Types.ObjectId;
 
 
 const Kham_Lam_Sang_Schema = new mongoose.Schema({
-    Id_PhieuKhamBenh : ObjectId,
+    Id_PhieuKhamBenh : {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Phieu_Kham_Benh', 
+            },
+    
     TrieuChung : String,
     ChiSoSinhTon : String,
     ChuanDoanSoBo : String,

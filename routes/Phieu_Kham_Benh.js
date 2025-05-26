@@ -11,7 +11,7 @@ router.put ('/Edit/:ID' , Handle_Phieu_Kham_Benh.Edit_Phieukhambenh);
 router.delete ('/Delete/:ID' , Handle_Phieu_Kham_Benh.Delete_Phieukham);
 router.patch ('/Xacnhanthanhtoan/:Id_PhieuKhamBenh', Handle_Phieu_Kham_Benh.PaymentConfirmation);
 
-// Load ra cho bác sĩ khám có thể lấy những phiếu đã khám rồi
+// Dùng để hiển thị danh sách bệnh nhân: Đã khám, chưa khám, đã bỏ qua, đang xét nghiệm. Theo từng Ca (Chức năng của bác sĩ)
 router.get ('/GetById_CaKham_Date/Pagination' , Handle_Phieu_Kham_Benh.Fill_Cakhambenh);
 router.get('/ChuaThanhToan', Handle_Phieu_Kham_Benh.Get_Not_Yet_Paid); 
 router.patch ('/XacNhanTrangThai/:ID' , Handle_Phieu_Kham_Benh.Status_handling);
@@ -21,7 +21,7 @@ router.get ('/LayTheoTheKhamBenh/:ID' , Handle_Phieu_Kham_Benh.GET_LayTheoTheKha
 
 // sửa lại API này
 // router.patch ('/BoQuaPhieuKham/:ID?TrangThaiHoatDong="Kham/XetNghiem/BoQua' , Handle_Phieu_Kham_Benh.BoQuaPhieuKham);
-router.patch ('/BoQuaPhieuKham/:ID' , Handle_Phieu_Kham_Benh.BoQuaPhieuKham); 
+router.patch ('/ThayDoiTrangThaiHoatDong/:ID' , Handle_Phieu_Kham_Benh.BoQuaPhieuKham); 
 
      
     

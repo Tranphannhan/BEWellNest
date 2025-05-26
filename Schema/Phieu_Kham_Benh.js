@@ -22,7 +22,6 @@ const Phieu_Kham_Benh_Schema = new mongoose.Schema({
     STTKham : String,  
     TrangThai: Boolean,
 
-    // sửa thành enum: 'Kham/XetNghiem/BoQua'
     TrangThaiHoatDong: {
         type: String,  
         enum: ['Kham', 'XetNghiem', 'BoQua'], 

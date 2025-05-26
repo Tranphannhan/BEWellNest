@@ -118,7 +118,7 @@ class Database_Phieu_Kham_Benh {
     };
 
 
-    Check_Benhnhan__M = async ( page,limit,Id_CaKham , Ngay , TrangThai , Callback) => {
+    Check_Benhnhan__M = async ( page,limit,Id_CaKham , Ngay , TrangThai , TrangThaiHoatDong, Callback) => {
         try {
             await connectDB();
             const skip = (page - 1)* limit;
@@ -126,7 +126,8 @@ class Database_Phieu_Kham_Benh {
                 Id_CaKham : Id_CaKham ,
                 Ngay : Ngay,
                 TrangThai: TrangThai,
-                TrangThaiThanhToan: true
+                TrangThaiThanhToan: true,
+                TrangThaiHoatDong:TrangThaiHoatDong
             }).populate({
                 path:"Id_TheKhamBenh"
             }).sort({ STTKham: 1 }).skip(skip).limit(limit);
@@ -134,7 +135,8 @@ class Database_Phieu_Kham_Benh {
                 Id_CaKham : Id_CaKham ,
                 Ngay : Ngay,
                 TrangThai: TrangThai,
-                TrangThaiThanhToan: true
+                TrangThaiThanhToan: true,
+                TrangThaiHoatDong:TrangThaiHoatDong
             })
             Callback(null, {totalItems:total, currentPage: page, totalPages: Math.ceil(total/limit),data:Check_Donthuoc});
         } catch (error){

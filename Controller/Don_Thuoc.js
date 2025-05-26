@@ -80,7 +80,8 @@ class Donthuoc_Controler {
 
   // Danh sách phát thuốc nhưng có phân trang
   MedicineDistributionList_Pagination = (req , res , next) => {
-    const Date = req.query.date;
+    const ngayHienTai = new Date().toISOString().split('T')[0];
+    const Date = req.query.date ||ngayHienTai;
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 7;
     Connect_Data_Model.MedicineDistributionList_Pagination_M (page,limit,Date , (error , result) => {
@@ -91,7 +92,8 @@ class Donthuoc_Controler {
   }
 
   HistoryOfMedicineDispensing_Pagination = (req , res , next) => {
-    const Date = req.query.date;
+    const ngayHienTai = new Date().toISOString().split('T')[0];
+    const Date = req.query.date || ngayHienTai;
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 7;
     Connect_Data_Model.HistoryOfMedicineDispensing_Pagination_M (page,limit,Date , (error , result) => {

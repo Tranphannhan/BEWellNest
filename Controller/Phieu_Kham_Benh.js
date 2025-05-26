@@ -63,6 +63,11 @@ class Phieu_Kham_Benh {
   BoQuaPhieuKham = (req , res , next) => {
     const ID  = req.params.ID;
     const Status = req.query.TrangThaiHoatDong;
+    if(Status !=="Kham" && Status !=="XetNghiem" && Status !=="BoQua"){
+      return res.status(500).json({ message: "Trang bắt buộc phải là: Kham, XetNghiem, BoQua"})
+    }
+      
+
     Connect_Data_Model.BoQuaPhieuKham__M (ID , Status , (error , result) => {
       if (error) return next(error);
       res.status(201).json({ message: "Cập Nhật Trạng Thái Hoạt Động Thành Công", data: result });
@@ -107,7 +112,8 @@ class Phieu_Kham_Benh {
     const TrangThai = req.query.TrangThai || false;
     const limit = parseInt(req.query.limit)||7;
     const page = parseInt(req.query.page)||1;
-    Connect_Data_Model.Check_Benhnhan__M (page,limit,id, ngay, TrangThai ,(error, result) => {
+    const TrangThaiHoatDong = req.query.TrangThaiHoatDong || 'Kham'
+    Connect_Data_Model.Check_Benhnhan__M (page,limit,id, ngay, TrangThai,TrangThaiHoatDong ,(error, result) => {
       if (error) return next(error);
       res.status(200).json({ data: result });
     });
