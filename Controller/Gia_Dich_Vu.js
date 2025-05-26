@@ -5,7 +5,7 @@ class Giadichvu_Controler {
     Runviews = (req, res, next) => {
         res.status(200).json({ message: "Loading Thành Công" }); 
     };
-
+   
 
     Select_Giadichvu = (req, res, next) => {
         Connect_Data_Model.Select_Giadichvu__M((error, result) => {
@@ -15,11 +15,13 @@ class Giadichvu_Controler {
         });
     };
 
-
+  
     Add_Giadichvu = (req, res, next) => {
         const data = {
             Tendichvu: req.body.Tendichvu?.trim(),
-            Giadichvu: req.body.Giadichvu
+            Loaigia : req.body.Loaigia,
+            Giadichvu: req.body.Giadichvu,
+            TrangThaiHoatDong : true
         };
 
         Connect_Data_Model.Add_Giadichvu__M (data, (error, result) => {
@@ -28,12 +30,24 @@ class Giadichvu_Controler {
         });
     };
 
+  
+    SuaTrangThai = (req ,res , next) => {
+        const { ID } = req.params;
+        const GET_Status = req.query.TrangThaiHoatDong;
+
+        Connect_Data_Model.SuaTrangThai__M (ID , GET_Status, (error, result) => {
+            if (error) return res.status(500).json({ message: "Cập nhật giá dịch vụ thất bại"});
+            res.status(201).json({ message: "cập nhật Trạng thái thành công"}); 
+        });
+    }
+
 
 
     Upload_Giadichvu = (req, res, next) => {
         const { ID } = req.params;
         const data = {
             Tendichvu: req.body.Tendichvu?.trim(),
+            Loaigia : req.body.Loaigia,
             Giadichvu: req.body.Giadichvu
         };
 

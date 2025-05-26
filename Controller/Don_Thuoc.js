@@ -35,9 +35,9 @@ class Donthuoc_Controler {
   }    
 
 
+
   PaymentConfirmation = (req, res, next) => {
     const Id_DonThuoc = req.params.ID_DonThuoc;
-  
     Connect_Data_Model.Select_Check_Status_Donthuoc_M(Id_DonThuoc, (error, result) => {
       if (error) return next(error);
   
@@ -78,6 +78,8 @@ class Donthuoc_Controler {
     });
   }
 
+
+
   // Danh sách phát thuốc nhưng có phân trang
   MedicineDistributionList_Pagination = (req , res , next) => {
     const ngayHienTai = new Date().toISOString().split('T')[0];
@@ -106,7 +108,6 @@ class Donthuoc_Controler {
    
 
   // 
-
   add_Donthuoc = (req, res, next) => {
     const data = {
       Id_PhieuKhamBenh: req.body.Id_PhieuKhamBenh,
