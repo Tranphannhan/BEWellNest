@@ -81,10 +81,10 @@ class Donthuoc_Controler {
   // Danh sách phát thuốc nhưng có phân trang
   MedicineDistributionList_Pagination = (req , res , next) => {
     const ngayHienTai = new Date().toISOString().split('T')[0];
-    const Date = req.query.date ||ngayHienTai;
+    const DaselectedDate = req.query.date ||ngayHienTai;
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 7;
-    Connect_Data_Model.MedicineDistributionList_Pagination_M (page,limit,Date , (error , result) => {
+    Connect_Data_Model.MedicineDistributionList_Pagination_M (page,limit,DaselectedDate , (error , result) => {
       if (error) return next (error);
       if (result.length === 0) return res.status(200).json ({totalItems:0, currentPage: 0, totalPages: 0,data: null});
       res.status(200).json(result);
@@ -93,10 +93,10 @@ class Donthuoc_Controler {
 
   HistoryOfMedicineDispensing_Pagination = (req , res , next) => {
     const ngayHienTai = new Date().toISOString().split('T')[0];
-    const Date = req.query.date || ngayHienTai;
+    const DaselectedDate = req.query.date || ngayHienTai;
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 7;
-    Connect_Data_Model.HistoryOfMedicineDispensing_Pagination_M (page,limit,Date , (error , result) => {
+    Connect_Data_Model.HistoryOfMedicineDispensing_Pagination_M (page,limit,DaselectedDate , (error , result) => {
       if (error) return next (error);
       if (result.length === 0) return res.status(200).json ({totalItems:0, currentPage: 0, totalPages: 0,data: null});
       res.status(200).json(result);
