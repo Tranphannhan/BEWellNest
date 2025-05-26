@@ -43,6 +43,7 @@ class Phieu_Kham_Benh {
         Id_TheKhamBenh: req.body.Id_TheKhamBenh.trim(),
         Id_CaKham: req.body.Id_CaKham.trim(),
         Id_NguoiTiepNhan: req.body.Id_NguoiTiepNhan.trim(),
+        Id_GiaDichVu: req.body.Id_GiaDichVu.trim(),
         Ngay: ngay,
         TrangThaiThanhToan: false,
         STTKham: 0,

@@ -11,14 +11,12 @@ const HoadonnSchema = new mongoose.Schema({
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'Tai_Khoan',
             },
-    Id_GiaDichVu:ObjectId || null,
     LoaiHoaDon: {
         type: String,
         enum: ['Kham', 'Thuoc', 'XetNghiem'], 
         required: true
     },
     TenHoaDon: String,
-    TongTien: Number
 
 }, { collection: "Hoa_Don" }); 
 

@@ -16,7 +16,10 @@ const Phieu_Kham_Benh_Schema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Tai_Khoan',
         },  
-                
+    Id_GiaDichVu:{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Gia_Dich_Vu',
+    },
     Ngay : String,  
     TrangThaiThanhToan : Boolean,
     STTKham : String,  

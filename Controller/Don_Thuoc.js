@@ -80,11 +80,11 @@ class Donthuoc_Controler {
 
   // Danh sách phát thuốc nhưng có phân trang
   MedicineDistributionList_Pagination = (req , res , next) => {
-    const ngayHienTai = new Date().toISOString().split('T')[0];
-    const DaselectedDate = req.query.date ||ngayHienTai;
+   const ngayHienTai = new Date().toISOString().split('T')[0];
+   const selectedDate = req.query.date || ngayHienTai;
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 7;
-    Connect_Data_Model.MedicineDistributionList_Pagination_M (page,limit,DaselectedDate , (error , result) => {
+    Connect_Data_Model.MedicineDistributionList_Pagination_M (page,limit,selectedDate , (error , result) => {
       if (error) return next (error);
       if (result.length === 0) return res.status(200).json ({totalItems:0, currentPage: 0, totalPages: 0,data: null});
       res.status(200).json(result);
@@ -92,11 +92,11 @@ class Donthuoc_Controler {
   }
 
   HistoryOfMedicineDispensing_Pagination = (req , res , next) => {
-    const ngayHienTai = new Date().toISOString().split('T')[0];
-    const DaselectedDate = req.query.date || ngayHienTai;
+   const ngayHienTai = new Date().toISOString().split('T')[0];
+   const selectedDate = req.query.date || ngayHienTai;
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 7;
-    Connect_Data_Model.HistoryOfMedicineDispensing_Pagination_M (page,limit,DaselectedDate , (error , result) => {
+    Connect_Data_Model.HistoryOfMedicineDispensing_Pagination_M (page,limit,selectedDate , (error , result) => {
       if (error) return next (error);
       if (result.length === 0) return res.status(200).json ({totalItems:0, currentPage: 0, totalPages: 0,data: null});
       res.status(200).json(result);
@@ -193,6 +193,7 @@ class Donthuoc_Controler {
     if (err) return res.status(500).json({ message: "Lỗi server", error: err });
 
     if (result[0].TrangThai) return res.status(200).json ({message : "Trạng thái đã được xác nhận trước đó" , error: err });
+     if (result[0].TrangThaiThanhToan === false) return res.status(200).json ({message : "Đơn thuốc này chưa được thanh toán" , error: err });
     Connect_Data_Model.Upload_Status_handling__M (Id_NguoiPhatThuoc , ID , (err , result) => {
         if (err) return res.status(500).json({ message: "Lỗi server", error: err });
         return res.status(200).json({ message: "Xác nhận trạng thái thành công" });
