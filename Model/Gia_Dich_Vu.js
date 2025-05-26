@@ -25,6 +25,16 @@ class Database_Dichvu {
         }
     }
 
+    SuaTrangThai__M = async (id , TrangThaiHoatDong , Callback) => {
+        try {
+            await connectDB();
+            const Result = await Hoadon.findByIdAndUpdate (id ,{ TrangThaiHoatDong : TrangThaiHoatDong} ,  { new: true });
+            Callback (null , Result);
+        } catch (error) {
+            Callback(error);
+        }
+    }
+
 
     Upload_Giadichvu__M = async (id , Data , Callback) => {
         try {

@@ -7,4 +7,5 @@ router.get ('/' , Handle_Giadichvu.Select_Giadichvu);
 router.post('/Add', Handle_Giadichvu.Add_Giadichvu);
 router.put('/Edit/:ID', Handle_Giadichvu.Upload_Giadichvu);
 router.delete('/Delete/:ID', Handle_Giadichvu.Delete_Giadichvu);
+router.put ('/SuaTrangThai/:ID', Handle_Giadichvu.SuaTrangThai);
 module.exports = router; 
