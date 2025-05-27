@@ -1,6 +1,7 @@
 
 const connectDB = require("../Model/Db");
 const Khamlamsang = require("../Schema/Kham_Lam_Sang"); 
+const Phieu_Kham_Benh = require("../Schema/Phieu_Kham_Benh"); 
 
 class Database_Khamlamsang {
     Select_Phieukhambenh_M = async (Callback) => {
@@ -51,6 +52,30 @@ class Database_Khamlamsang {
             Callback(error);
         }
     }
+         
+
+    GET_TheKhamBenh__M = async (page , limit , _id , Callback) => {
+        try {
+            await connectDB ();
+            const skip = (page - 1) * limit;
+            const Arr_ID = await Phieu_Kham_Benh.find ({_id}).select('_id');
+            const Arr_PhieuKhamBenh = Arr_ID.map (value => value._id);
+            // Bước 2: Lấy các khám lâm sàng liên quan tới các phiếu khám bệnh đó
+            const KhamLamSangList = await Khamlamsang.find({
+                Id_PhieuKhamBenh : { $in: Arr_PhieuKhamBenh }
+            }).skip (skip).limit(limit);
+
+            const total = await Khamlamsang.countDocuments ({
+                Id_PhieuKhamBenh: { $in: Arr_PhieuKhamBenh }
+            });
+
+            Callback(null, {totalItems:total, currentPage: page, totalPages: Math.ceil(total/limit),data:KhamLamSangList});
+ 
+            
+        } catch (error) {
+            Callback(error);
+        }   
+    }   
 
 
     Edit_Kham_Lam_Sang_M = async (id , Data , Callback) => {

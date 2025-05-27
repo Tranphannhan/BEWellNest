@@ -49,6 +49,16 @@ class Kham_Lam_Sang {
     });
   };    
 
+  GET_TheKhamBenh = (req, res, next) => {
+    const ID_TheKhamBenh = req.params.ID;
+    const limit = parseInt (req.query.limit) || 7;
+    const page = parseInt (req.query.page) || 1;
+
+    Connect_Data_Model.GET_TheKhamBenh__M (page , limit , ID_TheKhamBenh , (error , Result) => {
+      if (Error) return next(Error);
+      res.status(200).json({ Result }); 
+    });  
+  }
        
     
   Edit_Kham_Lam_Sang = (req, res, next) => {

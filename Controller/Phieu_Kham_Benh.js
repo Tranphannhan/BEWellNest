@@ -108,8 +108,9 @@ class Phieu_Kham_Benh {
   
 
   Fill_Cakhambenh = (req, res, next) => {
+    const ngayHienTai = new Date().toISOString().split('T')[0];
     const id = req.query.Id;
-    const ngay = req.query.ngay;
+    const ngay = req.query.ngay || ngayHienTai;
     const TrangThai = req.query.TrangThai || false;
     const limit = parseInt(req.query.limit)||7;
     const page = parseInt(req.query.page)||1;

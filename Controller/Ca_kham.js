@@ -30,7 +30,7 @@ class Cakham_Controler {
 
   
   Get_ByKhoa = (req, res, next) => {
-    const Id_Khoa = req.params.ID;
+    const Id_Khoa = req.query.Id_Khoa || null;
     const Id_LoaiCa = req.query.Id_LoaiCa || null;
     if(!Id_Khoa) return res.status(500).json({ message: "Cần truyền Id_Khoa vào đẻ lọc" });
     const limit = parseInt(req.query.limit)||7;
