@@ -7,5 +7,5 @@ router.get ('/Pagination' , Handle_Khoa.Select_Khoa);
 router.post('/Add', Handle_Khoa.add_Khoa);
 router.delete('/:id', Handle_Khoa.deleteKhoa);
 router.put('/:id', Handle_Khoa.updateKhoa);
-router.put ('/TrangThaiHoatDong/:ID' , Handle_Khoa.ThayDoiTrangThaiHoatDong);
+router.patch ('/TrangThaiHoatDong/:ID' , Handle_Khoa.ThayDoiTrangThaiHoatDong);
 module.exports = router;    

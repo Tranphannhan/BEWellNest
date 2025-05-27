@@ -29,7 +29,6 @@ class Database_Phieu_Kham_Benh {
             await connectDB ();
             const Select_Detail = await Phieu_Kham_Benh.find ({_id}).populate({
                 path: 'Id_TheKhamBenh',
-                select: 'HoVaTen SoDienThoai',
                 }).populate({
                     path: 'Id_CaKham',
                     select: 'TenCa',
