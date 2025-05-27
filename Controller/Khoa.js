@@ -18,6 +18,7 @@ class Khoa_Controler {
   };
            
 
+  
   add_Khoa = (req, res, next) => {
     const data = {
       TenKhoa: req.body.TenKhoa?.trim(),
