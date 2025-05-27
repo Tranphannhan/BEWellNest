@@ -61,7 +61,7 @@ class Kham_Lam_Sang {
       GhiChu : req.body.GhiChu.trim(),
       HuongXuLy : req.body.HuongXuLy.trim(),
       KetQua: req.body.KetQua.trim(),
-    };
+    };  
 
     Connect_Data_Model.Edit_Kham_Lam_Sang_M(ID, Data_Edit, (Error, Result) => {
       if (Error) return next(Error);

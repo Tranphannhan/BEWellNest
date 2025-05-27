@@ -31,7 +31,7 @@ class Phieu_Kham_Benh {
     });
   }      
 
-
+  
   Add_Phieukhambenh = (req, res, next) => {
     const ngay = new Date().toISOString().split('T')[0]; // Lấy ngày hiện tại dạng YYYY-MM-DD
   

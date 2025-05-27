@@ -9,3 +9,4 @@ router.delete('/:id', Handle_Khoa.deleteKhoa);
 router.put('/:id', Handle_Khoa.updateKhoa);
 router.patch ('/TrangThaiHoatDong/:ID' , Handle_Khoa.ThayDoiTrangThaiHoatDong);
 module.exports = router;    
+   
