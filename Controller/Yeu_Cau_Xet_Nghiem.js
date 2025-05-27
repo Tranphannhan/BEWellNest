@@ -75,7 +75,7 @@ class Yeucauxetnghiem_Controler {
       if (error) return next(error);
       const Data_Add = {
         Id_PhieuKhamBenh: req.body.Id_PhieuKhamBenh.trim(),
-        Id_PhongThietBi: req.body.Id_PhongThietBi.trim(),
+        Id_LoaiXetNghiem: req.body.Id_LoaiXetNghiem.trim(),
         TrangThaiThanhToan: false,
         Ngay: ngay,
         // Số thức tự mới tạo là 0 vì thanh toán xong thì mới xếp số thứ tự
@@ -107,7 +107,7 @@ class Yeucauxetnghiem_Controler {
     const { ID } = req.params;
     const Data_Edit = {
       Id_PhieuKhamBenh: req.body.Id_PhieuKhamBenh.trim(),
-      Id_PhongThietBi: req.body.Id_PhongThietBi.trim(),
+      Id_LoaiXetNghiem: req.body.Id_LoaiXetNghiem.trim(),
       TrangThaiThanhToan: req.body.TrangThaiThanhToan.trim(),
       STT: req.body.STT.trim(),
     };
