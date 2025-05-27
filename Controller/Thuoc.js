@@ -24,6 +24,17 @@ class Thuoc_Controler {
       res.status(200).json(result);
     });
   };
+   
+
+  TimKiemTenThuoc =  (req, res, next) => {
+    const Key_Select = req.query.search;
+    Connect_Data_Model.TimKiemTenThuoc__M  (Key_Select ,(error, result) => {
+      if (error) return next(error);
+      if (result.length < 1) return res.status(404).json({ message: "Không tìm thấy thuốc trong kho" });
+      res.status(200).json(result);
+    });
+  };
+
 
 
   Add_Donthuoc = (req, res, next) => {

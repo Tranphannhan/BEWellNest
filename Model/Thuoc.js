@@ -25,6 +25,21 @@ class Database_Thuoc {
             Callback(error);
         }   
     };
+ 
+    TimKiemTenThuoc__M = async (Key_Search, Callback) => {
+        try {
+            await connectDB();
+            const Select_Thuoc = await Thuoc.find({
+                TenThuoc: { $regex: '^' + Key_Search, $options: 'i' } // Bắt đầu bằng Key_Search
+            }).limit(7);
+
+            const total = await Thuoc.countDocuments ({ TenThuoc: { $regex: '^' + Key_Search, $options: 'i' }})
+            Callback(null, {totalItems:total, currentPage: 1, totalPages: Math.ceil(total/7 ),data:Select_Thuoc});
+        } catch (error) {
+            Callback(error);
+        }
+    } 
+
 
     Get_TakeInGroups_M = async (page, limit, Id,Callback) => {
         try {
