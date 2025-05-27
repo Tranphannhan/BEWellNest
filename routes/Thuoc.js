@@ -10,4 +10,5 @@ router.get ('/Pagination' , Handle_Thuoc.Get_Pagination);
 router.post ('/Add' , Handle_Thuoc.Add_Donthuoc);
 router.put ('/Edit/:ID' , Handle_Thuoc.Edit_Donthuoc);
 router.delete ('/Delete/:ID' , Handle_Thuoc.Delete_Donthuoc);
-module.exports = router;  
+module.exports = router; 
+

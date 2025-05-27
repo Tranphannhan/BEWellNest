@@ -28,6 +28,7 @@ class Cakham_Controler {
   };
 
 
+  
   Get_ByKhoa = (req, res, next) => {
     const Id_Khoa = req.params.ID;
     const Id_LoaiCa = req.query.Id_LoaiCa || null;
@@ -42,6 +43,7 @@ class Cakham_Controler {
       res.status(200).json(result);
     });
   };
+
 
   add_Cakham = (req, res, next) => {
     const data = {
@@ -64,6 +66,8 @@ class Cakham_Controler {
       res.status(201).json({ message: "Thêm ca khám thành công", data: result }); // ✅ Chuẩn hóa response
     });
   };
+
+
 
   deleteCakham = (req, res, next) => {
     const { id } = req.params;

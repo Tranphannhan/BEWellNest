@@ -16,11 +16,12 @@ class Khoa_Controler {
       res.status(200).json(result);
     });
   };
-         
+           
 
   add_Khoa = (req, res, next) => {
     const data = {
       TenKhoa: req.body.TenKhoa?.trim(),
+      TrangThaiHoatDong : true
     };
 
     if (!data.TenKhoa) {
@@ -34,6 +35,26 @@ class Khoa_Controler {
       res.status(201).json({ message: "Thêm khoa thành công", data: result }); // ✅ Đã sửa thành chuẩn response JSON
     });
   };
+   
+
+  
+  ThayDoiTrangThaiHoatDong = (req , res , next) => {
+    const TrangThaiHoatDong = req.query.TrangThaiHoatDong;
+    const ID = req.params.ID;
+
+    if (!TrangThaiHoatDong) res.status(500).json ({message : "Vui lòng truyền trạng thái hoạt động"});
+    Connect_Data_Model.ChinhTrangThaiHoatDong__M (ID, TrangThaiHoatDong , (error, result) => {
+      if (error) return next (error) 
+      if (!result) return res.status(404).json({ message: 'Không tìm thấy khoa để xóa' }); 
+      return res.status(200).json({
+        message: 'Cập Nhật Trạng Thái Hoạt Động Thành Công',
+        data: result, 
+      });
+    });
+  }
+
+
+
 
   deleteKhoa = (req, res) => {
     const { id } = req.params;
