@@ -6,9 +6,9 @@ const Yeu_Cau_Xet_Nghiem_Schema = new mongoose.Schema({
         ref: 'Phieu_Kham_Benh', 
     },
 
-    Id_PhongThietBi : {
+    Id_LoaiXetNghiem : {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Phong_Thiet_Bi'
+        ref: 'Loai_Xet_Nghiem'
     },
 
     TrangThaiThanhToan : Boolean,  

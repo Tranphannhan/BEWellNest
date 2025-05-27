@@ -17,5 +17,6 @@ const Cakham_Schema = new mongoose.Schema({
             },
     TenCa: String,
     TrangThaiHoatDong:Boolean,
+
 }, { collection: "Ca_Kham" }); 
 module.exports = mongoose.model("Ca_Kham", Cakham_Schema);

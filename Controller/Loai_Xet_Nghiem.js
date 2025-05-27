@@ -31,7 +31,7 @@ class Loaixetnghiem_Controler {
             res.status(201).json({ message: "Thêm Loai_Xet_Nghiem thành công"}); 
         });
     };
-
+    
 
 
     Upload_LoaiXetNghiem = (req, res, next) => {

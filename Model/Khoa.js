@@ -31,6 +31,18 @@ class Database_Khoa {
       }
     };
 
+    ChinhTrangThaiHoatDong__M =  async (_id , TrangThaiHoatDong , Callback) => {
+      try {
+        await connectDB();
+        const updated = await Khoa.findByIdAndUpdate(_id, {TrangThaiHoatDong}, { new: true });
+        Callback(null, updated);
+      } catch (error) {
+        Callback(error);
+      }
+    };
+
+
+
     // Cập nhật khoa
     Update_Khoa_M = async (id, updatedData, Callback) => {
       try {

@@ -78,9 +78,18 @@ class Database_Thuoc {
     Get_Pagination_M = async (page,limit,Callback) => {
         try {
             const skip = (page - 1) * limit;
+            const ngay = new Date().toISOString().split('T')[0];
             await connectDB();
-            const Select_Thuoc = await Thuoc.find({}).skip(skip).limit(limit);
-            const total = await Thuoc.countDocuments()
+            const Select_Thuoc = await Thuoc.find({
+                  SoLuong: { $gt: 0 },
+                 HanSuDung: { $gte: ngay }
+            }).populate([
+                {path:"Id_NhomThuoc"},
+                {path:"Id_NhaSanXuat"}
+            ]).skip(skip).limit(limit);
+            const total = await Thuoc.countDocuments({  
+                 SoLuong: { $gt: 0 },
+                 HanSuDung: { $gte: ngay }})
             Callback(null, {totalItems:total, currentPage: page, totalPages: Math.ceil(total/limit),data:Select_Thuoc});
         } catch (error) {
             Callback(error);
