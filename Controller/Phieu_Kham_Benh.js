@@ -65,7 +65,7 @@ class Phieu_Kham_Benh {
     const ID  = req.params.ID;
     const Status = req.query.TrangThaiHoatDong;
     if(Status !=="Kham" && Status !=="XetNghiem" && Status !=="BoQua"){
-      return res.status(500).json({ message: "Trang bắt buộc phải là: Kham, XetNghiem, BoQua"})
+      return res.status(500).json({ message: "Vui lòng bắt buộc phải truyền TrangThaiHoatDong: Kham, XetNghiem, BoQua"})
     }
       
 
@@ -114,8 +114,24 @@ class Phieu_Kham_Benh {
     const TrangThai = req.query.TrangThai || false;
     const limit = parseInt(req.query.limit)||7;
     const page = parseInt(req.query.page)||1;
-    const TrangThaiHoatDong = req.query.TrangThaiHoatDong || 'Kham'
+    const TrangThaiHoatDong = req.query.TrangThaiHoatDong || null;
     Connect_Data_Model.Check_Benhnhan__M (page,limit,id, ngay, TrangThai,TrangThaiHoatDong ,(error, result) => {
+      if (error) return next(error);
+      res.status(200).json({ data: result });
+    });
+  };
+
+   TimKiemBenhNhanBangSDTHoacIdTheKhamBenh = (req, res, next) => {
+    const ngayHienTai = new Date().toISOString().split('T')[0];
+    const id = req.query.Id;
+    const SDT = req.query.SDT||null;
+    const Id_TheKhamBenh = req.query.Id_TheKhamBenh||null;
+    const ngay = req.query.ngay || ngayHienTai;
+    const TrangThai = req.query.TrangThai || false;
+    const limit = parseInt(req.query.limit)||7;
+    const page = parseInt(req.query.page)||1;
+    const TrangThaiHoatDong = req.query.TrangThaiHoatDong || null;
+    Connect_Data_Model.TimKiemBenhNhanBangSDTHoacIdTheKhamBenh__M (page,limit,id, ngay, TrangThai,TrangThaiHoatDong, SDT,Id_TheKhamBenh,(error, result) => {
       if (error) return next(error);
       res.status(200).json({ data: result });
     });
