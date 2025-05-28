@@ -59,6 +59,15 @@ class Ketquaxetnghiem_Controler {
   }         
 
   
+  GETIdPhieuKhamBenh =  (req , res , next) => {
+    const Id_PhieuKhamBenh  =  req.params.ID;
+    Connect_Data_Model.GETIdPhieuKhamBenh__M (Id_PhieuKhamBenh , (error , result) => {
+      if (error) return next(error);
+      res.status(200).json(result);
+    });
+  }         
+
+  
    
   Edit_Ketquaxetnghiem = (req, res, next) => {
     const { ID } = req.params;

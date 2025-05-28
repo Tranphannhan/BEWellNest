@@ -49,6 +49,18 @@ class Database_Ketqua_Xet_Nghiem {
             Callback(error);
         }   
     }
+
+       
+    GETIdPhieuKhamBenh__M = async (Id_PhieuKhamBenh , Callback) => {
+        try {
+            await connectDB ();
+            const Select = await Ketquaxetnghiem.find ({Id_PhieuKhamBenh});
+            Callback(null, Select);
+        } catch (error) {
+            Callback(error);
+        }   
+    }
+
     
 
 
