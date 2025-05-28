@@ -1,5 +1,5 @@
 
-const { path } = require("../app");
+
 const connectDB = require("../Model/Db");
 const Hoadon = require("../Schema/Hoadon"); 
 

@@ -1,5 +1,5 @@
 const connectDB = require("../Model/Db");
-const { populate } = require("../Schema/Bacsi");
+
 const Donthuoc = require("../Schema/Don_Thuoc"); 
 const Phieu_Kham_Benh = require ('../Schema/Phieu_Kham_Benh');
 

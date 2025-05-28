@@ -34,7 +34,7 @@ class Donthuoc_Chitiet_Controler {
     };
 
     // ✅ Kiểm tra dữ liệu hợp lệ
-    if (!data.Id_DonThuoc || !data.Id_Thuoc || !data.SoLuong || !data.DonVi || !data.NhacNho) {
+    if (!data.Id_DonThuoc || !data.Id_Thuoc || !data.SoLuong || !data.NhacNho) {
       return res.status(400).json({ message: "Thiếu dữ liệu cần thiết" }); // ✅ Kiểm tra dữ liệu hợp lệ
     }
 

@@ -1,5 +1,4 @@
 
-const { path } = require("../app");
 const connectDB = require("../Model/Db");
 const Yeucauxetnghiem = require("../Schema/Yeu_Cau_Xet_Nghiem"); 
 

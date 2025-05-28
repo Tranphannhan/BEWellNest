@@ -1,4 +1,4 @@
-const { path } = require("../app");
+
 const connectDB = require("../Model/Db");
 const Phieu_Kham_Benh = require("../Schema/Phieu_Kham_Benh"); 
 

@@ -55,8 +55,8 @@ class Kham_Lam_Sang {
     const page = parseInt (req.query.page) || 1;
 
     Connect_Data_Model.GET_TheKhamBenh__M (page , limit , ID_TheKhamBenh , (error , Result) => {
-      if (Error) return next(Error);
-      res.status(200).json({ Result }); 
+      if (error) return next(error);
+      res.status(200).json(Result); 
     });  
   }
        
