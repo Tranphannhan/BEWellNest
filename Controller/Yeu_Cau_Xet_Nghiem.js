@@ -70,7 +70,7 @@ class Yeucauxetnghiem_Controler {
 
   Add_Yeucauxetnghiem = (req, res, next) => {
     const ngay = new Date().toISOString().split("T")[0];
-
+ 
     Connect_Data_Model.GetNextSTT_M(ngay, req.body.Id_PhongThietBi.trim(), (error, nextSTT) => {
       if (error) return next(error);
       const Data_Add = {

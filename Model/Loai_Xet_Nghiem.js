@@ -25,6 +25,16 @@ class Database_Loaixetnghiem {
         }
     }
 
+    ThayDoiTrangThaiHoatDong_M = async (Trangthai , id , Callback) => {
+        try {
+            await connectDB();
+            const Result = await Loaixetnghiem.findByIdAndUpdate (_id , Trangthai ,  { new: true });
+            Callback (null , Result);
+        } catch (error) {
+            Callback(error);
+        }
+    }
+
 
     Upload_Loai_Xet_Nghiem__M = async (id , Data , Callback) => {
         try {

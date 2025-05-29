@@ -15,15 +15,27 @@ class Loaixetnghiem_Controler {
         });
     };
   
-    
+
+    ThayDoiTrangThaiHoatDong = (req , res , next) => {
+        const Trangthai = req.query.TrangThaiHoatDong;
+        const ID = req.params.ID;
+
+        Connect_Data_Model.ThayDoiTrangThaiHoatDong_M (Trangthai , ID ,(error, result) => {
+            if (error) return next(error);
+            if (result.length === 0) return res.status(404).json({ message: "Cập nhật trạng thái thất bại" }); 
+            res.status(200).json({message : "Cập nhật trạng thái thành công" , Data : result});
+        });  
+    }
+
+      
     Add_LoaiXetNghiem = (req, res, next) => {
         const GET_Image =  req.file ? req.file.filename : 'http://localhost:5000/image/AnhMacDinhKetQuaXetNghiem.png';
         const Data_Add = {
             Id_PhongThietBi: req.body.Id_PhongThietBi?.trim(),
             Id_GiaDichVu : req.body.Id_GiaDichVu?.trim(),
-            TenXetNghiem: req.body.TenXetNghiem.trim(),
             MoTaXetNghiem : req.body.MoTaXetNghiem.trim(),
-            Image : GET_Image
+            Image : GET_Image,
+            TrangThaiHoatDong : true
         };
 
         Connect_Data_Model.Add_Loai_Xet_Nghiem__M (Data_Add, (error, result) => {
