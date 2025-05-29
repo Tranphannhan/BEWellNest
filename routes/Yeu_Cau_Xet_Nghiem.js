@@ -18,8 +18,8 @@ router.patch ('/XacNhanTrangThai/:ID' , Handle_Yeucauxetnghiem.Status_handling);
 router.get ('/Detail/:ID' , Handle_Yeucauxetnghiem.Detail);
 router.get ('/LayTheoPhieuKhamBenh/:ID' , Handle_Yeucauxetnghiem.GET_LayTheoPhieuKhamBenh);
 router.patch ('/BoQua/:ID' , Handle_Yeucauxetnghiem.Boquatrangthaihoatdong);
-   
+      
     
-
+   
 module.exports = router;     
     

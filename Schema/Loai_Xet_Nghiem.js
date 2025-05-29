@@ -13,7 +13,8 @@ const Loai_Xet_Nghiem_Schema = new mongoose.Schema ({
         },
     TenXetNghiem : String,
     MoTaXetNghiem : String,
-    Image : String
+    Image : String,
+    TrangThaiHoatDong : Boolean
 
 }, { collection: "Loai_Xet_Nghiem" }); 
 module.exports = mongoose.model("Loai_Xet_Nghiem", Loai_Xet_Nghiem_Schema);  
