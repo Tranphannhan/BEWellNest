@@ -164,7 +164,13 @@ class Phieu_Kham_Benh {
   };
 
   Get_Not_Yet_Paid = (req, res, next) =>{
-    Connect_Data_Model.Get_Not_yet_paid((err,result)=>{
+    const ngayHienTai = new Date().toISOString().split('T')[0];
+    const ngay = req.query.ngay || ngayHienTai;
+    const TrangThaiThanhToan = req.query.TrangThaiThanhToan ;
+    const limit = parseInt (req.query.limit)||7;
+    const page = parseInt (req.query.page)||1;
+    if(!TrangThaiThanhToan) return res.status(500).json({ message: "Vui lòng truyền trạng thái thanh toán"});
+    Connect_Data_Model.Get_Not_yet_paid(page,limit,ngay,TrangThaiThanhToan,(err,result)=>{
       if (err) return res.status(500).json({ message: "Lỗi server", error: err });
       if (!result || result.length === 0) {
         return res.status(404).json({ message: "Không tìm thấy yêu cầu nào phù hợp" });

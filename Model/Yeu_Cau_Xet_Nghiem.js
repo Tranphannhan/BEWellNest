@@ -43,8 +43,12 @@ class Database_Yeu_Cau_Xet_Nghiem {
                     ]
                 },
                 {
-                    path: 'Id_PhongThietBi',
-                    select: 'TenXetNghiem TenPhongThietBi'
+                    path: 'Id_LoaiXetNghiem',
+                    select: 'TenXetNghiem',
+                    populate:{
+                        path:'Id_PhongThietBi',
+                        select:"TenPhongThietBi"
+                    }
                 }
                 ])
             
@@ -61,29 +65,17 @@ class Database_Yeu_Cau_Xet_Nghiem {
     GET_LayTheoPhieuKhamBenh__M = async (Id_PhieuKhamBenh , Callback) => {
         try {
             await connectDB ();
-            const Select_Detail = await Yeucauxetnghiem.find ({Id_PhieuKhamBenh}).populate([
-                {
-                    path: 'Id_PhieuKhamBenh',
-                    select: 'Ngay',
-                    populate: [
-                    {
-                        path: 'Id_TheKhamBenh',
-                        select: 'HoVaTen SoDienThoai'
-                    },
-                    {
-                        path: 'Id_CaKham',
-                        select: 'TenCa',
-                        populate:[
-                            {
-                            path: 'Id_BacSi',
-                            select: 'TenBacSi'
-                                },
-                            {
-                            path: 'Id_PhongKham',
-                            select: 'SoPhongKham'
-                                },
-                        ] 
-                    }
+            const Select_Detail = await Yeucauxetnghiem.find ({Id_PhieuKhamBenh, TrangThaiThanhToan: false}).populate([
+                {path:"Id_LoaiXetNghiem",
+                    select:"TenXetNghiem Image",
+                    populate:[
+                        {path:"Id_GiaDichVu",
+                            select:"Giadichvu"
+                        },
+                        {
+                            path:"Id_PhongThietBi",
+                            select:"TenPhongThietBi"
+                        }
                     ]
                 }
                 ])
@@ -180,15 +172,30 @@ class Database_Yeu_Cau_Xet_Nghiem {
     };
 
    
-    Delete_Yeucauxetnghiem_M =  async (id , Callback) => {
-        try {
-            await connectDB();
-            const Result = await Yeucauxetnghiem.findByIdAndDelete (id);
-            Callback (null , Result);
-        } catch (error) {
-            Callback(error);
+Delete_Yeucauxetnghiem_M = async (id, Callback) => {
+    try {
+        await connectDB();
+        
+        // Tìm trước xem yêu cầu có tồn tại và chưa thanh toán không
+        const record = await Yeucauxetnghiem.findById(id);
+
+        if (!record) {
+            return Callback(new Error("Không tìm thấy yêu cầu xét nghiệm"));
         }
+
+        if (record.TrangThaiThanhToan) {
+            return Callback(new Error("Không thể xóa vì yêu cầu đã được thanh toán"));
+        }
+
+        // Nếu chưa thanh toán thì xóa
+        const Result = await Yeucauxetnghiem.findByIdAndDelete(id);
+        Callback(null, Result);
+        
+    } catch (error) {
+        Callback(error);
     }
+}
+
 
 
 GetNextSTT_M = async (ngay, Id_PhongThietBi, Callback) => {

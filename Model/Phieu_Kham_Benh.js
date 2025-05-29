@@ -271,11 +271,13 @@ class Database_Phieu_Kham_Benh {
     }
 
     // lấy những yêu cầu xét nghiệm chưa thanh toán để load cho thu ngân xem
-    Get_Not_yet_paid = async (Callback)=>{
+    Get_Not_yet_paid = async (page, limit, Ngay, TrangThaiThanhToan,Callback)=>{
         try{
+            const skip = (page - 1)* limit;
             await connectDB();
             const result = await Phieu_Kham_Benh.find({
-                TrangThaiThanhToan:false
+                TrangThaiThanhToan:TrangThaiThanhToan,
+                Ngay:Ngay
             }).populate({
                 path: 'Id_TheKhamBenh',
                 select: 'HoVaTen SoDienThoai',
@@ -292,19 +294,23 @@ class Database_Phieu_Kham_Benh {
                     select: 'SoPhongKham'
                         },
                 ] 
+            }).skip(skip).limit(limit);
+            const total = await Phieu_Kham_Benh.countDocuments({
+                TrangThaiThanhToan:TrangThaiThanhToan,
+                Ngay:Ngay
             })
 
-            Callback(null, result)
+            Callback(null, {totalItems:total, currentPage: page, totalPages: Math.ceil(total/limit),data:result})
         }catch(error){
             Callback(error)
         }
     } 
     
 
-    Upload_Status_handling__M = async (ID  , Callback) => {
+    Upload_Status_handling__M = async (_id  , Callback) => {
         try {
             await connectDB();
-            const data = await Phieu_Kham_Benh.findByIdAndUpdate(ID,{ $set: { TrangThai: true}},{ new: true });
+            const data = await Phieu_Kham_Benh.findByIdAndUpdate(_id,{ $set: { TrangThai: true}},{ new: true });
           Callback(null, data);
         } catch (error){
             Callback(error)

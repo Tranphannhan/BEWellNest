@@ -13,6 +13,23 @@ class Database_Loaixetnghiem {
         }    
     };
 
+    LayTheoIdPhongThietBi_M = async (Id_PhongThietBi,Callback) => {
+        try {
+            await connectDB();
+            const data = await Loaixetnghiem.find({Id_PhongThietBi}).populate([
+                { path:"Id_GiaDichVu",
+                select:'Giadichvu'},
+                {path:"Id_PhongThietBi",
+                    select:"TenPhongThietBi"
+                }
+            ]
+               
+            );
+            Callback(null, data);
+        } catch (error) {
+            Callback(error);
+        }    
+    };
 
     Add_Loai_Xet_Nghiem__M = async (Data , Callback) => {
         try {

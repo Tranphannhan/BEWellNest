@@ -3,7 +3,6 @@ const mongoose = require("mongoose");
 const Phong_Thiet_Bi_Schema = new mongoose.Schema({
     TenPhongThietBi: String,
     TenXetNghiem: String,
-    MoTaXetNghiem: String,
     Image : String
 }, { collection: "Phong_Thiet_Bi" }); 
 

@@ -130,7 +130,7 @@ Add_Yeucauxetnghiem = (req, res, next) => {
 
     Connect_Data_Model.Delete_Yeucauxetnghiem_M(ID, (Error, Result) => {
       if (Error) return next(Error);
-      res.status(200).json({ message: "Xóa Thẻ Yêu Cầu Khám Bệnh Thành Công" });
+      res.status(200).json({ message: "Đã loại bỏ thành công yêu cầu xét nghiệm" });
     });
   };
 
