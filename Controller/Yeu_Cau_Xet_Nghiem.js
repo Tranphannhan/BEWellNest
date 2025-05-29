@@ -1,4 +1,4 @@
-const { Query } = require("mongoose");
+
 const Connect_Select_Yeu_Cau_Xet_Nghiem = require("../Model/Yeu_Cau_Xet_Nghiem");
 const Connect_Data_Model = new Connect_Select_Yeu_Cau_Xet_Nghiem();
 
