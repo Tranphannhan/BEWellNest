@@ -2,8 +2,15 @@ const mongoose = require("mongoose");
 const ObjectId = mongoose.Types.ObjectId;
 
 const Loai_Xet_Nghiem_Schema = new mongoose.Schema ({
-    Id_PhongThietBi : ObjectId,
-    Id_GiaDichVu : ObjectId,
+    Id_PhongThietBi : {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Phong_Thiet_Bi'
+        },
+    
+    Id_GiaDichVu :{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Gia_Dich_Vu'
+        },
     TenXetNghiem : String,
     MoTaXetNghiem : String,
     Image : String,

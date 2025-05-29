@@ -5,7 +5,6 @@ class Loaixetnghiem_Controler {
     Runviews = (req, res, next) => {
         res.status(200).json({ message: "Loading Thành Công" }); 
     };
-       
 
     Select_LoaiXetNghiem = (req, res, next) => {
         Connect_Data_Model.Select_Loai_Xet_Nghiem__M((error, result) => {
@@ -33,7 +32,8 @@ class Loaixetnghiem_Controler {
         const Data_Add = {
             Id_PhongThietBi: req.body.Id_PhongThietBi?.trim(),
             Id_GiaDichVu : req.body.Id_GiaDichVu?.trim(),
-            MoTaXetNghiem : req.body.MoTaXetNghiem.trim(),
+            MoTaXetNghiem : req.body.MoTaXetNghiem?.trim(),
+            TenXetNghiem : req.body.TenXetNghiem?.trim(),
             Image : GET_Image,
             TrangThaiHoatDong : true
         };

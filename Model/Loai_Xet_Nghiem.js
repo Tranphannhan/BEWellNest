@@ -25,10 +25,10 @@ class Database_Loaixetnghiem {
         }
     }
 
-    ThayDoiTrangThaiHoatDong_M = async (Trangthai , id , Callback) => {
+    ThayDoiTrangThaiHoatDong_M = async (TrangThaiHoatDong , _id , Callback) => {
         try {
             await connectDB();
-            const Result = await Loaixetnghiem.findByIdAndUpdate (_id , Trangthai ,  { new: true });
+            const Result = await Loaixetnghiem.findByIdAndUpdate (_id , {TrangThaiHoatDong}  ,  { new: true });
             Callback (null , Result);
         } catch (error) {
             Callback(error);

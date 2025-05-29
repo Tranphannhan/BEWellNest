@@ -1,4 +1,4 @@
-const { Query } = require("mongoose");
+
 const Connect_Select_Yeu_Cau_Xet_Nghiem = require("../Model/Yeu_Cau_Xet_Nghiem");
 const Connect_Data_Model = new Connect_Select_Yeu_Cau_Xet_Nghiem();
 
@@ -48,7 +48,7 @@ class Yeucauxetnghiem_Controler {
       }
       
       else{
-        Connect_Data_Model.GetNextSTT_M(result[0].Ngay,result[0].Id_PhongThietBi,(error,nextSTT)=>{
+        Connect_Data_Model.GetNextSTT_M(result[0].Ngay,result[0].Id_LoaiXetNghiem?.Id_PhongThietBi,(error,nextSTT)=>{
           Connect_Data_Model.PaymentConfirmation_M(Id_YeuCauXetNghiem,nextSTT,(error, result)=>{
             if (error) return next(error);
             return res.status(200).json({
@@ -68,30 +68,34 @@ class Yeucauxetnghiem_Controler {
   }
 
 
-  Add_Yeucauxetnghiem = (req, res, next) => {
-    const ngay = new Date().toISOString().split("T")[0];
- 
-    Connect_Data_Model.GetNextSTT_M(ngay, req.body.Id_PhongThietBi.trim(), (error, nextSTT) => {
-      if (error) return next(error);
-      const Data_Add = {
-        Id_PhieuKhamBenh: req.body.Id_PhieuKhamBenh.trim(),
-        Id_LoaiXetNghiem: req.body.Id_LoaiXetNghiem.trim(),
-        TrangThaiThanhToan: false,
-        Ngay: ngay,
-        // Số thức tự mới tạo là 0 vì thanh toán xong thì mới xếp số thứ tự
-        STT: 0,
-        TrangThai : false,
-        TrangThaiHoatDong : true
-      };
+Add_Yeucauxetnghiem = (req, res, next) => {
+  const ngay = new Date().toISOString().split("T")[0];
 
-      if (!Data_Add) return res.status(400).json({ message: "Không có dữ liệu" });
-      Connect_Data_Model.Add_Yeucauxetnghiem_M(Data_Add, (Error, Result) => {
-        if (Error) return next(Error);
-        res.status(201).json({ message: "Thêm Mới Yêu Cầu Khám Bệnh Thành Công" });
-      });
+  const idPhieuKhamBenh = req.body.Id_PhieuKhamBenh?.trim();
+  const idLoaiXetNghiem = req.body.Id_LoaiXetNghiem?.trim();
 
+  if ( !idPhieuKhamBenh || !idLoaiXetNghiem) {
+    return res.status(400).json({ message: "Thiếu thông tin yêu cầu" });
+  }
+
+
+    const Data_Add = {
+      Id_PhieuKhamBenh: idPhieuKhamBenh,
+      Id_LoaiXetNghiem: idLoaiXetNghiem,
+      TrangThaiThanhToan: false,
+      Ngay: ngay,
+      STT: 0,
+      TrangThai: false,
+      TrangThaiHoatDong: true
+    };
+
+    Connect_Data_Model.Add_Yeucauxetnghiem_M(Data_Add, (Error, Result) => {
+      if (Error) return next(Error);
+      res.status(201).json({ message: "Thêm Mới Yêu Cầu Khám Bệnh Thành Công" });
     });
-  };
+
+};
+
    
     
   Boquatrangthaihoatdong = (req, res, next) => {
@@ -131,14 +135,16 @@ class Yeucauxetnghiem_Controler {
   };
 
   Get_ById_PTB_Date = (req, res, next) => {
-    const { Id_PhongThietBi, ngay } = req.query;
+      const ngayHienTai = new Date().toISOString().split('T')[0];
+    const ngay = req.query.ngay || ngayHienTai;
+    const  Id_PhongThietBi = req.query.Id_PhongThietBi;
     const limit = parseInt(req.query.limit)||7;
     const page = parseInt(req.query.page)||1;
     const TrangThai = req.query.TrangThai || false;
     if (!Id_PhongThietBi || !ngay) {
       return res.status(400).json({ message: "Không có ngày hoặc Id_PhongThietBi" });
     }
-
+    
     Connect_Data_Model.Get_By_PTB_Date_M(page,limit,TrangThai,Id_PhongThietBi, ngay, (err, result) => {
       if (err) return res.status(500).json({ message: "Lỗi server", error: err });
 

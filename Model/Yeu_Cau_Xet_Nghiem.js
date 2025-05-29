@@ -1,6 +1,7 @@
 
 const connectDB = require("../Model/Db");
 const Yeucauxetnghiem = require("../Schema/Yeu_Cau_Xet_Nghiem"); 
+const Loaixetnghiem = require("../Schema/Loai_Xet_Nghiem"); 
 
 class Database_Yeu_Cau_Xet_Nghiem {
     Select_Yeucauxetnghiem_M = async (Callback) => {
@@ -102,7 +103,9 @@ class Database_Yeu_Cau_Xet_Nghiem {
     Select_Check_Status_Yeucauxetnghiem_M = async (Id_YeuCauXetNghiem , Callback) => {
         try {
             await connectDB();
-            const Data_YeuCauXetNghiem = await Yeucauxetnghiem.find({_id : Id_YeuCauXetNghiem})
+            const Data_YeuCauXetNghiem = await Yeucauxetnghiem.find({_id : Id_YeuCauXetNghiem}).populate({
+                path:'Id_LoaiXetNghiem'
+            })
             Callback(null, Data_YeuCauXetNghiem);
         } catch (error){
             Callback(error);
@@ -118,7 +121,7 @@ class Database_Yeu_Cau_Xet_Nghiem {
             { new: true }
           ).populate([
                 {
-            path:"Id_PhongThietBi"
+            path:"Id_LoaiXetNghiem"
             },
             {path:"Id_PhieuKhamBenh",
                 select:'TrangThaiThanhToan',
@@ -188,37 +191,45 @@ class Database_Yeu_Cau_Xet_Nghiem {
     }
 
 
-    GetNextSTT_M = async (ngay, Id_PhongThietBi, Callback) => {
-        try {
-            await connectDB();
-            const Yeu_Cau_Xet_Nghiem = await Yeucauxetnghiem.find({
-                Ngay: ngay,
-                Id_PhongThietBi: Id_PhongThietBi,
-                TrangThaiThanhToan: 'true'
-            }).sort({ STT: -1 }).limit(1);
+GetNextSTT_M = async (ngay, Id_PhongThietBi, Callback) => {
+    try {
+        await connectDB();
 
-            // Nếu không có phiếu nào, bắt đầu từ 1
-            if (Yeu_Cau_Xet_Nghiem.length === 0) {
-                Callback(null, "1");
-            } else {
-                // Tăng số thứ tự lên 1
-                const nextSTT = (parseInt(Yeu_Cau_Xet_Nghiem[0].STT) + 1).toString();
-                Callback(null, nextSTT);
-            }
-            
-        } catch (error) {
-            Callback(error);
+        // Bước 1: Lấy danh sách Id_LoaiXetNghiem theo Id_PhongThietBi
+        const dsLoaiXetNghiem = await Loaixetnghiem.find({ Id_PhongThietBi: Id_PhongThietBi }).select('_id');
+        const danhSachIdLoai = dsLoaiXetNghiem.map(item => item._id);
+
+        // Bước 2: Tìm yêu cầu xét nghiệm theo ngày và danh sách Id_LoaiXetNghiem đó
+        const Yeu_Cau_Xet_Nghiem = await Yeucauxetnghiem.find({
+            Ngay: ngay,
+            Id_LoaiXetNghiem: { $in: danhSachIdLoai },
+            TrangThaiThanhToan: true,
+            TrangThaiHoatDong: true
+        }).sort({ STT: -1 }).limit(1);
+
+        // Bước 3: Trả về STT
+        if (Yeu_Cau_Xet_Nghiem.length === 0) {
+            Callback(null, "1");
+        } else {
+            const nextSTT = (parseInt(Yeu_Cau_Xet_Nghiem[0].STT) + 1).toString();
+            Callback(null, nextSTT);
         }
+
+    } catch (error) {
+        Callback(error);
     }
+}
 
 
     // Dùng để load dữ liệu cho mỗi phòng thiết bị khi đã thanh toán và có số thứ tự rồi mới load, đã sắp xếp
     Get_By_PTB_Date_M = async (page,limit,TrangThai,Id_PhongThietBi, ngay, Callback) => {
         try {
             await connectDB();
+            const dsLoaiXetNghiem = await Loaixetnghiem.find({ Id_PhongThietBi: Id_PhongThietBi }).select('_id');
+            const danhSachIdLoai = dsLoaiXetNghiem.map(item => item._id);
             const skip = (page - 1)* limit;
             const result = await Yeucauxetnghiem.find({
-                Id_PhongThietBi: Id_PhongThietBi,
+                Id_LoaiXetNghiem: { $in: danhSachIdLoai },
                 Ngay: ngay,
                 TrangThai: TrangThai,
                 TrangThaiThanhToan:true
