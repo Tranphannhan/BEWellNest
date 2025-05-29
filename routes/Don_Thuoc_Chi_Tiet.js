@@ -10,3 +10,4 @@ router.delete('Delete/:id', Handle_Donthuoc_Chitiet.deleteDonthuoc_Chitiet);
 router.put('/:id', Handle_Donthuoc_Chitiet.updateDonthuoc_Chitiet);
 router.get ('/LayTheoDonThuoc/:ID' , Handle_Donthuoc_Chitiet.Detail_Donthuoc);
 module.exports = router;
+  

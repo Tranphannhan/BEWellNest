@@ -5,12 +5,24 @@ class Hoadon_Controler {
     Runviews = (req, res, next) => {
         res.status(200).json({ message: "Loading Thành Công" }); 
     };
-
+  
 
     Select_Hoadon = (req, res, next) => {
         const limit = parseInt(req.query.limit)||7;
         const page = parseInt(req.query.page)||1;
         Connect_Data_Model.Select_Hoadon__M(page,limit,(error, result) => {
+            if (error) return next(error);
+            if (result.length === 0) return res.status(404).json({ message: "Không có hóa đơn nào hệ thống" }); 
+            res.status(200).json(result);
+        });
+    };
+
+    LayTheoPhieuKhamBenhLoaiHoaDon = (req, res, next) => {
+        const ID = req.params.ID;
+        const LoaiHoaDon = req.query.LoaiHoaDon;
+
+        if (!ID || !LoaiHoaDon) return res.status (500).json ({message : "Vui lòng truyền ID và Loại Hóa Đơn Vào"});
+        Connect_Data_Model.LayTheoPhieuKhamBenhLoaiHoaDon__M (ID , LoaiHoaDon ,(error, result) => {
             if (error) return next(error);
             if (result.length === 0) return res.status(404).json({ message: "Không có hóa đơn nào hệ thống" }); 
             res.status(200).json(result);

@@ -24,6 +24,26 @@ class Database_Hoadon {
     };
 
 
+    LayTheoPhieuKhamBenhLoaiHoaDon__M =   async ( _id , LoaiHoaDon ,Callback) => {
+        try {
+            await connectDB();
+            const Select_Hoadon = await Hoadon.find({_id ,LoaiHoaDon }).populate({
+                path:"Id_PhieuKhamBenh",
+                select:"Ngay",
+                populate:{
+                    path:"Id_TheKhamBenh",
+                    select:"HoVaTen"
+                }
+            })
+
+            Callback (null , Select_Hoadon);
+        } catch (error){
+            Callback(error);
+        }
+    }
+
+
+
     Select_LayTheoLoai__M = async ( LoaiHoaDon ,Callback) => {
         try {
             await connectDB();
