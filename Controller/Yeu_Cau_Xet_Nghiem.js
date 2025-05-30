@@ -157,7 +157,13 @@ Add_Yeucauxetnghiem = (req, res, next) => {
   };
 
   Get_Not_Yet_Paid = (req, res, next) =>{
-    Connect_Data_Model.Get_Not_yet_paid((err,result)=>{
+    const ngayHienTai = new Date().toISOString().split('T')[0];
+    const ngay = req.query.ngay || ngayHienTai;
+    const TrangThaiThanhToan = req.query.TrangThaiThanhToan ;
+    const limit = parseInt (req.query.limit)||7;
+    const page = parseInt (req.query.page)||1;
+    if(!TrangThaiThanhToan) return res.status(500).json({massage:"Vui lòng truyền vào trạng thái thanh toán"})
+    Connect_Data_Model.Get_Not_yet_paid(page, limit, ngay, TrangThaiThanhToan, (err,result)=>{
       if (err) return res.status(500).json({ message: "Lỗi server", error: err });
       if (!result || result.length === 0) {
         return res.status(404).json({ message: "Không tìm thấy yêu cầu nào phù hợp" });
@@ -165,6 +171,23 @@ Add_Yeucauxetnghiem = (req, res, next) => {
       res.status(200).json(result);
     })
   }
+
+  TimKiemBenhNhanBangSDTHoacIdTheKhamBenh = (req, res, next) => {
+    const ngayHienTai = new Date().toISOString().split('T')[0];
+    const id_PhongThietBi = req.query.Id || null;
+    const SDT = req.query.SDT||null;
+    const Id_TheKhamBenh = req.query.Id_TheKhamBenh||null;
+    const ngay = req.query.ngay || ngayHienTai;
+    const TrangThaiThanhToan = req.query.TrangThaiThanhToan||null;
+    const TrangThai = req.query.TrangThai || false;
+    const limit = parseInt(req.query.limit)||7;
+    const page = parseInt(req.query.page)||1;
+    const TrangThaiHoatDong = req.query.TrangThaiHoatDong || null;
+    Connect_Data_Model.TimKiemBenhNhanBangSDTHoacIdTheKhamBenh__M (page,limit,id_PhongThietBi, ngay, TrangThai,TrangThaiHoatDong, TrangThaiThanhToan, SDT,Id_TheKhamBenh,(error, result) => {
+      if (error) return next(error);
+      res.status(200).json({ data: result });
+    });
+  };
 
 
   //    
