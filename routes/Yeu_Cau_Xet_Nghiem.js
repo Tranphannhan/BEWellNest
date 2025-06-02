@@ -13,12 +13,12 @@ router.delete ('/Delete/:ID' , Handle_Yeucauxetnghiem.Delete_Yeucauxetnghiem);
 // dùng để load yêu cầu xét nghiệp chưa xét nghiệp hoặc đã xét nghiệm
 router.get('/GetById_PhongTB_date/Pagination', Handle_Yeucauxetnghiem.Get_ById_PTB_Date);
 router.patch ('/Xacnhanthanhtoan/:ID_YeuCauXetNghiem', Handle_Yeucauxetnghiem.PaymentConfirmation);
-router.get('/ChuaThanhToan', Handle_Yeucauxetnghiem.Get_Not_Yet_Paid);
+router.get('/YeuCauXetNghiemThuNgan/Pagination', Handle_Yeucauxetnghiem.Get_Not_Yet_Paid);
 router.patch ('/XacNhanTrangThai/:ID' , Handle_Yeucauxetnghiem.Status_handling);
 router.get ('/Detail/:ID' , Handle_Yeucauxetnghiem.Detail);
 router.get ('/LayTheoPhieuKhamBenh/:ID' , Handle_Yeucauxetnghiem.GET_LayTheoPhieuKhamBenh);
 router.patch ('/BoQua/:ID' , Handle_Yeucauxetnghiem.Boquatrangthaihoatdong);
-      
+router.get ('/TimKiemTheoSDTHoacIdPhieuKhamBenh/Pagination', Handle_Yeucauxetnghiem.TimKiemBenhNhanBangSDTHoacIdTheKhamBenh);
     
    
 module.exports = router;     
