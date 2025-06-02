@@ -2,6 +2,7 @@
 const connectDB = require("../Model/Db");
 const Yeucauxetnghiem = require("../Schema/Yeu_Cau_Xet_Nghiem"); 
 const Loaixetnghiem = require("../Schema/Loai_Xet_Nghiem"); 
+const Phieu_Kham_Benh = require("../Schema/Phieu_Kham_Benh"); 
 
 class Database_Yeu_Cau_Xet_Nghiem {
     Select_Yeucauxetnghiem_M = async (Callback) => {
@@ -292,48 +293,148 @@ GetNextSTT_M = async (ngay, Id_PhongThietBi, Callback) => {
     }
 
 
+TimKiemBenhNhanBangSDTHoacIdTheKhamBenh__M = async (
+    page, limit, id_PhongThietBi, Ngay,
+    TrangThai, TrangThaiHoatDong, TrangThaiThanhToan,
+    SDT, Id_TheKhamBenh, Callback
+) => {
+    try {
+        await connectDB();
+
+        const query = {};
+        if (Ngay) query.Ngay = Ngay;
+        if (TrangThai !== null && TrangThai !== undefined) query.TrangThai = TrangThai;
+        if (TrangThaiHoatDong !== null && TrangThaiHoatDong !== undefined) query.TrangThaiHoatDong = TrangThaiHoatDong;
+        if (TrangThaiThanhToan !== null && TrangThaiThanhToan !== undefined) query.TrangThaiThanhToan = TrangThaiThanhToan;
+
+        const search = {};
+
+        if (Id_TheKhamBenh) {
+            search.Id_TheKhamBenh = Id_TheKhamBenh;
+        }
+        if(Ngay) search.Ngay = Ngay;
+
+        // 1. Lấy toàn bộ danh sách phiếu khám bệnh (không skip/limit ở đây)
+        let KetQuaTimTheoId_TheKhamBenh = await Phieu_Kham_Benh.find(search)
+            .populate({ path: "Id_TheKhamBenh" })
+            .sort({ STTKham: 1 })
+            .lean();
+
+        // 2. Nếu có SDT thì lọc thêm theo số điện thoại
+        if (SDT) {
+            KetQuaTimTheoId_TheKhamBenh = KetQuaTimTheoId_TheKhamBenh.filter(
+                item => item.Id_TheKhamBenh?.SoDienThoai === SDT
+            );
+        }
+
+        // 3. Lấy danh sách ID
+        const danhSachIdLoai = KetQuaTimTheoId_TheKhamBenh.map(item => item._id);
+
+        // 4. Lấy tất cả các yêu cầu xét nghiệm theo danh sách phiếu khám bệnh
+        let dataQuery = { Id_PhieuKhamBenh: { $in: danhSachIdLoai }, ...query };
+
+        const total = await Yeucauxetnghiem.countDocuments(dataQuery);
+        const data = await Yeucauxetnghiem.find(dataQuery).populate([
+            {
+                path: 'Id_PhieuKhamBenh',
+                select: 'Ngay',
+                populate: [
+                {
+                    path: 'Id_TheKhamBenh',
+                    select: 'HoVaTen SoDienThoai'
+                },
+                {
+                    path: 'Id_CaKham',
+                    select: 'TenCa',
+                    populate:[
+                        {
+                        path: 'Id_BacSi',
+                        select: 'TenBacSi'
+                            },
+                        {
+                        path: 'Id_PhongKham',
+                        select: 'SoPhongKham'
+                            },
+                    ] 
+                }
+                ]
+            },
+            {
+                path: 'Id_LoaiXetNghiem',
+                select: 'TenXetNghiem',
+                populate:{
+                    path:"Id_PhongThietBi",
+                    select: 'TenPhongThietBi'
+                }
+            }
+            ])
+            .skip((page - 1) * limit)
+            .limit(limit)
+            .lean();
+
+        Callback(null, {
+            totalItems: total,
+            currentPage: page,
+            totalPages: Math.ceil(total / limit),
+            data: data,
+        });
+    } catch (error) {
+        Callback(error);
+    }
+};
+
+
 
 
     // lấy những yêu cầu xét nghiệm chưa thanh toán để load cho thu ngân xem
-    Get_Not_yet_paid = async (Callback) => {
+    Get_Not_yet_paid = async (page, limit, Ngay, TrangThaiThanhToan, Callback) => {
     try {
         await connectDB();
+        const skip = (page - 1)*limit;
 const result = await Yeucauxetnghiem.find({
-  TrangThaiThanhToan: false
-}).populate([
-  {
-    path: 'Id_PhieuKhamBenh',
-    select: 'Ngay',
-    populate: [
-      {
-        path: 'Id_TheKhamBenh',
-        select: 'HoVaTen SoDienThoai'
-      },
-      {
-        path: 'Id_CaKham',
-        select: 'TenCa',
-        populate:[
+            TrangThaiThanhToan: TrangThaiThanhToan,
+            Ngay: Ngay
+            }).populate([
             {
-            path: 'Id_BacSi',
-            select: 'TenBacSi'
+                path: 'Id_PhieuKhamBenh',
+                select: 'Ngay',
+                populate: [
+                {
+                    path: 'Id_TheKhamBenh',
+                    select: 'HoVaTen SoDienThoai'
                 },
+                {
+                    path: 'Id_CaKham',
+                    select: 'TenCa',
+                    populate:[
+                        {
+                        path: 'Id_BacSi',
+                        select: 'TenBacSi'
+                            },
+                        {
+                        path: 'Id_PhongKham',
+                        select: 'SoPhongKham'
+                            },
+                    ] 
+                }
+                ]
+            },
             {
-            path: 'Id_PhongKham',
-            select: 'SoPhongKham'
-                },
-        ] 
-      }
-    ]
-  },
-  {
-    path: 'Id_PhongThietBi',
-    select: 'TenXetNghiem TenPhongThietBi'
-  }
-]);
+                path: 'Id_LoaiXetNghiem',
+                select: 'TenXetNghiem',
+                populate:{
+                    path:"Id_PhongThietBi",
+                    select: 'TenPhongThietBi'
+                }
+            }
+            ]).skip(skip).limit(limit);
 
+    const total = await Yeucauxetnghiem.countDocuments({ 
+        TrangThaiThanhToan: TrangThaiThanhToan,
+        Ngay: Ngay
+    })
 
-
-        Callback(null, result);
+        Callback(null, {totalItems:total, currentPage: page, totalPages: Math.ceil(total/limit),data:result});
     } catch (error) {
         Callback(error);
     }

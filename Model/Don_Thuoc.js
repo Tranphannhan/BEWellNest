@@ -1,6 +1,7 @@
 const connectDB = require("../Model/Db");
 
 const Donthuoc = require("../Schema/Don_Thuoc"); 
+
 const Phieu_Kham_Benh = require ('../Schema/Phieu_Kham_Benh');
 
 class Database_Donthuoc {
@@ -271,21 +272,39 @@ class Database_Donthuoc {
     };
 
        // lấy những yêu cầu xét nghiệm chưa thanh toán để load cho thu ngân xem
-    Get_Not_yet_paid = async (Callback)=>{
+    Get_Not_yet_paid = async (page, limit, ngay, TrangThaiThanhToan, Callback)=>{
       try{
-          await connectDB();
-          const result = await Donthuoc.find({
-              TrangThaiThanhToan:false
-          }).populate({
+           const skip = (page - 1)* limit
+        await connectDB();
+        const KQ_Select1 = await Phieu_Kham_Benh.find ({Ngay : ngay}).select ('_id');
+        const Arr_ID = KQ_Select1.map (Tm => Tm._id);
+        const data = await Donthuoc.find ({
+          Id_PhieuKhamBenh :  Arr_ID,
+          TrangThaiThanhToan : TrangThaiThanhToan,
+
+        }).populate({
             path: 'Id_PhieuKhamBenh',
             select:'Ngay',
-            populate:{
+            populate:[
+                {
               path: 'Id_TheKhamBenh',
               select: 'HoVaTen SoDienThoai'
+            },
+            {path: 'Id_CaKham',
+              select:'TenCa',
+              populate:{
+                path: "Id_BacSi",
+                select:"TenBacSi"
+              }
             }
-          })
+            ]
+          }).skip(skip).limit(limit)
 
-          Callback(null, result)
+          const total = await Donthuoc.countDocuments({
+               Id_PhieuKhamBenh :  Arr_ID,
+               TrangThaiThanhToan : TrangThaiThanhToan,
+          })
+          Callback(null, {totalItems:total, currentPage: page, totalPages: Math.ceil(total/limit),data:data})
       }catch(error){
           Callback(error)
       }
@@ -300,6 +319,79 @@ class Database_Donthuoc {
     } catch (error){
       Callback(error)
     }
+  }
+
+  TimKiemBenhNhanBangSDTHoacIdTheKhamBenh_M = async (page,limit,TrangThai, TrangThaiThanhToan, Ngay,Id_TheKhamBenh, SoDienThoai, Callback ) => {
+      try {
+        const skip = (page - 1)* limit;
+        const query = {};
+        
+        if(TrangThai !== null && TrangThai !== undefined){
+          query.TrangThai = TrangThai;
+        }
+
+        if(TrangThaiThanhToan !== null && TrangThaiThanhToan !== undefined){
+          query.TrangThaiThanhToan = TrangThaiThanhToan;
+        }
+
+        const search = {}
+        if(Id_TheKhamBenh !== null && Id_TheKhamBenh !== undefined){
+            search.Id_TheKhamBenh = Id_TheKhamBenh;
+        }
+
+        search.Ngay = Ngay;
+
+        let PhieuKhamBenhDaTimQuaId = await Phieu_Kham_Benh.find(search)       
+            .populate({ path: "Id_TheKhamBenh" })
+            .sort({ STTKham: 1 })
+            .lean();
+        
+                // 2. Nếu có SDT thì lọc thêm theo số điện thoại
+        if (SoDienThoai) {
+            PhieuKhamBenhDaTimQuaId = PhieuKhamBenhDaTimQuaId.filter(
+                item => item.Id_TheKhamBenh?.SoDienThoai === SoDienThoai
+            );
+        }
+
+        // 3. Lấy danh sách ID
+        const danhSachIdLoai = PhieuKhamBenhDaTimQuaId.map(item => item._id);
+        
+        if (danhSachIdLoai.length === 0) {
+          return Callback(null, {
+            totalItems: 0,
+            currentPage: page,
+            totalPages: 0,
+            data: []
+          });
+        }
+
+        // 4. Lấy tất cả các yêu cầu xét nghiệm theo danh sách phiếu khám bệnh
+        let dataQuery = { Id_PhieuKhamBenh: { $in: danhSachIdLoai }, ...query };
+
+        await connectDB();
+        const Select_Donthuoc = await Donthuoc.find(dataQuery).populate({
+            path: 'Id_PhieuKhamBenh',
+            select:'Ngay',
+            populate:[
+                {
+                  path: 'Id_TheKhamBenh',
+                  select: 'HoVaTen SoDienThoai'
+                },
+                {
+                  path: 'Id_CaKham',
+                  select:'TenCa',
+                  populate:{
+                    path:'Id_BacSi',
+                    select:'TenBacSi'
+                  }
+                }
+            ]
+          }).skip(skip).limit(limit);
+        const total = await Donthuoc.countDocuments(dataQuery)
+        Callback(null, {totalItems:total, currentPage: page, totalPages: Math.ceil(total/limit),data:Select_Donthuoc});
+      } catch (error) {
+        Callback(error);
+      }
   }
 
   SearchDS_M = async (page,limit,search, Callback) => {

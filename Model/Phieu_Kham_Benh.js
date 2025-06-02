@@ -141,16 +141,25 @@ class Database_Phieu_Kham_Benh {
         }
     }
 
-    TimKiemBenhNhanBangSDTHoacIdTheKhamBenh__M = async (page, limit, Id_CaKham, Ngay, TrangThai, TrangThaiHoatDong, SoDienThoai, IdTheKhamBenh, Callback) => {
+    TimKiemBenhNhanBangSDTHoacIdTheKhamBenh__M = async (page, limit, Id_CaKham, Ngay, TrangThai, TrangThaiHoatDong, TrangThaiThanhToan, SoDienThoai, IdTheKhamBenh, Callback) => {
     try {
         await connectDB();
 
         const query = {
-            Id_CaKham: Id_CaKham,
             Ngay: Ngay,
-            TrangThai: TrangThai,
-            TrangThaiThanhToan: true,
         };
+
+        if(TrangThai !== null && TrangThai !== undefined){
+            query.TrangThai = TrangThai
+        }
+
+        if(Id_CaKham !== null && Id_CaKham !== undefined){
+            query.Id_CaKham = Id_CaKham
+        }
+
+        if(TrangThaiThanhToan !== null && TrangThaiThanhToan !== undefined){
+            query.TrangThaiThanhToan = TrangThaiThanhToan
+        }
 
         if (TrangThaiHoatDong !== null && TrangThaiHoatDong !== undefined) {
             query.TrangThaiHoatDong = TrangThaiHoatDong;
