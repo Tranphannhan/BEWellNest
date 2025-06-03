@@ -44,6 +44,7 @@ class Phieu_Kham_Benh {
         Id_CaKham: req.body.Id_CaKham.trim(),
         Id_NguoiTiepNhan: req.body.Id_NguoiTiepNhan.trim(),
         Id_GiaDichVu: req.body.Id_GiaDichVu.trim(),
+        LyDoDenKham : req.body.LyDoDenKham.trim(),
         Ngay: ngay,
         TrangThaiThanhToan: false,
         STTKham: 0,
@@ -74,6 +75,7 @@ class Phieu_Kham_Benh {
       res.status(201).json({ message: "Cập Nhật Trạng Thái Hoạt Động Thành Công", data: result });
     });
   }
+
 
   
   // chức năng xác nhận thanh toán
@@ -121,6 +123,8 @@ class Phieu_Kham_Benh {
     });
   };
 
+
+
    TimKiemBenhNhanBangSDTHoacIdTheKhamBenh = (req, res, next) => {
     const ngayHienTai = new Date().toISOString().split('T')[0];
     const id = req.query.Id || null;
@@ -155,6 +159,7 @@ class Phieu_Kham_Benh {
     });
   };
 
+  
   Delete_Phieukham = (req, res, next) => {
     const { ID } = req.params;
     if (!ID) return res.status(400).json({ message: "Thiếu ID để xóa phiếu khám bệnh" }); // ✅ Đã sửa thành chuẩn response JSON

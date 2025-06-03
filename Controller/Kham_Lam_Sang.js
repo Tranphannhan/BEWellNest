@@ -35,12 +35,10 @@ class Kham_Lam_Sang {
   Add_Kham_Lam_Sang = (req, res, next) => {
     const Data_Add = {
       Id_PhieuKhamBenh: req.body.Id_PhieuKhamBenh.trim(),
-      TrieuChung : req.body.TrieuChung.trim(),
-      ChiSoSinhTon : req.body.ChiSoSinhTon.trim(),
-      ChuanDoanSoBo : req.body.ChuanDoanSoBo.trim(),
+      TrangThaiHoanThanh : false,
       GhiChu : req.body.GhiChu.trim(),
-      HuongXuLy : req.body.HuongXuLy.trim(),
-      KetQua: req.body.KetQua.trim(),
+      HuongSuLy : req.body.HuongSuLy.trim(),
+      KetQua : req.body.KetQua.trim()
     };
 
     Connect_Data_Model.Add_Kham_Lam_Sang_M(Data_Add, (Error, Result) => {
@@ -48,6 +46,8 @@ class Kham_Lam_Sang {
       res.status(201).json({ message: "Thêm Mới Kham_Lam_Sang Thành Công", data: Result });
     });
   };    
+
+
 
   GET_TheKhamBenh = (req, res, next) => {
     const ID_TheKhamBenh = req.params.ID;
@@ -59,18 +59,16 @@ class Kham_Lam_Sang {
       res.status(200).json(Result); 
     });  
   }
-       
+         
     
   Edit_Kham_Lam_Sang = (req, res, next) => {
     const { ID } = req.params;
     const Data_Edit = {
       Id_PhieuKhamBenh: req.body.Id_PhieuKhamBenh.trim(),
-      TrieuChung : req.body.TrieuChung.trim(),
-      ChiSoSinhTon : req.body.ChiSoSinhTon.trim(),
-      ChuanDoanSoBo : req.body.ChuanDoanSoBo.trim(),
+      TrangThaiHoanThanh : false,
       GhiChu : req.body.GhiChu.trim(),
-      HuongXuLy : req.body.HuongXuLy.trim(),
-      KetQua: req.body.KetQua.trim(),
+      HuongSuLy : req.body.HuongSuLy.trim(),
+      KetQua : req.body.KetQua.trim()
     };  
 
     Connect_Data_Model.Edit_Kham_Lam_Sang_M(ID, Data_Edit, (Error, Result) => {

@@ -29,6 +29,8 @@ class Database_Cakham {
     }
   };
 
+  
+
 Get_ByKhoa_M = async (page, limit, Id_LoaiCa, Id_Khoa, Callback) => {
   try {
     const ngay = new Date().toISOString().split('T')[0];

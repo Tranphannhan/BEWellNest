@@ -11,7 +11,6 @@ const The_Kham_Benh_Schema = new mongoose.Schema({
     SoCCCD: String,
     SDT_NguoiThan : String,
     LichSuBenh:String,
-    QrCode:String
 
 }, { collection: "The_Kham_Benh" }); 
 module.exports = mongoose.model("The_Kham_Benh", The_Kham_Benh_Schema);

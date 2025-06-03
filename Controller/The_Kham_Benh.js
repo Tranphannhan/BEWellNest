@@ -2,10 +2,6 @@ const Connect_Select_Phieukhambenh = require("../Model/The_Kham_Benh");
 const Connect_Data_Model = new Connect_Select_Phieukhambenh();
 
 class The_Kham_Benh_Controler {
-  Runviews = (req, res, next) => {
-    res.status(200).json({ message: "Loadding Thành Công" });
-  };
-
   Select_Thekhambenh = (req, res, next) => {
     const page =parseInt(req.query.page ) || 1;
     const limit =parseInt(req.query.limit)  || 7;
@@ -26,6 +22,7 @@ class The_Kham_Benh_Controler {
   }
 
 
+
   Add_Thekhambenh = (req, res, next) => {
     const Data_Add = {
       HoVaTen: req.body.HoVaTen.trim(),
@@ -37,7 +34,6 @@ class The_Kham_Benh_Controler {
       SoCCCD: req.body.SoCCCD.trim(),
       SDT_NguoiThan: req.body.SDT_NguoiThan.trim(),
       LichSuBenh: req.body.LichSuBenh.trim(),
-      QrCode: req.body.QrCode.trim(),
     };
 
     if (!Data_Add) return res.status(400).json({ message: "Không có dữ liệu" });
@@ -47,6 +43,8 @@ class The_Kham_Benh_Controler {
       res.status(201).json({ message: "Thêm Mới Thẻ Khám Bệnh Thành Công" });
     });
   };
+
+
 
   Edit_Thekhambenh = (req, res, next) => {
     const { ID } = req.params;
@@ -60,7 +58,6 @@ class The_Kham_Benh_Controler {
       SoCCCD: req.body.SoCCCD.trim(),
       SDT_NguoiThan: req.body.SDT_NguoiThan.trim(),
       LichSuBenh: req.body.LichSuBenh.trim(),
-      QrCode: req.body.QrCode.trim(),
     };
 
     if (!Data_Edit) return res.status(400).json({ message: "Không có dữ liệu" });
@@ -70,6 +67,8 @@ class The_Kham_Benh_Controler {
       res.status(200).json({ message: "Cập Nhật Thẻ Khám Bệnh Thành Công" });
     });
   };
+
+
 
   Delete_Phieukham = (req, res, next) => {
     const { ID } = req.params;

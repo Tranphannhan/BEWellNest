@@ -6,13 +6,11 @@ const Kham_Lam_Sang_Schema = new mongoose.Schema({
     Id_PhieuKhamBenh : {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'Phieu_Kham_Benh', 
-            },
+            },  
     
-    TrieuChung : String,
-    ChiSoSinhTon : String,
-    ChuanDoanSoBo : String,
+    TrangThaiHoanThanh : Boolean,
     GhiChu : String,
-    HuongXuLy : String,
+    HuongSuLy : String,
     KetQua : String
     
 }, { collection: "Kham_Lam_Sang" }); 

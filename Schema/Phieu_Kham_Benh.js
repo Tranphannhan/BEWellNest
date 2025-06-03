@@ -20,6 +20,9 @@ const Phieu_Kham_Benh_Schema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Gia_Dich_Vu',
     },
+
+    
+    LyDoDenKham : String,
     Ngay : String,  
     TrangThaiThanhToan : Boolean,
     STTKham : String,  
