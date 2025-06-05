@@ -1,6 +1,7 @@
 const Connect_Phieu_Kham_Benh = require("../Model/Phieu_Kham_Benh");
 const Connect_Data_Model = new Connect_Phieu_Kham_Benh();
 
+
 class Phieu_Kham_Benh {
   Runviews = (req, res, next) => res.status(200).json({ message: "Loadding Thành Công" }); // ✅ Đã sửa thành chuẩn response JSON
 
@@ -31,7 +32,8 @@ class Phieu_Kham_Benh {
     });
   }      
 
-  
+
+  // Sửa phần chỗ này ------  
   Add_Phieukhambenh = (req, res, next) => {
     const ngay = new Date().toISOString().split('T')[0]; // Lấy ngày hiện tại dạng YYYY-MM-DD
   
@@ -41,7 +43,7 @@ class Phieu_Kham_Benh {
   
       const Data_Add = {
         Id_TheKhamBenh: req.body.Id_TheKhamBenh.trim(),
-        Id_CaKham: req.body.Id_CaKham.trim(),
+        Id_Bacsi : req.body.Id_Bacsi.trim(),
         Id_NguoiTiepNhan: req.body.Id_NguoiTiepNhan.trim(),
         Id_GiaDichVu: req.body.Id_GiaDichVu.trim(),
         LyDoDenKham : req.body.LyDoDenKham.trim(),
@@ -68,7 +70,6 @@ class Phieu_Kham_Benh {
     if(Status !=="Kham" && Status !=="XetNghiem" && Status !=="BoQua"){
       return res.status(500).json({ message: "Vui lòng bắt buộc phải truyền TrangThaiHoatDong: Kham, XetNghiem, BoQua"})
     }
-      
 
     Connect_Data_Model.BoQuaPhieuKham__M (ID , Status , (error , result) => {
       if (error) return next(error);
@@ -125,7 +126,7 @@ class Phieu_Kham_Benh {
 
 
 
-   TimKiemBenhNhanBangSDTHoacIdTheKhamBenh = (req, res, next) => {
+  TimKiemBenhNhanBangSDTHoacIdTheKhamBenh = (req, res, next) => {
     const ngayHienTai = new Date().toISOString().split('T')[0];
     const id = req.query.Id || null;
     const SDT = req.query.SDT||null;
@@ -168,6 +169,7 @@ class Phieu_Kham_Benh {
       res.status(200).json({ message: "Xóa phiếu khám bệnh thành công", data: Result }); // ✅ Đã sửa thành chuẩn response JSON
     });
   };
+  
 
   Get_Not_Yet_Paid = (req, res, next) =>{
     const ngayHienTai = new Date().toISOString().split('T')[0];

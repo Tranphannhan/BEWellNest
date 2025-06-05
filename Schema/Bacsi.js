@@ -3,10 +3,11 @@ const ObjectId = mongoose.Types.ObjectId;
 
 const BacSiSchema = new mongoose.Schema({
     ID_Khoa :  {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'Khoa', 
-            },
-    
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Khoa', 
+    },
+
+    Id_PhongKham  : ObjectId,
     TenBacSi: String,
     GioiTinh: String,
     SoDienThoai: String,

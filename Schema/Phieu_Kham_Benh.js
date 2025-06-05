@@ -6,8 +6,8 @@ const Phieu_Kham_Benh_Schema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: 'The_Kham_Benh', 
         },
-
-    Id_CaKham : {
+  
+    Id_Bacsi : {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Ca_Kham',
         },

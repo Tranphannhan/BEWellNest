@@ -25,7 +25,7 @@ class Khoa_Controler {
       TenKhoa: req.body.TenKhoa?.trim(),
       TrangThaiHoatDong : true
     };
-
+   
     if (!data.TenKhoa) {
       return res.status(400).json({ message: "Tên khoa không được để trống" }); // ✅ Đã sửa thành chuẩn response JSON
     }

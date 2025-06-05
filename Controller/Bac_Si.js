@@ -5,7 +5,6 @@ const Connect_Handle_Password = new Handle_Password();
 const bcrypt = require('bcrypt');
 
 
-
 class Bacsi_Controler {
   Runviews = (req, res, next) => {
     res.status(200).json({ message: "Loading Thành Công" }); 
@@ -24,6 +23,7 @@ class Bacsi_Controler {
     });
   };
 
+
   Get_ByTrangThaiHoatDong = (req, res, next) => {
     const TrangThaiHoatDong = req.query.TrangThaiHoatDong;
     if(!TrangThaiHoatDong) return res.status(500).json({ message: "Vui lòng cho trạng thái hoạt động vào" }); 
@@ -38,6 +38,7 @@ class Bacsi_Controler {
     });
   };
 
+
   Get_Dettail = (req, res, next) => {
     const id = req.params.ID;
     Connect_Data_Model.Get_Dettail_M(id,(error, result) => {
@@ -48,6 +49,7 @@ class Bacsi_Controler {
       res.status(200).json(result);
     });
   };
+
 
   Get_ByKhoa = (req, res, next) => {
     const id = req.params.ID;
@@ -61,7 +63,7 @@ class Bacsi_Controler {
       res.status(200).json(result);
     });
   };
-    
+     
             
   add_Bacsi = async (req, res, next) => {
     const Image = req.file ?  `http://localhost:5000/image/${req.file.filename}`  : 'http://localhost:5000/image/bacsi.jpg';
@@ -69,6 +71,7 @@ class Bacsi_Controler {
 
     const data = {
       ID_Khoa : req.body.ID_Khoa?.trim(),
+      Id_PhongKham  : req.body.Id_PhongKham?.trim(),
       TenBacSi: req.body.TenBacSi?.trim(),
       GioiTinh: req.body.GioiTinh?.trim(),
       SoDienThoai: req.body.SoDienThoai?.trim(),
@@ -79,6 +82,7 @@ class Bacsi_Controler {
       VaiTro : 'BacSi',
       TrangThaiHoatDong : true
     };
+
     const Continue = await Connect_Data_Model.Check_SoDienThoai_register(data.SoDienThoai)
     if(Continue === false) return res.status(500).json({message:"Số điện thoại này đã được đăng ký rồi"})
     Connect_Data_Model.Insert_Bacsi_M(data, (err, result) => {
@@ -104,6 +108,7 @@ class Bacsi_Controler {
       const Data_Token_ = {
         _id : result._id,
         _ID_Khoa : result.ID_Khoa,
+        _Id_PhongKham : result.Id_PhongKham,
         _TenBacSi :  result.TenBacSi,
         _GioiTinh : result.GioiTinh,
         _SoDienThoai : result.SoDienThoai,
@@ -136,6 +141,7 @@ class Bacsi_Controler {
  
       let data = {
         ID_Khoa : req.body.ID_Khoa?.trim(),
+        Id_PhongKham  : req.body.Id_PhongKham?.trim(),
         TenBacSi: req.body.TenBacSi?.trim(),
         GioiTinh: req.body.GioiTinh?.trim(),
         SoDienThoai: req.body.SoDienThoai?.trim(),
@@ -150,6 +156,7 @@ class Bacsi_Controler {
       if (!Image) {
         delete data.Image;
       }
+
 
       Connect_Data_Model.Update_Bacsi_M(id, data, (error, updatedBacSi) => {
         if (error) return res.status(500).json({ message: 'Lỗi khi cập nhật bác sĩ', error });

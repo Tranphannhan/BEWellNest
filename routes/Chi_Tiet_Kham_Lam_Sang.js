@@ -10,4 +10,3 @@ router.delete('/Delete/:ID/:ID_Khamlamsang', Chitietkhambenh.Delete_Chitietkhamb
 router.put('/Upload/:ID/:ID_Khamlamsang', Chitietkhambenh.Update_Chitietkhambenh);
 // router.get ('/LayTheoDonThuoc/:ID' , Chitietkhambenh.Detail_Donthuoc);
 module.exports = router;
-  

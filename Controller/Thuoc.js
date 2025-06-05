@@ -2,10 +2,6 @@ const Connect_Select_Phieukhambenh = require("../Model/Thuoc");
 const Connect_Data_Model = new Connect_Select_Phieukhambenh();
 
 class Thuoc_Controler {
-  Runviews = (req, res, next) => {
-    res.status(200).json({ message: "Loadding Thành Công" });
-  };  
-
   Select_Donthuoc = (req, res, next) => {
     Connect_Data_Model.Select_Thuoc__M ((error, result) => {
       if (error) return next(error);
@@ -13,7 +9,7 @@ class Thuoc_Controler {
       res.status(200).json(result);
     });
   };
-  
+
 
   Get_Pagination = (req, res, next) => {
     const page = parseInt(req.query.page) || 1;
@@ -33,26 +29,14 @@ class Thuoc_Controler {
       if (result.length < 1) return res.status(404).json({ message: "Không tìm thấy thuốc trong kho" });
       res.status(200).json(result);
     });
-  };
-
+  };  
 
 
   Add_Donthuoc = (req, res, next) => {
     const Data_Add = {
       Id_NhomThuoc: req.body.Id_NhomThuoc.trim(),
-      Id_NhaSanXuat: req.body.Id_NhaSanXuat.trim(),
       TenThuoc: req.body.TenThuoc.trim(),
-      MoTa : req.body.MoTa.trim(),
-      ThanhPhan: req.body.ThanhPhan.trim(),
-      CachDung : req.body.CachDung.trim(),
-      NgaySanXuat: req.body.NgaySanXuat.trim(),
-      HanSuDung: req.body.HanSuDung.trim(),
-      NgayNhapKho: req.body.NgayNhapKho.trim(),
-      DonVi: req.body.DonVi.trim(),
-      GiaMoiDonVi: req.body.GiaMoiDonVi,
-      LoThuoc: req.body.LoThuoc.trim(),
-      SoLuong: req.body.SoLuong.trim(),
-      URLAnhThuoc: req.body.URLAnhThuoc.trim(),
+      Gia : req.body.Gia,
     };
 
     if (!Data_Add) return res.status(400).json({ message: "Không có dữ liệu" });
@@ -60,26 +44,15 @@ class Thuoc_Controler {
       if (Error) return next(Error);
       res.status(201).json({ message: "Thêm Mới Thuốc Thành Công" });
     });
-  };
+  };  
 
 
   Edit_Donthuoc = (req, res, next) => {
     const { ID } = req.params;
     const Data_Edit = {
       Id_NhomThuoc: req.body.Id_NhomThuoc.trim(),
-      Id_NhaSanXuat: req.body.Id_NhaSanXuat.trim(),
       TenThuoc: req.body.TenThuoc.trim(),
-      MoTa : req.body.MoTa.trim(),
-      ThanhPhan: req.body.ThanhPhan.trim(),
-      CachDung : req.body.CachDung.trim(),
-      NgaySanXuat: req.body.NgaySanXuat.trim(),
-      HanSuDung: req.body.HanSuDung.trim(),
-      NgayNhapKho: req.body.NgayNhapKho.trim(),
-      DonVi: req.body.DonVi.trim(),
-      GiaMoiDonVi: req.body.GiaMoiDonVi,
-      LoThuoc: req.body.LoThuoc.trim(),
-      SoLuong: req.body.SoLuong.trim(),
-      URLAnhThuoc: req.body.URLAnhThuoc.trim(),
+      Gia : req.body.Gia,
     };
 
     if (!Data_Edit) return res.status(400).json({ message: "Không có dữ liệu" });
@@ -90,6 +63,7 @@ class Thuoc_Controler {
   };
 
 
+
   Delete_Donthuoc = (req, res, next) => {
     const { ID } = req.params;
     if (!ID) return res.status(400).json({ message: "Không có dữ liệu" });
@@ -98,6 +72,7 @@ class Thuoc_Controler {
       res.status(200).json({ message: "Xóa Thuốc Thành Công" });
     });
   };
+
 
   Get_Detail = (req, res, next) => {
     const Id = req.params.ID

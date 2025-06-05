@@ -5,10 +5,9 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 
-
+  
 
 var indexRouter_Bacsi = require('./routes/Bac_Si');
-let indexRouter_Cakham = require ('./routes/Ca_kham');
 let indexRouter_Donthuoc = require ('./routes/Don_Thuoc');
 let indexRouter_Donthuoc_Chitiet = require ('./routes/Don_Thuoc_Chi_Tiet');
 let indexRouter_Phieu_Kham_Benh = require ('./routes/Phieu_Kham_Benh');
@@ -24,13 +23,10 @@ let indexRouter_Phong_Thiet_Bi= require ('./routes/Phong_Thiet_Bi');
 let indexRouter_Thuoc = require ('./routes/Thuoc');
 let indexRouter_Hoadon = require ('./routes/Hoadon');
 let indexRouter_Nhom_thuoc = require ('./routes/Nhom_Thuoc');
-let indexRouter_Nha_san_xuat = require ('./routes/Nha_San_Xuat');
 let indexRouter_Giadichvu = require ('./routes/Gia_Dich_Vu');
-let indexRouter_Loaica = require ('./routes/Loaica');
 let indexRouter_Loai_Xet_Nghiem = require ('./routes/Loai_Xet_Nghiem');
 let indexRouter_Chi_Tiet_Kham_Lam_Sang = require ('./routes/Chi_Tiet_Kham_Lam_Sang');
 let indexRouter_Chi_So_Sinh_Ton = require ('./routes/Chi_So_Sinh_Ton');
-
 
 
   
@@ -47,9 +43,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
    
-            
+
+
 app.use ('/Bacsi', indexRouter_Bacsi);
-app.use ('/Cakham' , indexRouter_Cakham);
 app.use ('/Donthuoc' , indexRouter_Donthuoc);
 app.use ('/Donthuoc_Chitiet' , indexRouter_Donthuoc_Chitiet);
 app.use ('/Phieu_Kham_Benh' , indexRouter_Phieu_Kham_Benh);
@@ -65,9 +61,7 @@ app.use ('/Phong_Thiet_Bi' , indexRouter_Phong_Thiet_Bi);
 app.use ('/Thuoc' , indexRouter_Thuoc);
 app.use ('/Hoadon' , indexRouter_Hoadon);
 app.use ('/Nhomthuoc' , indexRouter_Nhom_thuoc);
-app.use ('/Nhasanxuat' , indexRouter_Nha_san_xuat);
 app.use ('/Giadichvu' , indexRouter_Giadichvu);
-app.use ('/Loaica' , indexRouter_Loaica);
 app.use ('/Loaixetnghiem' , indexRouter_Loai_Xet_Nghiem);
 app.use ('/Chi_Tiet_Kham_Lam_Sang' , indexRouter_Chi_Tiet_Kham_Lam_Sang);
 app.use ('/Chi_So_Sinh_Ton' , indexRouter_Chi_So_Sinh_Ton);

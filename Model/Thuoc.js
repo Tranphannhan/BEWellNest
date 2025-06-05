@@ -11,8 +11,9 @@ class Database_Thuoc {
         } catch (error) {
             Callback(error);
         }   
-    };
+    };  
 
+    
     Get_Detail_M = async (Id ,Callback) => {
         try {
             await connectDB();
@@ -26,6 +27,7 @@ class Database_Thuoc {
         }   
     };
  
+
     TimKiemTenThuoc__M = async (Key_Search, Callback) => {
         try {
             await connectDB();
