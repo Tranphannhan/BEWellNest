@@ -17,6 +17,41 @@ class Database_The_Kham_Benh {
         }   
     };
 
+TimKiemSoKhamBenh_M = async (page, limit, SoCCCD, SoDienThoai, HoVaTen, Callback) => {
+    try {
+        const query = {};
+
+        if (SoCCCD) {
+            query.SoCCCD = SoCCCD;
+        }
+
+        if (SoDienThoai) {
+            query.SoDienThoai = SoDienThoai;
+        }
+
+        if (HoVaTen) {
+            query.HoVaTen = { $regex: new RegExp(HoVaTen, 'i') };
+        }
+
+        const skip = (page - 1) * limit;
+
+        await connectDB();
+
+        const data = await The_Kham_Benh.find(query).skip(skip).limit(limit);
+        const total = await The_Kham_Benh.countDocuments(query);
+
+        Callback(null, {
+            totalItems: total,
+            currentPage: page,
+            totalPages: Math.ceil(total / limit),
+            data: data
+        });
+    } catch (error) {
+        Callback(error);
+    }
+};
+
+
 
     Detail__M = async (_id , Callback) => {
         try {

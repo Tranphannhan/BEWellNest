@@ -12,6 +12,19 @@ class The_Kham_Benh_Controler {
     });
   };
 
+  TimKiemSoKhamBenh = (req, res, next) => {
+    const page =parseInt(req.query.page ) || 1;
+    const limit =parseInt(req.query.limit)  || 7;
+    const soCCCD = req.query.soCCCD || null;
+    const SDT = req.query.sdt || null;
+    const Ten = req.query.ten || null; 
+    Connect_Data_Model.TimKiemSoKhamBenh_M(page,limit, soCCCD, SDT, Ten,(error, result) => {
+      if (error) return next(error);
+      if (result.length < 1) return res.status(404).json({ message: "Dữ liệu Thẻ Khám Bệnh Rỗng" });
+      res.status(200).json(result);
+    });
+  };
+
 
   Detail_Phieukham = (req, res, next) => {
     const ID  =  req.params.ID;

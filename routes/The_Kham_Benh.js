@@ -3,7 +3,8 @@ var router = express.Router();
 const Loading_Controler_The_Kham_Benh = require ('../Controller/The_Kham_Benh');
 const Handle_The_Kham_Benh = new Loading_Controler_The_Kham_Benh ();
 
-
+// có thể tìm theo tên, số điện thoại, soCCCD
+router.get ('/TimKiemSoKhamBenh/Pagination' , Handle_The_Kham_Benh.TimKiemSoKhamBenh);
 router.get ('/Pagination' , Handle_The_Kham_Benh.Select_Thekhambenh);
 router.post ('/Add' , Handle_The_Kham_Benh.Add_Thekhambenh);
 router.put ('/Edit/:ID' , Handle_The_Kham_Benh.Edit_Thekhambenh);
