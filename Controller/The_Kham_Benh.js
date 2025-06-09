@@ -52,7 +52,7 @@ class The_Kham_Benh_Controler {
 
     Connect_Data_Model.Add_Thekhambenh_M(Data_Add, (Error, Result) => {
       if (Error) return next(Error);
-      res.status(201).json({ message: "Thêm Mới Thẻ Khám Bệnh Thành Công" });
+      res.status(201).json(Result);
     });
   };
 
