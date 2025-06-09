@@ -64,18 +64,42 @@ TimKiemSoKhamBenh_M = async (page, limit, SoCCCD, SoDienThoai, HoVaTen, Callback
     }
 
 
-    Add_Thekhambenh_M = async (Data , Callback) => {
-        try {
-            await connectDB();
-            const Add_New = new The_Kham_Benh (Data);
-            const Result = await Add_New.save();
-            Callback (null , Result);
+Add_Thekhambenh_M = async (Data, Callback) => {
+    try {
+        await connectDB();
+
+        // Kiểm tra nếu có số CCCD trùng
+        if (Data.SoCCCD) {
+            const existingCCCD = await The_Kham_Benh.findOne({ SoCCCD: Data.SoCCCD });
+            if (existingCCCD) {
+                return Callback({ message: "Số CCCD đã tồn tại", status: 400 });
+            }
         }
 
-        catch (error) {
-            Callback(error);
+        // Kiểm tra trùng theo Họ và Tên + Ngày sinh + Giới tính
+        const existingPatient = await The_Kham_Benh.findOne({
+            HoVaTen: Data.HoVaTen,
+            NgaySinh: Data.NgaySinh,
+            GioiTinh: Data.GioiTinh,
+        });
+
+        if (existingPatient) {
+            return Callback({
+                message: "Bệnh nhân này đã tạo sổ khám bệnh tạm thời rồi",
+                status: 400,
+                data: existingPatient, // Trả lại dữ liệu đã có
+            });
         }
+
+        // Nếu không trùng, tiến hành tạo mới
+        const Add_New = new The_Kham_Benh(Data);
+        const Result = await Add_New.save();
+        Callback(null, Result);
+    } catch (error) {
+        Callback(error);
     }
+}
+
 
 
     Edit_Thekhambenh_M = async (id , Data , Callback) => {

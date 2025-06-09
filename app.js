@@ -3,7 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-
+const cors = require('cors'); 
 
   
 
@@ -34,6 +34,7 @@ let indexRouter_Chi_So_Sinh_Ton = require ('./routes/Chi_So_Sinh_Ton');
 
  
 var app = express();
+app.use(cors());
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.use(logger('dev'));
@@ -42,7 +43,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
-   
 
 
 app.use ('/Bacsi', indexRouter_Bacsi);

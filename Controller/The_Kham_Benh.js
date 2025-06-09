@@ -20,7 +20,6 @@ class The_Kham_Benh_Controler {
     const Ten = req.query.ten || null; 
     Connect_Data_Model.TimKiemSoKhamBenh_M(page,limit, soCCCD, SDT, Ten,(error, result) => {
       if (error) return next(error);
-      if (result.length < 1) return res.status(404).json({ message: "Dữ liệu Thẻ Khám Bệnh Rỗng" });
       res.status(200).json(result);
     });
   };
