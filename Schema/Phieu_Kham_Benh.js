@@ -9,7 +9,7 @@ const Phieu_Kham_Benh_Schema = new mongoose.Schema({
   
     Id_Bacsi : {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Ca_Kham',
+            ref: 'BacSi',
         },
 
     Id_NguoiTiepNhan: {

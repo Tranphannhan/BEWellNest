@@ -23,8 +23,6 @@ class Database_Khoa {
       }
     };
 
-    
-
     // Thêm khoa
     Insert_Khoa_M = async (data, Callback) => {
       try {

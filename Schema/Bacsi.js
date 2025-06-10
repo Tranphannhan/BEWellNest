@@ -7,7 +7,10 @@ const BacSiSchema = new mongoose.Schema({
         ref: 'Khoa', 
     },
 
-    Id_PhongKham  : ObjectId,
+    Id_PhongKham  : {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Phong_Kham', 
+    },
     TenBacSi: String,
     GioiTinh: String,
     SoDienThoai: String,

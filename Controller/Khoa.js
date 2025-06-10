@@ -17,8 +17,7 @@ class Khoa_Controler {
       res.status(200).json(result);
     });
   };
-           
-
+  
   
   add_Khoa = (req, res, next) => {
     const data = {

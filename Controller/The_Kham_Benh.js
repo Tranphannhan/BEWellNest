@@ -58,27 +58,40 @@ class The_Kham_Benh_Controler {
 
 
 
-  Edit_Thekhambenh = (req, res, next) => {
-    const { ID } = req.params;
-    const Data_Edit = {
-      HoVaTen: req.body.HoVaTen.trim(),
-      GioiTinh: req.body.GioiTinh.trim(),
-      NgaySinh: req.body.NgaySinh.trim(),
-      SoDienThoai: req.body.SoDienThoai.trim(),
-      SoBaoHiemYTe: req.body.SoBaoHiemYTe.trim(),
-      DiaChi: req.body.DiaChi.trim(),
-      SoCCCD: req.body.SoCCCD.trim(),
-      SDT_NguoiThan: req.body.SDT_NguoiThan.trim(),
-      LichSuBenh: req.body.LichSuBenh.trim(),
-    };
+ Edit_Thekhambenh = (req, res, next) => {
+  const { ID } = req.params;
 
-    if (!Data_Edit) return res.status(400).json({ message: "Không có dữ liệu" });
+  const fields = [
+    'HoVaTen',
+    'GioiTinh',
+    'NgaySinh',
+    'SoDienThoai',
+    'SoBaoHiemYTe',
+    'DiaChi',
+    'SoCCCD',
+    'SDT_NguoiThan',
+    'LichSuBenh'
+  ];
 
-    Connect_Data_Model.Edit_Thekhambenh_M(ID, Data_Edit, (Error, Result) => {
-      if (Error) return next(Error);
-      res.status(200).json({ message: "Cập Nhật Thẻ Khám Bệnh Thành Công" });
-    });
-  };
+  const Data_Edit = {};
+
+  fields.forEach((field) => {
+    const value = req.body[field];
+    if (typeof value === 'string' && value.trim() !== '') {
+      Data_Edit[field] = value.trim();
+    }
+  });
+
+  if (Object.keys(Data_Edit).length === 0) {
+    return res.status(400).json({ message: "Không có dữ liệu để cập nhật" });
+  }
+
+  Connect_Data_Model.Edit_Thekhambenh_M(ID, Data_Edit, (Error, Result) => {
+    if (Error) return next(Error);
+    res.status(200).json({ message: "Cập Nhật Thẻ Khám Bệnh Thành Công", data: Result });
+  });
+};
+
 
 
 

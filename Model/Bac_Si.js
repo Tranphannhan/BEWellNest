@@ -1,6 +1,7 @@
 
 const connectDB = require("../Model/Db");
 const Bac_Si = require("../Schema/Bacsi"); 
+const Phieu_Kham_Benh = require("../Schema/Phieu_Kham_Benh"); 
 
 class Database_Bacsi {
   // Lấy danh sách bác sĩ
@@ -52,17 +53,50 @@ class Database_Bacsi {
     try {
       const skip = (page - 1)* limit
       await connectDB();
-      const Select_Bacsi = await Bac_Si.find({ID_Khoa:id}).populate({
-        path:"ID_Khoa"
-      }).skip(skip).limit(limit);
+      const Select_Bacsi = await Bac_Si.find({ID_Khoa:id}).populate([
+       {
+          path:'Id_PhongKham',
+          select:'SoPhongKham'
+       }
+]).select('TenBacSi').skip(skip).limit(limit).lean();
+
+      const data = await Promise.all(
+      Select_Bacsi.map(async (item)=>{
+        const SoNguoiDangKham = await this.DemSoLuongNguoiDangKham__M(item._id);
+            return {
+          ...item,
+          SoNguoiDangKham
+        };
+      })
+      )
 
       const total = await Bac_Si.countDocuments({ID_Khoa:id})
       
-      Callback(null, {totalItems:total, currentPage: page, totalPages: Math.ceil(total/limit),data:Select_Bacsi});
+      Callback(null, {totalItems:total, currentPage: page, totalPages: Math.ceil(total/limit),data:data});
     } catch (error) {
       Callback(error);
     }
   };
+
+
+    DemSoLuongNguoiDangKham__M = async (Id_Bacsi) => {
+    try {
+      await connectDB();
+      const ngayHienTai = new Date().toISOString().split('T')[0];
+      const count = await Phieu_Kham_Benh.countDocuments({
+        Id_Bacsi: Id_Bacsi,
+        Ngay: ngayHienTai,
+        TrangThaiThanhToan: true,
+        TrangThai: false,
+        TrangThaiHoatDong:'Kham'
+      });  
+    
+      return count
+    } catch (error) {
+      return error
+    }
+  };
+
 
 
   Select_Image_Bacsi_M = async (ID) => {
