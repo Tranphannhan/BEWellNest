@@ -48,6 +48,8 @@ class The_Kham_Benh_Controler {
       LichSuBenh: req.body.LichSuBenh.trim(),
     };
 
+    if(!Data_Add.HoVaTen || !Data_Add.NgaySinh || !Data_Add.GioiTinh)return res.status(400).json({ message: "Thiếu dữ liệu quan trọng" });
+
     if (!Data_Add) return res.status(400).json({ message: "Không có dữ liệu" });
 
     Connect_Data_Model.Add_Thekhambenh_M(Data_Add, (Error, Result) => {

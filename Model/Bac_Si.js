@@ -71,6 +71,7 @@ class Database_Bacsi {
       )
 
       const total = await Bac_Si.countDocuments({ID_Khoa:id})
+      data.sort((a,b)=>a.SoNguoiDangKham - b.SoNguoiDangKham)
       
       Callback(null, {totalItems:total, currentPage: page, totalPages: Math.ceil(total/limit),data:data});
     } catch (error) {

@@ -36,10 +36,12 @@ class Phieu_Kham_Benh {
   // Sửa phần chỗ này ------  
   Add_Phieukhambenh = (req, res, next) => {
     const ngay = new Date().toISOString().split('T')[0]; // Lấy ngày hiện tại dạng YYYY-MM-DD
-  
+    const now = new Date();
+    const formattedTime = now.toLocaleTimeString('vi-VN'); // Kết quả: "14:25:30"
+
     // Lấy số thứ tự tiếp theo
-    Connect_Data_Model.GetNextSTT_M(ngay, req.body.Id_CaKham.trim(), (error, nextSTT) => {
-      if (error) return next(error);
+    // Connect_Data_Model.GetNextSTT_M(ngay, req.body.Id_CaKham.trim(), (error, nextSTT) => {
+      // if (error) return next(error);
   
       const Data_Add = {
         Id_TheKhamBenh: req.body.Id_TheKhamBenh.trim(),
@@ -48,6 +50,7 @@ class Phieu_Kham_Benh {
         Id_GiaDichVu: req.body.Id_GiaDichVu.trim(),
         LyDoDenKham : req.body.LyDoDenKham.trim(),
         Ngay: ngay,
+        Gio:formattedTime,
         TrangThaiThanhToan: false,
         STTKham: 0,
         TrangThai: false ,
@@ -59,7 +62,7 @@ class Phieu_Kham_Benh {
         if (Error) return next(Error);
         res.status(201).json({ message: "Thêm mới phiếu khám bệnh thành công", data: Result });
       });
-    });
+    // });
   };
 
 
@@ -91,16 +94,18 @@ class Phieu_Kham_Benh {
       if(result[0].TrangThaiThanhToan === true){
           return res.status(200).json({
             message: "Phiếu khám bệnh đã được thanh toán trước đó",
+            TrangThaiDaThanhToan:true,
             data: result
           })
         }else{
-          Connect_Data_Model.GetNextSTT_M(result[0].Ngay, result[0].Id_CaKham, (error, nextSTT) => { 
+          Connect_Data_Model.GetNextSTT_M(result[0].Ngay, result[0].Id_Bacsi, (error, nextSTT) => { 
 
             Connect_Data_Model.PaymentConfirmation_M(Id_PhieuKhamBenh,nextSTT,(error, result)=>{
               if (error) return next(error);
               return res.status(200).json({
-                message: "Xác nhận thanh toán đơn thuốc thành công",
-                data: result
+                message: "Xác nhận thanh toán phiếu khám thành công",
+                data: result,
+                
               })
             })
           });
@@ -112,7 +117,7 @@ class Phieu_Kham_Benh {
 
   Fill_Cakhambenh = (req, res, next) => {
     const ngayHienTai = new Date().toISOString().split('T')[0];
-    const id = req.query.Id;
+    const id = req.query.Id_Bacsi;
     const ngay = req.query.ngay || ngayHienTai;
     const TrangThai = req.query.TrangThai || false;
     const limit = parseInt(req.query.limit)||7;

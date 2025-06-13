@@ -30,18 +30,11 @@ class Database_Phieu_Kham_Benh {
             const Select_Detail = await Phieu_Kham_Benh.find ({_id}).populate({
                 path: 'Id_TheKhamBenh',
                 }).populate({
-                    path: 'Id_CaKham',
-                    select: 'TenCa',
-                    populate:[
+                    path: 'Id_Bacsi',
+                    populate:
                         {
-                        path: 'Id_BacSi',
-                        select: 'TenBacSi'
-                            },
-                        {
-                        path: 'Id_PhongKham',
-                        select: 'SoPhongKham'
-                            },
-                    ] 
+                        path: 'Id_PhongKham',}
+                    
                 })
             ;
             Callback(null, Select_Detail);
@@ -93,19 +86,8 @@ class Database_Phieu_Kham_Benh {
             {path:"Id_TheKhamBenh",
                 select:"HoVaTen"
             },
-            {path:"Id_CaKham",
-                select:"TenCa",
-                populate:[
-                    {
-                          path:"Id_PhongKham"
-                
-                    },
-                    {
-                         path:"Id_BacSi",
-                         select:"TenBacSi"
-                    }
-                ]
-                  
+            {path:"Id_Bacsi",
+                populate: "Id_PhongKham"
             }
           ]);
           Callback(null, data);
@@ -117,10 +99,10 @@ class Database_Phieu_Kham_Benh {
     };
 
 
-    Check_Benhnhan__M = async ( page,limit,Id_CaKham , Ngay , TrangThai , TrangThaiHoatDong, Callback) => {
+    Check_Benhnhan__M = async ( page,limit,Id_Bacsi , Ngay , TrangThai , TrangThaiHoatDong, Callback) => {
         try {
             const query = {
-                Id_CaKham : Id_CaKham ,
+                Id_Bacsi : Id_Bacsi,
                 Ngay : Ngay,
                 TrangThai: TrangThai,
                 TrangThaiThanhToan: true,
@@ -206,16 +188,42 @@ class Database_Phieu_Kham_Benh {
 
 
 
-    Add_Phieukhambenh_M = async (Data , Callback) => {
-        try {
-            await connectDB();
-            const Add_New = new Phieu_Kham_Benh (Data);
-            const Result = await Add_New.save();
-            Callback (null , Result);
-        } catch (error) {
-            Callback(error);
-        }
+Add_Phieukhambenh_M = async (Data, Callback) => {
+    try {
+        await connectDB();
+
+        // Tạo đối tượng mới
+        const Add_New = new Phieu_Kham_Benh(Data);
+
+        // Lưu lại
+        const savedDoc = await Add_New.save();
+
+        // Populate thông tin liên kết
+        const Result = await Phieu_Kham_Benh.findById(savedDoc._id).populate(
+            [ 
+                {
+                path: 'Id_TheKhamBenh'
+                },
+                {
+                    path:'Id_Bacsi',
+                    populate:{
+                        path:'Id_PhongKham'
+                    }
+                },
+                {
+
+                    path:'Id_GiaDichVu'
+
+                }
+            ]
+           );
+
+        Callback(null, Result);
+    } catch (error) {
+        Callback(error);
     }
+};
+
 
 
     Edit_Phieukhambenh_M = async (id , Data , Callback) => {
@@ -256,13 +264,13 @@ class Database_Phieu_Kham_Benh {
         }
     }
 
-    GetNextSTT_M = async (ngay, idCaKham, Callback) => {
+    GetNextSTT_M = async (ngay, Id_BacSi, Callback) => {
         try {
             await connectDB();
             // Tìm phiếu khám bệnh có cùng ngày và ca khám
             const phieuKham = await Phieu_Kham_Benh.find({
                 Ngay: ngay,
-                Id_CaKham: idCaKham,
+                Id_Bacsi: Id_BacSi,
                 TrangThaiThanhToan: 'true'
             }).sort({ STTKham: -1 }).limit(1);
 

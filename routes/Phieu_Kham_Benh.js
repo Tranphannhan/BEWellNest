@@ -10,7 +10,7 @@ router.put ('/Edit/:ID' , Handle_Phieu_Kham_Benh.Edit_Phieukhambenh);
 router.delete ('/Delete/:ID' , Handle_Phieu_Kham_Benh.Delete_Phieukham);
 router.patch ('/Xacnhanthanhtoan/:Id_PhieuKhamBenh', Handle_Phieu_Kham_Benh.PaymentConfirmation);
 
-// Dùng để hiển thị danh sách bệnh nhân: Đã khám, chưa khám, đã bỏ qua, đang xét nghiệm. Theo từng Ca (Chức năng của bác sĩ)
+// Dùng để hiển thị danh sách bệnh nhân: Đã khám, chưa khám, đã bỏ qua, đang xét nghiệm. Theo từng Bác sĩ (Chức năng của bác sĩ)
 router.get ('/GetById_CaKham_Date/Pagination' , Handle_Phieu_Kham_Benh.Fill_Cakhambenh);
 router.get('/PhieuKhamBenhThuNgan/Pagination', Handle_Phieu_Kham_Benh.Get_Not_Yet_Paid); 
 router.patch ('/XacNhanTrangThai/:ID' , Handle_Phieu_Kham_Benh.Status_handling);

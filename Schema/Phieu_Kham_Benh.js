@@ -24,6 +24,7 @@ const Phieu_Kham_Benh_Schema = new mongoose.Schema({
     
     LyDoDenKham : String,
     Ngay : String,  
+    Gio:String,
     TrangThaiThanhToan : Boolean,
     STTKham : String,  
     TrangThai: Boolean,
