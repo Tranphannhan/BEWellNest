@@ -34,7 +34,14 @@ let indexRouter_Chi_So_Sinh_Ton = require ('./routes/Chi_So_Sinh_Ton');
 
  
 var app = express();
-app.use(cors());
+const corsOptions = {
+  origin: '*', // Cho phép tất cả domain
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'], // Cho phép mọi phương thức HTTP
+  allowedHeaders: ['Content-Type', 'Authorization'], // Nếu bạn cần thêm header gì thì thêm ở đây
+};
+
+app.use(cors(corsOptions));
+
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.use(logger('dev'));
