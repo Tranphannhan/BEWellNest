@@ -28,10 +28,10 @@ class Phong_Thiet_Bi_Controler {
     const data = {
       TenPhongThietBi: req.body.TenPhongThietBi?.trim(),
       TenXetNghiem: req.body.TenXetNghiem?.trim(),
-      Image : `http://localhost:5000/image/${Image}`
+      Image : `${Image}`
     };
 
-    if (!data.TenPhongThietBi || !data.TenXetNghiem || !data.MoTaXetNghiem || !data.Image) return res.status(400).json({ message: "Thiếu dữ liệu để thêm phòng thiết bị" });
+    if (!data.TenPhongThietBi || !data.Image) return res.status(400).json({ message: "Thiếu dữ liệu để thêm phòng thiết bị" });
     Connect_Data_Model.Insert_Phong_Thiet_Bi_M(data, (err, result) => {
       if (err) return res.status(500).json({ message: "Thêm phòng thiết bị thất bại", error: err }); 
       res.status(201).json({ message: "Thêm phòng thiết bị thành công", data: result }); 

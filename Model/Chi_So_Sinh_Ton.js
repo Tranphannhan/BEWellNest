@@ -50,14 +50,12 @@ class Database_Chi_So_Sinh_Ton {
             const Result_Static__Phieukhambenh = await Chisosinhton.find ({_id })
                 .select('Id_PhieuKhamBenh');
             const Check__Status = await Phieu_Kham_Benh.find ({_id : Result_Static__Phieukhambenh[0].Id_PhieuKhamBenh})  
-                .select('TrangThaiThanhToan');
+                .select('TrangThai');
                 
             // Upload
-            if (Check__Status[0].TrangThaiThanhToan) return Callback (null , 'Chỉ số sinh tồn của bạn không được phép sửa');
+            if (Check__Status[0].TrangThai) return Callback (null , {message:'Chỉ số sinh tồn của bạn không được phép sửa'});
             const Upload = await Chisosinhton.findByIdAndUpdate(_id , Data, { new: true });
-            Callback (null , Upload);
-
-
+            Callback (null ,  {message:'Đã sửa thành công',data:Upload});
         } catch (error) {
             Callback(error);
         }

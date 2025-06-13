@@ -54,7 +54,7 @@ class Chisosinhton_Controler {
 
     Upload_Chisosinhton__C  = (req, res, next) => {
         const { ID  } = req.params;
-        if (!ID ) return res.status(400).json({ message: "Thiếu ID để sửa ca khám" }); 
+        if (!ID ) return res.status(400).json({ message: "Thiếu ID để sửa chỉ số sinh tồn" }); 
         const Data_Upload  = {
             Id_PhieuKhamBenh: req.body.Id_PhieuKhamBenh?.trim(),
             NhietDo: req.body.NhietDo?.trim(),
@@ -70,7 +70,7 @@ class Chisosinhton_Controler {
         Connect_Data_Model.Upload_Chisosinhton__M (ID , Data_Upload , (error, Result) => {
             if (error) return next (error);
             if (!Result) return res.status(404).json({ message: 'Cập nhật thất bại'}); 
-            return res.status(404).json({ message: 'Cập nhật thành công' , Data : Result}); 
+            return res.status(200).json(Result); 
         });
 
     };

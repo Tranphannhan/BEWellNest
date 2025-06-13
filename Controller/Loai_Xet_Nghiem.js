@@ -36,7 +36,7 @@ class Loaixetnghiem_Controler {
     };
 
     Add_LoaiXetNghiem = (req, res, next) => {
-        const GET_Image =  req.file ? req.file.filename : 'http://localhost:5000/image/AnhMacDinhKetQuaXetNghiem.png';
+        const GET_Image =  req.file ? req.file.filename : 'AnhMacDinhKetQuaXetNghiem.png';
         const Data_Add = {
             Id_PhongThietBi: req.body.Id_PhongThietBi?.trim(),
             Id_GiaDichVu : req.body.Id_GiaDichVu?.trim(),
