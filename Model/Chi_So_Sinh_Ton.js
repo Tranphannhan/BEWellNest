@@ -20,6 +20,16 @@ class Database_Chi_So_Sinh_Ton {
         }       
     };
 
+    LayTheoPhieuKhamBenh_M = async (Id_PhieuKhamBenh,Callback) => {
+        try {
+            await connectDB();
+            const data = await Chisosinhton.find({Id_PhieuKhamBenh:Id_PhieuKhamBenh});
+            Callback(null, data);
+        } catch (error) {
+            Callback(error);
+        }       
+    };
+
 
     Add_Chi_So_Sinh_Ton_M = async (Data , Callback) => {
         try {

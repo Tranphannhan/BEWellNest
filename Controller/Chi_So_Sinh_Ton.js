@@ -11,6 +11,16 @@ class Chisosinhton_Controler {
         });
     };
 
+    LayTheoPhieuKhamBenh = (req, res, next) => {
+        const Id_PhieuKhamBenh = req.query.Id_PhieuKhamBenh;
+        if(!Id_PhieuKhamBenh) return res.status(404).json({ message: "Không có mã phiếu khám bệnh" });
+        Connect_Data_Model.LayTheoPhieuKhamBenh_M (Id_PhieuKhamBenh ,(error, result) => {
+            if (error) return next(error);
+            if (!result || result.length < 1) return res.status(404).json({ message: "Dữ liệu chỉ số sinh tồn rỗng" });
+            res.status(200).json(result);
+        });
+    };
+
 
     Add_Chisosinhton__C = (req, res, next) => {
         const Data__Add = {
