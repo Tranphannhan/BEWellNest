@@ -70,6 +70,8 @@ class Yeucauxetnghiem_Controler {
 
 Add_Yeucauxetnghiem = (req, res, next) => {
   const ngay = new Date().toISOString().split("T")[0];
+  const now = new Date();
+  const formattedTime = now.toLocaleTimeString('vi-VN'); // Kết quả: "14:25:30"
 
   const idPhieuKhamBenh = req.body.Id_PhieuKhamBenh?.trim();
   const idLoaiXetNghiem = req.body.Id_LoaiXetNghiem?.trim();
@@ -84,6 +86,7 @@ Add_Yeucauxetnghiem = (req, res, next) => {
       Id_LoaiXetNghiem: idLoaiXetNghiem,
       TrangThaiThanhToan: false,
       Ngay: ngay,
+      Gio:formattedTime,
       STT: 0,
       TrangThai: false,
       TrangThaiHoatDong: true

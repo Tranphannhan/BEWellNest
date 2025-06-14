@@ -7,7 +7,6 @@ const Donthuoc_Chitiet_Schema = new mongoose.Schema({
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'Thuoc', 
             },
-    
     SoLuong:Number,
     NhacNho:String
     

@@ -6,7 +6,7 @@ const Thuoc_Schema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Nhom_Thuoc', 
     },
-
+    DonVi: String,
     TenThuoc:String,
     Gia : Number,   
 

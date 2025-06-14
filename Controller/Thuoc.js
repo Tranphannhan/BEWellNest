@@ -34,9 +34,10 @@ class Thuoc_Controler {
 
   Add_Donthuoc = (req, res, next) => {
     const Data_Add = {
-      Id_NhomThuoc: req.body.Id_NhomThuoc.trim(),
-      TenThuoc: req.body.TenThuoc.trim(),
+      Id_NhomThuoc: req.body.Id_NhomThuoc?.trim(),
+      TenThuoc: req.body.TenThuoc?.trim(),
       Gia : req.body.Gia,
+      DonVi: req.body.DonVi?.trim(),
     };
 
     if (!Data_Add) return res.status(400).json({ message: "Không có dữ liệu" });

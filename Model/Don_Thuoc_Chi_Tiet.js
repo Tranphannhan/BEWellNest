@@ -19,7 +19,6 @@ class Database_Donthuoc_Chitiet {
         await connectDB ();
         const Select_Detail = await Donthuoc_Chitiet.find ({Id_DonThuoc}).populate({
           path:"Id_Thuoc",
-          select:"TenThuoc DonVi GiaMoiDonVi CachDung URLAnhThuoc"
         });
         Callback(null, Select_Detail);
     } catch (error) {

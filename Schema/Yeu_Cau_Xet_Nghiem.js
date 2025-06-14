@@ -10,7 +10,7 @@ const Yeu_Cau_Xet_Nghiem_Schema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Loai_Xet_Nghiem'
     },
-
+    Gio:String,
     TrangThaiThanhToan : Boolean,  
     Ngay : String,   
     STT : String,
