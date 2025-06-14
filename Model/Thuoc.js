@@ -18,8 +18,7 @@ class Database_Thuoc {
         try {
             await connectDB();
             const Select_Thuoc = await Thuoc.find({_id: Id}).populate([
-                {path:"Id_NhomThuoc"},
-                {path:"Id_NhaSanXuat"}
+                {path:"Id_NhomThuoc"}
             ]);
             Callback(null, Select_Thuoc);
         } catch (error) {
@@ -49,7 +48,6 @@ class Database_Thuoc {
             await connectDB();
             const Select_Thuoc = await Thuoc.find({Id_NhomThuoc: Id}).populate([
                 {path:"Id_NhomThuoc"},
-                {path:"Id_NhaSanXuat"}
             ]).skip(skip).limit(limit);
             const total = await Thuoc.countDocuments({Id_NhomThuoc: Id})
             Callback(null, {totalItems:total, currentPage: page, totalPages: Math.ceil(total/limit),data:Select_Thuoc});
@@ -102,7 +100,6 @@ class Database_Thuoc {
                  HanSuDung: { $gte: ngay }
             }).populate([
                 {path:"Id_NhomThuoc"},
-                {path:"Id_NhaSanXuat"}
             ]).skip(skip).limit(limit);
             const total = await Thuoc.countDocuments({  
                  SoLuong: { $gt: 0 },

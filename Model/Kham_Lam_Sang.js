@@ -41,18 +41,25 @@ class Database_Khamlamsang {
 
 
 
-    Add_Kham_Lam_Sang_M = async (Data , Callback) => {
-        try {
-            await connectDB();
-            const Add_New = new Khamlamsang (Data);
-            const Result = await Add_New.save();
-            Callback (null , Result);
-        }
+Add_Kham_Lam_Sang_M = async (Data, Callback) => {
+  try {
+    await connectDB();
 
-        catch (error) {
-            Callback(error);
-        }
+    // Kiểm tra xem đã có bản ghi với Id_PhieuKhamBenh chưa
+    const existed = await Khamlamsang.findOne({ Id_PhieuKhamBenh: Data.Id_PhieuKhamBenh });
+
+    if (existed) {
+      return Callback(null, {message:"Phiếu đã tạo kết quả lâm sàng",data:existed}); // Trả về bản ghi cũ
     }
+
+    const Add_New = new Khamlamsang(Data);
+    const Result = await Add_New.save();
+    Callback(null, {message:"Tạo kết quả lâm sàng thành công",data:Result});
+  } catch (error) {
+    Callback(error);
+  }
+};
+
          
 
 GET_TheKhamBenh__M = async (page, limit, _id, Callback) => {

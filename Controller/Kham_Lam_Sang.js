@@ -32,20 +32,24 @@ class Kham_Lam_Sang {
   } 
            
     
-  Add_Kham_Lam_Sang = (req, res, next) => {
-    const Data_Add = {
-      Id_PhieuKhamBenh: req.body.Id_PhieuKhamBenh.trim(),
-      TrangThaiHoanThanh : false,
-      GhiChu : req.body.GhiChu.trim(),
-      HuongSuLy : req.body.HuongSuLy.trim(),
-      KetQua : req.body.KetQua.trim()
-    };
+Add_Kham_Lam_Sang = (req, res, next) => {
+  const Data_Add = {
+    Id_PhieuKhamBenh: req.body.Id_PhieuKhamBenh,
+    TrangThaiHoanThanh: false,
+    GhiChu: req.body.GhiChu?.trim() || '',
+    HuongSuLy: req.body.HuongSuLy?.trim() || '',
+    KetQua: req.body.KetQua?.trim() || '',
+  };
 
-    Connect_Data_Model.Add_Kham_Lam_Sang_M(Data_Add, (Error, Result) => {
-      if (Error) return next(Error);
-      res.status(201).json({ message: "Thêm Mới Kham_Lam_Sang Thành Công", data: Result });
-    });
-  };    
+  if (!Data_Add.Id_PhieuKhamBenh)
+    return res.status(500).json({ message: "Không có Id_PhieuKhamBenh" });
+
+  Connect_Data_Model.Add_Kham_Lam_Sang_M(Data_Add, (Error, Result) => {
+    if (Error) return next(Error);
+    res.status(201).json(Result);
+  });
+};
+
 
 
 
