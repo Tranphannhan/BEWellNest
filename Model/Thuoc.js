@@ -27,19 +27,36 @@ class Database_Thuoc {
     };
  
 
-    TimKiemTenThuoc__M = async (Key_Search, Callback) => {
-        try {
-            await connectDB();
-            const Select_Thuoc = await Thuoc.find({
-                TenThuoc: { $regex: '^' + Key_Search, $options: 'i' } // Bắt đầu bằng Key_Search
-            }).limit(7);
+TimKiemTenThuoc__M = async (Key_Search, Id_NhomThuoc, Callback) => {
+    try {
+        await connectDB();
 
-            const total = await Thuoc.countDocuments ({ TenThuoc: { $regex: '^' + Key_Search, $options: 'i' }})
-            Callback(null, {totalItems:total, currentPage: 1, totalPages: Math.ceil(total/7 ),data:Select_Thuoc});
-        } catch (error) {
-            Callback(error);
+        const query = {};
+
+        // Gán điều kiện theo nhóm thuốc nếu có
+        if (Id_NhomThuoc) {
+            query.Id_NhomThuoc = Id_NhomThuoc;
         }
-    } 
+
+        // Gán điều kiện tìm kiếm theo tên thuốc nếu có
+        if (Key_Search) {
+            query.TenThuoc = { $regex: '^' + Key_Search, $options: 'i' }; // bắt đầu bằng từ khóa
+        }
+
+        const Select_Thuoc = await Thuoc.find(query).limit(7);
+        const total = await Thuoc.countDocuments(query);
+
+        Callback(null, {
+            totalItems: total,
+            currentPage: 1,
+            totalPages: Math.ceil(total / 7),
+            data: Select_Thuoc
+        });
+    } catch (error) {
+        Callback(error);
+    }
+};
+
 
 
     Get_TakeInGroups_M = async (page, limit, Id,Callback) => {
