@@ -29,7 +29,7 @@ class Donthuoc_Chitiet_Controler {
     const data = {
       Id_DonThuoc: req.body.Id_DonThuoc,
       Id_Thuoc: req.body.Id_Thuoc,
-      SoLuong: req.body.SoLuong?.trim(),
+      SoLuong: Number(req.body.SoLuong), 
       NhacNho: req.body.NhacNho?.trim(),
     };
 

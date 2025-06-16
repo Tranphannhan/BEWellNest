@@ -5,9 +5,14 @@ const { kiemTraVaiTroDuocSi } = require('../Middleware/authenticate');
 const Handle_Donthuoc = new Loading_Controler_Donthuoc ();
 
 router.get ('/Pagination' , Handle_Donthuoc.Select_Donthuoc);
-router.post('/', Handle_Donthuoc.add_Donthuoc);
+router.post('/Add', Handle_Donthuoc.add_Donthuoc);
 router.delete('/:id', Handle_Donthuoc.deleteDonthuoc);
 router.put('/:id', Handle_Donthuoc.updateDonthuoc);
+
+
+// Kiểm tra xem phiếu khám bệnh có đơn thuốc nào đang tạo không
+router.get('/KiemTraDonThuocDangTao', Handle_Donthuoc.KiemTraDonThuocDangTao);
+
 router.patch ('/Xacnhanthanhtoan/:ID_DonThuoc', Handle_Donthuoc.PaymentConfirmation);
 router.get('/DonThuocThuNgan/Pagination', Handle_Donthuoc.Get_Not_Yet_Paid);
 router.patch ('/XacNhanTrangThai/:ID' , Handle_Donthuoc.Status_handling);

@@ -105,7 +105,23 @@ class Donthuoc_Controler {
     });
   }
   
-    
+    KiemTraDonThuocDangTao = (req, res, next) => {
+      const TrangThai = req.query.TrangThai || 'DangTao';
+      const Id_PhieuKhamBenh = req.query.Id_PhieuKhamBenh;
+
+      if (!Id_PhieuKhamBenh) {
+        return res.status(400).json({ message: 'Thiếu Id_PhieuKhamBenh' });
+      }
+      Connect_Data_Model.KiemTraDonThuocDangTao_M(
+        TrangThai,
+        Id_PhieuKhamBenh,
+        (error, result) => {
+          if (error) return res.status(500).json({ message: 'Lỗi truy vấn', error });
+          return res.status(200).json(result);
+        }
+      );
+    };
+
 
   // 
   add_Donthuoc = (req, res, next) => {
@@ -113,7 +129,7 @@ class Donthuoc_Controler {
       Id_PhieuKhamBenh: req.body.Id_PhieuKhamBenh,
       TenDonThuoc: req.body.TenDonThuoc?.trim(),
       TrangThaiThanhToan: false,
-      TrangThai:false
+      TrangThai: 'DangTao',
     };
 
     // ✅ Kiểm tra dữ liệu hợp lệ

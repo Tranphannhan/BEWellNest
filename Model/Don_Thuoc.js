@@ -34,6 +34,51 @@ class Database_Donthuoc {
       }
     };
 
+KiemTraDonThuocDangTao_M = async (TrangThai, Id_PhieuKhamBenh, Callback) => {
+  try {
+    await connectDB();
+
+    const data = await Donthuoc.find({
+      TrangThai: TrangThai,
+      Id_PhieuKhamBenh: Id_PhieuKhamBenh,
+    }).populate({
+      path: 'Id_PhieuKhamBenh',
+      select: 'Ngay',
+      populate: [
+        {
+          path: 'Id_TheKhamBenh',
+          select: 'HoVaTen SoDienThoai',
+        },
+        {
+          path: 'Id_Bacsi',
+          select: 'TenBacSi',
+          populate: {
+            path: 'Id_PhongKham',
+            select: 'SoPhongKham',
+          },
+        },
+      ],
+    });
+
+    if (data.length > 0) {
+      Callback(null, {
+        message: 'Đang có đơn thuốc chờ xác nhận',
+        waitForConfirmation: true,
+        data,
+      });
+    } else {
+      Callback(null, {
+        message: 'Bạn có thể tạo đơn thuốc',
+        waitForConfirmation: false,
+        data: null,
+      });
+    }
+  } catch (error) {
+    Callback(error);
+  }
+};
+
+
     
     // Check đơn thuốc
     Select_Check_Status_Donthuoc_M = async (Id_DonThuoc , Callback) => {
