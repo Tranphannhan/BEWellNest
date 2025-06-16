@@ -49,12 +49,12 @@ Add_Kham_Lam_Sang_M = async (Data, Callback) => {
     const existed = await Khamlamsang.findOne({ Id_PhieuKhamBenh: Data.Id_PhieuKhamBenh });
 
     if (existed) {
-      return Callback(null, {message:"Phiếu đã tạo kết quả lâm sàng",data:existed}); // Trả về bản ghi cũ
+      return Callback(null, {Created: true ,message:"Phiếu đã từng tạo kết quả lâm sàng chỉ được phép sửa",data:existed}); // Trả về bản ghi cũ
     }
 
     const Add_New = new Khamlamsang(Data);
     const Result = await Add_New.save();
-    Callback(null, {message:"Tạo kết quả lâm sàng thành công",data:Result});
+    Callback(null, {Created:false ,message:"Tạo kết quả lâm sàng thành công",data:Result});
   } catch (error) {
     Callback(error);
   }
