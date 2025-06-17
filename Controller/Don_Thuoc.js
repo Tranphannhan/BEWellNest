@@ -223,6 +223,38 @@ class Donthuoc_Controler {
     })
   }
 
+ThayDoiTrangThai = (req, res, next) => {
+  const { ID } = req.params;
+  const TrangThai = req.query.TrangThai || '';
+  const Id_NguoiPhatThuoc = req.query.ID || null;
+  const data = {};
+
+  if (!['DaXacNhan', 'DaPhatThuoc'].includes(TrangThai)) {
+    return res.status(400).json({ message: 'Vui lòng truyền trạng thái: DaXacNhan hoặc DaPhatThuoc' });
+  }
+
+  if (Id_NguoiPhatThuoc !== null) {
+    data.Id_NguoiPhatThuoc = Id_NguoiPhatThuoc;
+  }
+
+  data.TrangThai = TrangThai;
+
+  Connect_Data_Model.ThayDoiTrangThai_M(ID, data, (error, updatedDonthuoc) => {
+    if (error) {
+      return res.status(500).json({ message: 'Lỗi khi cập nhật đơn thuốc', error });
+    }
+
+    if (!updatedDonthuoc) {
+      return res.status(404).json({ message: 'Không tìm thấy đơn thuốc để cập nhật' });
+    }
+
+    return res.status(200).json({
+      message: 'Cập nhật đơn thuốc thành công',
+      updatedDonthuoc
+    });
+  });
+};
+
 
   Status_handling = (req , res , next) => {
     const ID = req.params.ID;

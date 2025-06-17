@@ -38,7 +38,8 @@ KiemTraDonThuocDangTao_M = async (TrangThai, Id_PhieuKhamBenh, Callback) => {
   try {
     await connectDB();
 
-    const data = await Donthuoc.find({
+    // Bước 1: Tìm đơn thuốc đúng trạng thái
+    let data = await Donthuoc.find({
       TrangThai: TrangThai,
       Id_PhieuKhamBenh: Id_PhieuKhamBenh,
     }).populate({
@@ -60,23 +61,49 @@ KiemTraDonThuocDangTao_M = async (TrangThai, Id_PhieuKhamBenh, Callback) => {
       ],
     });
 
+    // Nếu tìm thấy đơn thuốc đúng trạng thái
     if (data.length > 0) {
-      Callback(null, {
+      return Callback(null, {
         message: 'Đang có đơn thuốc chờ xác nhận',
         waitForConfirmation: true,
         data,
       });
-    } else {
-      Callback(null, {
-        message: 'Bạn có thể tạo đơn thuốc',
-        waitForConfirmation: false,
-        data: null,
-      });
     }
+
+    // Bước 2: Không có => Tìm đơn gần nhất theo thời gian
+    const latestDon = await Donthuoc.findOne({
+      Id_PhieuKhamBenh: Id_PhieuKhamBenh,
+    })
+      .sort({ Gio: -1 }) // thời gian mới nhất
+      .populate({
+        path: 'Id_PhieuKhamBenh',
+        select: 'Ngay',
+        populate: [
+          {
+            path: 'Id_TheKhamBenh',
+            select: 'HoVaTen SoDienThoai',
+          },
+          {
+            path: 'Id_Bacsi',
+            select: 'TenBacSi',
+            populate: {
+              path: 'Id_PhongKham',
+              select: 'SoPhongKham',
+            },
+          },
+        ],
+      });
+
+    return Callback(null, {
+      message: 'Không có đơn thuốc chờ xác nhận, đây là đơn gần nhất',
+      waitForConfirmation: false,
+      data: latestDon || null,
+    });
   } catch (error) {
     Callback(error);
   }
 };
+
 
 
     
@@ -304,6 +331,22 @@ KiemTraDonThuocDangTao_M = async (TrangThai, Id_PhieuKhamBenh, Callback) => {
         Callback(error);
       }
     };
+
+      ThayDoiTrangThai_M = async (_id, updatedData, Callback) => {
+        try {
+          await connectDB();
+
+          if (!_id) {
+            return Callback(new Error('Thiếu ID đơn thuốc'));
+          }
+
+          const updated = await Donthuoc.findByIdAndUpdate(_id, updatedData, { new: true });
+          Callback(null, updated);
+        } catch (error) {
+          Callback(error);
+        }
+      };
+
 
     // Xóa đơn thuốc
     Delete_Donthuoc_M = async (id, Callback) => {
