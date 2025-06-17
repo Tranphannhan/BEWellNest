@@ -68,8 +68,6 @@ Add_Kham_Lam_Sang = (req, res, next) => {
   Edit_Kham_Lam_Sang = (req, res, next) => {
     const { ID } = req.params;
     const Data_Edit = {
-      Id_PhieuKhamBenh: req.body.Id_PhieuKhamBenh.trim(),
-      TrangThaiHoanThanh : false,
       GhiChu : req.body.GhiChu.trim(),
       HuongSuLy : req.body.HuongSuLy.trim(),
       KetQua : req.body.KetQua.trim()

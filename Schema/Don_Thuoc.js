@@ -14,6 +14,7 @@ const Donthuoc_Schema = new mongoose.Schema({
 
     TenDonThuoc: String,
     TrangThaiThanhToan: Boolean,
+    Gio:String,
     TrangThai: {
         type: String,
         enum: ['DangTao', 'DaXacNhan', 'DaPhatThuoc'], 

@@ -17,7 +17,7 @@ const Ket_Qua_Xet_Nghiem_Schema = new mongoose.Schema({
                 ref: 'Tai_Khoan',
         },
            
-       
+    Gio:String,
     MaXetNghiem :   String,
     TenXetNghiem : String, 
     KetQua : String,  

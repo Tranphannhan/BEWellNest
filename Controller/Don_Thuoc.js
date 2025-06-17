@@ -125,10 +125,13 @@ class Donthuoc_Controler {
 
   // 
   add_Donthuoc = (req, res, next) => {
+      const now = new Date();
+      const formattedTime = now.toLocaleTimeString('vi-VN'); 
     const data = {
       Id_PhieuKhamBenh: req.body.Id_PhieuKhamBenh,
       TenDonThuoc: req.body.TenDonThuoc?.trim(),
       TrangThaiThanhToan: false,
+      Gio:formattedTime,
       TrangThai: 'DangTao',
     };
 
