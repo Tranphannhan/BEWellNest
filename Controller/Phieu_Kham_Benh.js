@@ -51,10 +51,12 @@ class Phieu_Kham_Benh {
         LyDoDenKham : req.body.LyDoDenKham.trim(),
         Ngay: ngay,
         Gio:formattedTime,
+        GioKetThucKham:formattedTime,
         TrangThaiThanhToan: false,
         STTKham: 0,
         TrangThai: false ,
-        TrangThaiHoatDong : "Kham"
+        TrangThaiHoatDong : "Kham",
+        SoLanKhongCoMat:0
       };
   
       if (!Data_Add) return res.status(400).json({ message: "Không có dữ liệu để thêm phiếu khám bệnh" });
@@ -79,6 +81,18 @@ class Phieu_Kham_Benh {
       res.status(201).json({ message: "Cập Nhật Trạng Thái Hoạt Động Thành Công", data: result });
     });
   }
+
+  // Chức năng bỏ qua không có mặt
+  Update_SoLanKhongCoMat = (req, res, next) => {
+  const { ID } = req.params;
+
+  Connect_Data_Model.Update_SoLanKhongCoMat_M(ID, (error, result) => {
+    if (error) return next(error);
+    if (!result) return res.status(404).json({ message: "Không tìm thấy phiếu khám" });
+
+    res.status(200).json(result);
+  });
+};
 
 
   

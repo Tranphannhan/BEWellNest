@@ -17,7 +17,8 @@ class Ketquaxetnghiem_Controler {
   
   Add_Ketquaxetnghiem = (req , res , next) => {
     const Image = req.file ? req.file.filename : "AnhMacDinhKetQuaXetNghiem.png";
-    
+    const now = new Date();
+    const formattedTime = now.toLocaleTimeString('vi-VN'); 
     const ngay = new Date().toISOString().split('T')[0];
     const Data_Add = {
         Id_YeuCauXetNghiem : req.body.Id_YeuCauXetNghiem.trim(),
@@ -29,6 +30,7 @@ class Ketquaxetnghiem_Controler {
         DonViTinh : req.body.DonViTinh.trim(),
         ChiSoBinhThuong : req.body.ChiSoBinhThuong.trim(),
         GhiChu : req.body.GhiChu.trim(),
+        Gio:formattedTime,
         NgayXetNghiem : ngay,
         Image : `http://localhost:5000/image/${Image}` 
     }   

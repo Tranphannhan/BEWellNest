@@ -89,7 +89,7 @@ Add_Yeucauxetnghiem = (req, res, next) => {
       Gio:formattedTime,
       STT: 0,
       TrangThai: false,
-      TrangThaiHoatDong: true
+      TrangThaiHoatDong: false,
     };
 
     Connect_Data_Model.Add_Yeucauxetnghiem_M(Data_Add, (Error, Result) => {

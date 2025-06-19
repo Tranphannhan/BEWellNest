@@ -147,7 +147,7 @@ class Database_Yeu_Cau_Xet_Nghiem {
     Boquatrangthaihoatdong__M = async (_id, Callback) => {
         try {
             await connectDB();    
-            const Result = await Yeucauxetnghiem.findByIdAndUpdate( _id, {TrangThaiHoatDong : false}, { new: true });
+            const Result = await Yeucauxetnghiem.findByIdAndUpdate( _id, {TrangThaiHoatDong : true}, { new: true });
             Callback(null, Result);
         } catch (error) {
             Callback(error);

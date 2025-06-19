@@ -21,6 +21,7 @@ router.get ('/LayTheoTheKhamBenh/:ID' , Handle_Phieu_Kham_Benh.GET_LayTheoTheKha
 // sửa lại API này
 // router.patch ('/BoQuaPhieuKham/:ID?TrangThaiHoatDong="Kham/XetNghiem/BoQua' , Handle_Phieu_Kham_Benh.BoQuaPhieuKham);
 router.patch ('/ThayDoiTrangThaiHoatDong/:ID' , Handle_Phieu_Kham_Benh.BoQuaPhieuKham); 
+router.patch ('/KhongCoMat/:ID' , Handle_Phieu_Kham_Benh.Update_SoLanKhongCoMat); 
 router.get ('/TimKiemTheoSDTHoacIdPhieuKhamBenh/Pagination', Handle_Phieu_Kham_Benh.TimKiemBenhNhanBangSDTHoacIdTheKhamBenh);
 
        

@@ -68,7 +68,7 @@ GET_TheKhamBenh__M = async (page, limit, _id, Callback) => {
         const skip = (page - 1) * limit;
 
         // Bước 1: Lấy danh sách Phiếu khám bệnh theo Thẻ khám bệnh và sắp xếp theo ngày mới nhất
-        const Arr_PhieuKhamBenh = await Phieu_Kham_Benh.find({ Id_TheKhamBenh: _id })
+        const Arr_PhieuKhamBenh = await Phieu_Kham_Benh.find({ Id_TheKhamBenh: _id ,TrangThai:true})
             .sort({ Ngay: -1 }) // Sort từ mới nhất đến cũ nhất
             .select('_id');
 
@@ -76,19 +76,19 @@ GET_TheKhamBenh__M = async (page, limit, _id, Callback) => {
 
         // Bước 2: Lấy danh sách KhamLamSang theo danh sách ID trên (không đảm bảo thứ tự)
         const KhamLamSangList = await Khamlamsang.find({
-            Id_PhieuKhamBenh: { $in: Arr_PhieuKhamBenh_IDs }
+            Id_PhieuKhamBenh: { $in: Arr_PhieuKhamBenh_IDs },
+            TrangThaiHoanThanh:true
         })
-        .select('TrieuChung KetQua')
         .populate({
             path: "Id_PhieuKhamBenh",
             select: "Ngay",
-            populate: {
-                path: "Id_CaKham",
-                select: "TenCa",
-                populate: [
-                    { path: "Id_BacSi", select: "TenBacSi" },
-                    { path: "Id_PhongKham", select: "SoPhongKham" }
-                ]
+            populate:{
+                path:"Id_Bacsi",
+                select:'TenBacSi',
+                populate:{
+                    path:'Id_PhongKham',
+                    select:'SoPhongKham'
+                }
             }
         });
 

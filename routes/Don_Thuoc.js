@@ -9,6 +9,7 @@ router.post('/Add', Handle_Donthuoc.add_Donthuoc);
 router.delete('/:id', Handle_Donthuoc.deleteDonthuoc);
 router.put('/:id', Handle_Donthuoc.updateDonthuoc);
 
+router.patch ('/ThayDoiTrangThai/:ID' , Handle_Donthuoc.ThayDoiTrangThai);
 
 // Kiểm tra xem phiếu khám bệnh có đơn thuốc nào đang tạo không
 router.get('/KiemTraDonThuocDangTao', Handle_Donthuoc.KiemTraDonThuocDangTao);
