@@ -72,7 +72,51 @@ class Database_Phieu_Kham_Benh {
     }
 
  
-   
+Update_SoLanKhongCoMat_M = async (id, Callback) => {
+  try {
+    await connectDB();
+
+    const record = await Phieu_Kham_Benh.findById(id);
+    if (!record) return Callback("Không tìm thấy phiếu khám");
+
+    const soLanMoi = (record.SoLanKhongCoMat || 0) + 1;
+    const trangThaiMoi = soLanMoi >= 3 ? "BoQua" : record.TrangThaiHoatDong;
+
+    let updateData = {
+      SoLanKhongCoMat: soLanMoi,
+      TrangThaiHoatDong: trangThaiMoi,
+    };
+
+    // Nếu chưa vượt quá số lần vắng → cập nhật lại STT
+    if (soLanMoi < 3) {
+      const phieuCungNgayVaBacSi = await Phieu_Kham_Benh.find({
+        Ngay: record.Ngay,
+        Id_Bacsi: record.Id_Bacsi,
+        TrangThaiThanhToan: true
+      }).sort({ STTKham: -1 }).limit(1);
+
+      const nextSTT = phieuCungNgayVaBacSi.length === 0
+        ? 1
+        : phieuCungNgayVaBacSi[0].STTKham + 1;
+
+      updateData.STTKham = nextSTT;
+    }
+
+    const updated = await Phieu_Kham_Benh.findByIdAndUpdate(
+      id,
+      updateData,
+      { new: true }
+    );
+
+    Callback(null, updated);
+  } catch (error) {
+    Callback(error);
+  }
+};
+
+
+
+
 
 
     PaymentConfirmation_M = async (id, nextSTT, Callback) => {
@@ -276,10 +320,10 @@ Add_Phieukhambenh_M = async (Data, Callback) => {
 
             // Nếu không có phiếu nào, bắt đầu từ 1
             if (phieuKham.length === 0) {
-                Callback(null, "1");
+                Callback(null, 1);
             } else {
                 // Tăng số thứ tự lên 1
-                const nextSTT = (parseInt(phieuKham[0].STTKham) + 1).toString();
+                const nextSTT = (phieuKham[0].STTKham + 1);
                 Callback(null, nextSTT);
             }
         } catch (error) {

@@ -26,7 +26,7 @@ const Phieu_Kham_Benh_Schema = new mongoose.Schema({
     Ngay : String,  
     Gio:String,
     TrangThaiThanhToan : Boolean,
-    STTKham : String,  
+    STTKham : Number,  
     TrangThai: Boolean,
 
     TrangThaiHoatDong: {
@@ -34,6 +34,8 @@ const Phieu_Kham_Benh_Schema = new mongoose.Schema({
         enum: ['Kham', 'XetNghiem', 'BoQua'], 
         required: true
     },
+    GioKetThucKham:String,
+    SoLanKhongCoMat:Number,
 
 }, { collection: "Phieu_Kham_Benh" }); 
 module.exports = mongoose.model("Phieu_Kham_Benh", Phieu_Kham_Benh_Schema);
