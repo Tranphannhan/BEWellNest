@@ -68,6 +68,10 @@ Add_Kham_Lam_Sang = (req, res, next) => {
   Edit_Kham_Lam_Sang = (req, res, next) => {
     const { ID } = req.params;
     const Data_Edit = {
+<<<<<<< HEAD
+      TrangThaiHoanThanh : true,
+=======
+>>>>>>> 1927050514b4b254d8d9ab75f447876108de2de6
       GhiChu : req.body.GhiChu.trim(),
       HuongSuLy : req.body.HuongSuLy.trim(),
       KetQua : req.body.KetQua.trim(),

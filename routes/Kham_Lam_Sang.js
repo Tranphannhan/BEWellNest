@@ -11,4 +11,4 @@ router.delete ('/Delete/:ID' , Handle_Kham_Lam_Sang.Delete_Kham_Lam_Sang);
 router.get ('/Detail/:ID' , Handle_Kham_Lam_Sang.Detail_Kham_Lam_Sang);
 router.get ('/LayTheoPhieuKhamBenh/:ID' , Handle_Kham_Lam_Sang.GET_PhieuKhamBenh); 
 router.get ('/LayTheoTheKhamBenh/Pagination/:ID' , Handle_Kham_Lam_Sang.GET_TheKhamBenh); 
-module.exports = router;      
+module.exports = router; 

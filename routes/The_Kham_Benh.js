@@ -10,4 +10,4 @@ router.post ('/Add' , Handle_The_Kham_Benh.Add_Thekhambenh);
 router.put ('/Edit/:ID' , Handle_The_Kham_Benh.Edit_Thekhambenh);
 router.delete ('/Delete/:ID' , Handle_The_Kham_Benh.Delete_Phieukham);
 router.get ('/Detail/:ID' , Handle_The_Kham_Benh.Detail_Phieukham);
-module.exports = router;      
+module.exports = router;        
