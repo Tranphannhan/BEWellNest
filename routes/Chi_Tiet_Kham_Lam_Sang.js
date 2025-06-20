@@ -4,6 +4,7 @@ const Loading_Controler_Chitietkhamlamsàng = require ('../Controller/Chi_Tiet_K
 const Chitietkhambenh = new Loading_Controler_Chitietkhamlamsàng ();
 
 router.get ('/' , Chitietkhambenh.Select_Chitietkhambenh);
+router.get ('/KiemTraCoChiTietKhamLamSang' , Chitietkhambenh.KiemTraCoChiTietKhamLamSang);
 router.post('/Add', Chitietkhambenh.add_Chitietkhambenh);
 
 router.delete('/Delete/:ID/:ID_Khamlamsang', Chitietkhambenh.Delete_Chitietkhambenh);

@@ -16,6 +16,29 @@ class Database_ChiTietKhamLamSang {
         }   
     };
 
+    KiemTraCoChiTietKhamLamSang_M = async (id, Callback) => {
+    try {
+        await connectDB();
+
+        // 1. Tìm tất cả Id_KhamLamSang của phiếu khám bệnh
+        const Id_KhamLamSang_List = await Kham_Lam_Sang.find({ Id_PhieuKhamBenh: id }).select('_id');
+
+        // 2. Rút ra mảng id đơn giản
+        const ids = Id_KhamLamSang_List.map(item => item._id);
+
+        // 3. Tìm tất cả chi tiết lâm sàng có Id_KhamLamSang nằm trong mảng trên
+        const data = await Chitietkhamlamsang.find({
+        Id_KhamLamSang: { $in: ids }
+        }).sort({ createdAt: -1 }).limit(1);;
+
+        // 4. Trả kết quả
+        Callback(null, data);
+    } catch (error) {
+        Callback(error);
+    }
+    };
+
+
 
     add_Chitietkhambenh_M = async (Data , Callback) => {
         try {

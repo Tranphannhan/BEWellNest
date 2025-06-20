@@ -70,7 +70,8 @@ Add_Kham_Lam_Sang = (req, res, next) => {
     const Data_Edit = {
       GhiChu : req.body.GhiChu.trim(),
       HuongSuLy : req.body.HuongSuLy.trim(),
-      KetQua : req.body.KetQua.trim()
+      KetQua : req.body.KetQua.trim(),
+      TrangThaiHoanThanh:true,
     };  
 
     Connect_Data_Model.Edit_Kham_Lam_Sang_M(ID, Data_Edit, (Error, Result) => {

@@ -371,7 +371,9 @@ Add_Phieukhambenh_M = async (Data, Callback) => {
     Upload_Status_handling__M = async (_id  , Callback) => {
         try {
             await connectDB();
-            const data = await Phieu_Kham_Benh.findByIdAndUpdate(_id,{ $set: { TrangThai: true}},{ new: true });
+            const now = new Date();
+            const formattedTime = now.toLocaleTimeString('vi-VN'); // Kết quả: "14:25:30"
+            const data = await Phieu_Kham_Benh.findByIdAndUpdate(_id,{ $set: { TrangThai: true, GioKetThucKham: formattedTime}},{ new: true });
           Callback(null, data);
         } catch (error){
             Callback(error)

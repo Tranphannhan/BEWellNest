@@ -7,6 +7,6 @@ const Chi_Tiet_Kham_Lam_Sang_Schema = new mongoose.Schema({
     TrieuChung : String,
     ChuanDoanSoBo : String
     
-}, { collection: "Chi_Tiet_Kham_Lam_Sang" }); 
+}, { collection: "Chi_Tiet_Kham_Lam_Sang" ,timestamps:true},); 
 module.exports = mongoose.model("Chi_Tiet_Kham_Lam_Sang", Chi_Tiet_Kham_Lam_Sang_Schema);  
      
