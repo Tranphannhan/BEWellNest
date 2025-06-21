@@ -66,7 +66,7 @@ class Database_Yeu_Cau_Xet_Nghiem {
     GET_LayTheoPhieuKhamBenh__M = async (Id_PhieuKhamBenh , Callback) => {
         try {
             await connectDB ();
-            const Select_Detail = await Yeucauxetnghiem.find ({Id_PhieuKhamBenh, TrangThaiThanhToan: false}).populate([
+            const Select_Detail = await Yeucauxetnghiem.find ({Id_PhieuKhamBenh}).populate([
                 {path:"Id_LoaiXetNghiem",
                     select:"TenXetNghiem Image",
                     populate:[
@@ -405,7 +405,7 @@ const result = await Yeucauxetnghiem.find({
                     select: 'HoVaTen SoDienThoai'
                 },
                 {
-                    path: 'Id_BacSi',
+                    path: 'Id_Bacsi',
                     select: 'TenBacSi'
                 }
                 ]
@@ -422,7 +422,8 @@ const result = await Yeucauxetnghiem.find({
 
     const total = await Yeucauxetnghiem.countDocuments({ 
         TrangThaiThanhToan: TrangThaiThanhToan,
-        Ngay: Ngay
+        Ngay: Ngay,
+        TrangThaiHoatDong:true
     })
 
         Callback(null, {totalItems:total, currentPage: page, totalPages: Math.ceil(total/limit),data:result});
