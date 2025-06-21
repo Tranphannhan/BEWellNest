@@ -22,5 +22,5 @@ const Donthuoc_Schema = new mongoose.Schema({
     },
     
     
-}, { collection: "Don_Thuoc" }); 
+}, { collection: "Don_Thuoc" ,timestamps:true}); 
 module.exports = mongoose.model("Don_Thuoc", Donthuoc_Schema);

@@ -378,15 +378,11 @@ KiemTraDonThuocDangTao_M = async (TrangThai, Id_PhieuKhamBenh, Callback) => {
               path: 'Id_TheKhamBenh',
               select: 'HoVaTen SoDienThoai'
             },
-            {path: 'Id_CaKham',
-              select:'TenCa',
-              populate:{
-                path: "Id_BacSi",
-                select:"TenBacSi"
-              }
+            {path: 'Id_Bacsi',
+              select:'TenBacSi'
             }
             ]
-          }).skip(skip).limit(limit)
+          }).skip(skip).limit(limit).sort({ createdAt: 1 })
 
           const total = await Donthuoc.countDocuments({
                Id_PhieuKhamBenh :  Arr_ID,
