@@ -393,7 +393,8 @@ TimKiemBenhNhanBangSDTHoacIdTheKhamBenh__M = async (
         const skip = (page - 1)*limit;
 const result = await Yeucauxetnghiem.find({
             TrangThaiThanhToan: TrangThaiThanhToan,
-            Ngay: Ngay
+            Ngay: Ngay,
+            TrangThaiHoatDong:true
             }).populate([
             {
                 path: 'Id_PhieuKhamBenh',
@@ -404,18 +405,8 @@ const result = await Yeucauxetnghiem.find({
                     select: 'HoVaTen SoDienThoai'
                 },
                 {
-                    path: 'Id_CaKham',
-                    select: 'TenCa',
-                    populate:[
-                        {
-                        path: 'Id_BacSi',
-                        select: 'TenBacSi'
-                            },
-                        {
-                        path: 'Id_PhongKham',
-                        select: 'SoPhongKham'
-                            },
-                    ] 
+                    path: 'Id_BacSi',
+                    select: 'TenBacSi'
                 }
                 ]
             },
@@ -427,7 +418,7 @@ const result = await Yeucauxetnghiem.find({
                     select: 'TenPhongThietBi'
                 }
             }
-            ]).skip(skip).limit(limit);
+            ]).skip(skip).limit(limit).sort({ createdAt: 1 });
 
     const total = await Yeucauxetnghiem.countDocuments({ 
         TrangThaiThanhToan: TrangThaiThanhToan,

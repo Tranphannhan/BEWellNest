@@ -21,5 +21,5 @@ const Yeu_Cau_Xet_Nghiem_Schema = new mongoose.Schema({
     // Thêm TrangThaiHoatDong kiểu: Boolen Mặc định là true
     // Thêm chức năng boqua
 
-}, { collection: "Yeu_Cau_Xet_Nghiem" }); 
+}, { collection: "Yeu_Cau_Xet_Nghiem"  ,timestamps:true}); 
 module.exports = mongoose.model("Yeu_Cau_Xet_Nghiem", Yeu_Cau_Xet_Nghiem_Schema);

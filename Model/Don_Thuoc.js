@@ -369,6 +369,7 @@ KiemTraDonThuocDangTao_M = async (TrangThai, Id_PhieuKhamBenh, Callback) => {
         const data = await Donthuoc.find ({
           Id_PhieuKhamBenh :  Arr_ID,
           TrangThaiThanhToan : TrangThaiThanhToan,
+          TrangThai:'DaXacNhan',
 
         }).populate({
             path: 'Id_PhieuKhamBenh',
