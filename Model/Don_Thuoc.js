@@ -529,6 +529,52 @@ KiemTraDonThuocDangTao_M = async (TrangThai, Id_PhieuKhamBenh, Callback) => {
   }
 };
 
+// Thống kê đơn thuốc 
+Filter_Donthuoc_ByDate_M = async (limit, page, { fromDate, toDate, year }) => {
+  try {
+    await connectDB();
+    const skip = (page - 1) * limit;
+
+    let query = {TrangThaiThanhToan:true};
+
+    // Lọc theo khoảng ngày
+    if (fromDate && toDate) {
+      const start = new Date(fromDate);
+      const end = new Date(toDate);
+      end.setHours(23, 59, 59, 999); // để bao trọn ngày
+
+      query.createdAt = {
+        $gte: start,
+        $lte: end,
+      };
+    }
+
+    // Lọc theo năm
+    else if (year) {
+      const start = new Date(`${year}-01-01T00:00:00.000Z`);
+      const end = new Date(`${year}-12-31T23:59:59.999Z`);
+
+      query.createdAt = {
+        $gte: start,
+        $lte: end,
+      };
+    }
+
+    const result = await Donthuoc.find(query).skip(skip).limit(limit);
+    const total = await Donthuoc.countDocuments(query);
+
+    return {
+      totalItems: total,
+      currentPage: page,
+      totalPages: Math.ceil(total / limit),
+      data: result,
+    };
+  } catch (error) {
+    throw error;
+  }
+};
+
+
 
 }
 

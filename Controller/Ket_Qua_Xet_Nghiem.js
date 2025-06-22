@@ -32,7 +32,7 @@ class Ketquaxetnghiem_Controler {
         GhiChu : req.body.GhiChu.trim(),
         Gio:formattedTime,
         NgayXetNghiem : ngay,
-        Image : `http://localhost:5000/image/${Image}` 
+        Image : `${Image}` 
     }   
 
     if (!Data_Add) return res.send ("Không có dữ liệu");

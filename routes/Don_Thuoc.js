@@ -34,6 +34,9 @@ router.get('/LichSuPhatThuoc/Pagination' , Handle_Donthuoc.HistoryOfMedicineDisp
 router.get ('/Detail/:ID' , Handle_Donthuoc.Detail_Donthuoc); 
 router.get ('/LayTheoPhieuKhamBenh/:ID' , Handle_Donthuoc.GET_Phieu_Kham_Benh);
 
+// Lọc từ ngày đến ngày, Lọc theo năm
+router.get('/filter-by-date', Handle_Donthuoc.Filter_Donthuoc_ByDate);
+
    
 
 module.exports = router;

@@ -284,6 +284,26 @@ ThayDoiTrangThai = (req, res, next) => {
     })
   }
 
+  // Thống kê đơn thuốc
+  Filter_Donthuoc_ByDate = async (req, res, next) => {
+  const { fromDate, toDate, year } = req.query;
+  const limit = parseInt(req.query.limit) || 10;
+  const page = parseInt(req.query.page) || 1;
+
+  try {
+    const result = await Connect_Data_Model.Filter_Donthuoc_ByDate_M(limit, page, { fromDate, toDate, year });
+
+    if (!result || result.data.length < 1) {
+      return res.status(404).json({ message: "Không tìm thấy dữ liệu đơn thuốc theo thời gian." });
+    }
+
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+
 
 }
 
