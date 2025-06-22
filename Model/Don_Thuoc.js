@@ -560,14 +560,23 @@ Filter_Donthuoc_ByDate_M = async (limit, page, { fromDate, toDate, year }) => {
       };
     }
 
-    const result = await Donthuoc.find(query).skip(skip).limit(limit);
+    const result = await Donthuoc.find(query).populate({
+      path:'Id_PhieuKhamBenh',
+      select:'Ngay'
+    }).skip(skip).limit(limit).lean();
+
+    // Thêm tổng tiền tạm thời (giá trị ngẫu nhiên từ 100000 đến 400000)
+const resultWithTongTien = result.map(item => ({
+  ...item,
+  TongTien: Math.floor(Math.random() * (400000 - 100000 + 1)) + 100000
+}));
     const total = await Donthuoc.countDocuments(query);
 
     return {
       totalItems: total,
       currentPage: page,
       totalPages: Math.ceil(total / limit),
-      data: result,
+      data: resultWithTongTien,
     };
   } catch (error) {
     throw error;

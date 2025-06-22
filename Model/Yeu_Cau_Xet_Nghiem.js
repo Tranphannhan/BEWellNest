@@ -452,7 +452,12 @@ Filter_Yeucauxetnghiem_ByDate_M = async (limit, page, { fromDate, toDate, year }
       query.createdAt = { $gte: start, $lte: end };
     }
 
-    const result = await Yeucauxetnghiem.find(query).skip(skip).limit(limit);
+    const result = await Yeucauxetnghiem.find(query).populate({
+        path:'Id_LoaiXetNghiem',
+        populate:{
+            path:'Id_GiaDichVu'
+        }
+    }).skip(skip).limit(limit);
     const total = await Yeucauxetnghiem.countDocuments(query);
 
     return {
