@@ -402,8 +402,7 @@ const result = await Yeucauxetnghiem.find({
                 select: 'Ngay',
                 populate: [
                 {
-                    path: 'Id_TheKhamBenh',
-                    select: 'HoVaTen'
+                    path: 'Id_TheKhamBenh'
                 },
                 {
                     path: 'Id_Bacsi',
