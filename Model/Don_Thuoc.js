@@ -1,7 +1,7 @@
 const connectDB = require("../Model/Db");
 
 const Donthuoc = require("../Schema/Don_Thuoc"); 
-
+const Donthuoc_Chitiet = require("../Schema/Don_Thuoc_Chi_Tiet"); 
 const Phieu_Kham_Benh = require ('../Schema/Phieu_Kham_Benh');
 
 class Database_Donthuoc {
@@ -359,41 +359,92 @@ KiemTraDonThuocDangTao_M = async (TrangThai, Id_PhieuKhamBenh, Callback) => {
       }
     };
 
-       // lấy những yêu cầu xét nghiệm chưa thanh toán để load cho thu ngân xem
-    Get_Not_yet_paid = async (page, limit, ngay, TrangThaiThanhToan, Callback)=>{
-      try{
-           const skip = (page - 1)* limit
-        await connectDB();
-        const KQ_Select1 = await Phieu_Kham_Benh.find ({Ngay : ngay}).select ('_id');
-        const Arr_ID = KQ_Select1.map (Tm => Tm._id);
-        const data = await Donthuoc.find ({
-          Id_PhieuKhamBenh :  Arr_ID,
-          TrangThaiThanhToan : TrangThaiThanhToan,
-          TrangThai:'DaXacNhan',
+Get_Not_yet_paid = async (page, limit, ngay, TrangThaiThanhToan, Callback) => {
+  try {
+    const skip = (page - 1) * limit;
+    await connectDB();
 
-        }).populate({
-            path: 'Id_PhieuKhamBenh',
-            select:'Ngay',
-            populate:[
-                {
-              path: 'Id_TheKhamBenh',
-              select: 'HoVaTen SoDienThoai'
-            },
-            {path: 'Id_Bacsi',
-              select:'TenBacSi'
-            }
-            ]
-          }).skip(skip).limit(limit).sort({ createdAt: 1 })
+    // Lấy danh sách ID phiếu khám theo ngày
+    const KQ_Select1 = await Phieu_Kham_Benh.find({ Ngay: ngay }).select('_id');
+    const Arr_ID = KQ_Select1.map(tm => tm._id);
 
-          const total = await Donthuoc.countDocuments({
-               Id_PhieuKhamBenh :  Arr_ID,
-               TrangThaiThanhToan : TrangThaiThanhToan,
-          })
-          Callback(null, {totalItems:total, currentPage: page, totalPages: Math.ceil(total/limit),data:data})
-      }catch(error){
-          Callback(error)
-      }
+    // Lấy danh sách đơn thuốc
+    const data = await Donthuoc.find({
+      Id_PhieuKhamBenh: Arr_ID,
+      TrangThaiThanhToan: TrangThaiThanhToan,
+      TrangThai: 'DaXacNhan'
+    })
+    .populate({
+      path: 'Id_PhieuKhamBenh',
+      select: 'Ngay',
+      populate: [
+        {
+          path: 'Id_TheKhamBenh',
+          select: 'HoVaTen SoDienThoai'
+        },
+        {
+          path: 'Id_Bacsi',
+          select: 'TenBacSi'
+        }
+      ]
+    })
+    .skip(skip)
+    .limit(limit)
+    .sort({ createdAt: 1 });
+
+    // 👉 Gọi TinhTongTienDonThuocChiTiet cho từng đơn thuốc
+    const dataWithTongTien = [];
+    for (const item of data) {
+      const tongTien = await this.TinhTongTienDonThuocChiTiet(item._id);
+      dataWithTongTien.push({
+        ...item.toObject(),
+        TongTien: tongTien
+      });
+    }
+
+    // Tổng số đơn thuốc
+    const total = await Donthuoc.countDocuments({
+      Id_PhieuKhamBenh: Arr_ID,
+      TrangThaiThanhToan: TrangThaiThanhToan
+    });
+
+    // Trả kết quả
+    Callback(null, {
+      totalItems: total,
+      currentPage: page,
+      totalPages: Math.ceil(total / limit),
+      data: dataWithTongTien
+    });
+
+  } catch (error) {
+        console.error("Lỗi khi lấy đơn thuốc chưa thanh toán:", error); // ✅ In chi tiết
+    Callback({ message: 'Lỗi server', error: error?.message || error });
   }
+};
+
+// ✅ Đặt hàm này trước khi gọi nó trong Get_Not_yet_paid
+ TinhTongTienDonThuocChiTiet = async (Id_DonThuoc) => {
+  try {
+    const chiTietList = await Donthuoc_Chitiet.find({ Id_DonThuoc })
+      .select('SoLuong Id_Thuoc')
+      .populate({ path: 'Id_Thuoc', select: 'Gia' });
+
+    let TongTien = 0;
+    for (const item of chiTietList) {
+      const gia = item?.Id_Thuoc?.Gia || 0;
+      const soLuong = item?.SoLuong || 0;
+      TongTien += gia * soLuong;
+    }
+
+    return TongTien;
+  } catch (error) {
+    console.error('Lỗi khi tính tổng tiền:', error);
+    return 0;
+  }
+};
+
+
+
 
   // 
    Upload_Status_handling__M = async (Id_NguoiPhatThuoc,ID  , Callback) => {
