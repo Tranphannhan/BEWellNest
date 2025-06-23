@@ -466,9 +466,16 @@ Get_Not_yet_paid = async (page, limit, Ngay, TrangThaiThanhToan, Callback) => {
             const phieuId = item?.Id_PhieuKhamBenh?._id?.toString();
             if (phieuId && !seenPhieuKham.has(phieuId)) {
                 seenPhieuKham.set(phieuId, true);
-                filteredResults.push(item);
+
+                // Gán thêm trường TongTien random
+                const tongTien = Math.floor(Math.random() * (500000 - 200000 + 1)) + 200000;
+                // Tạo bản sao và thêm trường mới
+                const itemWithTongTien = { ...item.toObject(), TongTien: tongTien };
+
+                filteredResults.push(itemWithTongTien);
             }
         }
+
 
         const total = filteredResults.length;
         const paginated = filteredResults.slice(skip, skip + limit);
