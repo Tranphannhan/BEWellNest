@@ -175,6 +175,23 @@ Add_Yeucauxetnghiem = (req, res, next) => {
     })
   }
 
+    Get_Not_yet_paid_Detail = (req, res, next) =>{
+    const ngayHienTai = new Date().toISOString().split('T')[0];
+    const ngay = req.query.ngay || ngayHienTai;
+    const Id_PhieuKhamBenh = req.query.Id_PhieuKhamBenh;
+    const TrangThaiThanhToan = req.query.TrangThaiThanhToan || false;
+    const limit = parseInt (req.query.limit)||7;
+    const page = parseInt (req.query.page)||1;
+    if(!Id_PhieuKhamBenh) return res.status(500).json({massage:"Vui lòng truyền vào Id_PhieuKhamBenh"})
+    Connect_Data_Model.Get_Not_yet_paid_Detail(page, limit, ngay, TrangThaiThanhToan,Id_PhieuKhamBenh, (err,result)=>{
+      if (err) return res.status(500).json({ message: "Lỗi server", error: err });
+      if (!result || result.length === 0) {
+        return res.status(404).json({ message: "Không tìm thấy yêu cầu nào phù hợp" });
+      }
+      res.status(200).json(result);
+    })
+  }
+
   TimKiemBenhNhanBangSDTHoacIdTheKhamBenh = (req, res, next) => {
     const ngayHienTai = new Date().toISOString().split('T')[0];
     const id_PhongThietBi = req.query.Id || null;
@@ -207,7 +224,7 @@ Add_Yeucauxetnghiem = (req, res, next) => {
       });
   }
 
-  
+
 Filter_Yeucauxetnghiem_ByDate = async (req, res, next) => {
   const { fromDate, toDate, year } = req.query;
   const limit = parseInt(req.query.limit) || 7;

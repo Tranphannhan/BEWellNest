@@ -15,6 +15,7 @@ router.delete ('/Delete/:ID' , Handle_Yeucauxetnghiem.Delete_Yeucauxetnghiem);
 router.get('/GetById_PhongTB_date/Pagination', Handle_Yeucauxetnghiem.Get_ById_PTB_Date);
 router.patch ('/Xacnhanthanhtoan/:ID_YeuCauXetNghiem', Handle_Yeucauxetnghiem.PaymentConfirmation);
 router.get('/YeuCauXetNghiemThuNgan/Pagination', Handle_Yeucauxetnghiem.Get_Not_Yet_Paid);
+router.get('/YeuCauXetNghiemThuNgan/Detail', Handle_Yeucauxetnghiem.Get_Not_yet_paid_Detail);
 router.patch ('/XacNhanTrangThai/:ID' , Handle_Yeucauxetnghiem.Status_handling);
 router.get ('/Detail/:ID' , Handle_Yeucauxetnghiem.Detail);
 router.get ('/LayTheoPhieuKhamBenh/:ID' , Handle_Yeucauxetnghiem.GET_LayTheoPhieuKhamBenh);
