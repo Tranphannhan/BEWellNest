@@ -119,32 +119,41 @@ KiemTraDonThuocDangTao_M = async (TrangThai, Id_PhieuKhamBenh, Callback) => {
     }
 
       
-    Detail__M  = async (_id , Callback) => {
-        try {
-            await connectDB ();
-            const Select_Detail = await Donthuoc.find ({_id}).populate({
-            path: 'Id_PhieuKhamBenh',
-            select:'Ngay',
-            populate:[
-                {
-                  path: 'Id_TheKhamBenh',
-                  select: 'HoVaTen SoDienThoai'
-                },
-                {
-                  path: 'Id_CaKham',
-                  select:'TenCa',
-                  populate:{
-                    path:'Id_BacSi',
-                    select:'TenBacSi'
-                  }
-                }
-            ]
-          })
-            Callback(null, Select_Detail);
-        } catch (error) {
-            Callback(error);
-        }   
+Detail__M = async (_id, Callback) => {
+  try {
+    await connectDB();
+
+    const Select_Detail = await Donthuoc.findOne({ _id })
+      .populate({
+        path: 'Id_PhieuKhamBenh',
+        select: 'Ngay',
+        populate: [
+          {
+            path: 'Id_TheKhamBenh',
+            select: 'HoVaTen SoDienThoai'
+          },
+          {
+            path: 'Id_Bacsi',
+            select: 'TenBacSi'
+          }
+        ]
+      })
+      .lean();
+
+    if (!Select_Detail) {
+      return Callback({ message: 'Không tìm thấy đơn thuốc' });
     }
+
+    Select_Detail.TongTien = await this.TinhTongTienDonThuocChiTiet(_id);
+
+    Callback(null, Select_Detail);
+
+  } catch (error) {
+    console.error("Lỗi Detail__M:", error);
+    Callback(error);
+  }
+};
+
 
 
     GET_Phieu_Kham_Benh__M  = async (Id_PhieuKhamBenh , Callback) => {
@@ -152,19 +161,15 @@ KiemTraDonThuocDangTao_M = async (TrangThai, Id_PhieuKhamBenh, Callback) => {
             await connectDB ();
             const Select_Detail = await Donthuoc.find ({Id_PhieuKhamBenh}).populate({
             path: 'Id_PhieuKhamBenh',
-            select:'Ngay',
+            select:'Ngay Gio',
             populate:[
                 {
                   path: 'Id_TheKhamBenh',
                   select: 'HoVaTen SoDienThoai'
                 },
                 {
-                  path: 'Id_CaKham',
-                  select:'TenCa',
-                  populate:{
-                    path:'Id_BacSi',
-                    select:'TenBacSi'
-                  }
+                  path: 'Id_Bacsi',
+                  select:'TenBacSi',
                 }
             ]
           })
@@ -405,7 +410,8 @@ Get_Not_yet_paid = async (page, limit, ngay, TrangThaiThanhToan, Callback) => {
     // Tổng số đơn thuốc
     const total = await Donthuoc.countDocuments({
       Id_PhieuKhamBenh: Arr_ID,
-      TrangThaiThanhToan: TrangThaiThanhToan
+      TrangThaiThanhToan: TrangThaiThanhToan,
+      TrangThai: 'DaXacNhan'
     });
 
     // Trả kết quả
