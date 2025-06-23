@@ -438,14 +438,13 @@ const result = await Yeucauxetnghiem.find({
     }
 };
 
-
 Get_Not_yet_paid = async (page, limit, Ngay, TrangThaiThanhToan, Callback) => {
     try {
         await connectDB();
 
         const skip = (page - 1) * limit;
 
-        // Lấy tất cả xét nghiệm chưa thanh toán, có populate
+        // Lấy tất cả yêu cầu xét nghiệm chưa thanh toán
         const allResults = await Yeucauxetnghiem.find({
             TrangThaiThanhToan: TrangThaiThanhToan,
             Ngay: Ngay,
@@ -458,31 +457,50 @@ Get_Not_yet_paid = async (page, limit, Ngay, TrangThaiThanhToan, Callback) => {
                 populate: [
                     {
                         path: 'Id_TheKhamBenh'
-                    },
+                    }
                 ]
+            },
+            {
+                path: 'Id_LoaiXetNghiem',
+                select: 'TenXetNghiem',
+                populate: {
+                    path: 'Id_GiaDichVu',
+                    select: 'Giadichvu'
+                }
             }
         ])
         .sort({ createdAt: 1 });
 
-        // Lọc: mỗi phiếu khám bệnh chỉ lấy 1 xét nghiệm đầu tiên
-        const seenPhieuKham = new Map();
-        const filteredResults = [];
+        // Gom nhóm theo Id_PhieuKhamBenh và tính tổng tiền
+        const grouped = new Map();
 
         for (const item of allResults) {
             const phieuId = item?.Id_PhieuKhamBenh?._id?.toString();
-            if (phieuId && !seenPhieuKham.has(phieuId)) {
-                seenPhieuKham.set(phieuId, true);
+            const gia = item?.Id_LoaiXetNghiem?.Id_GiaDichVu?.Giadichvu || 0;
 
-                // Gán thêm trường TongTien random
-                const tongTien = Math.floor(Math.random() * (500000 - 200000 + 1)) + 200000;
-                // Tạo bản sao và thêm trường mới
-                const itemWithTongTien = { ...item.toObject(), TongTien: tongTien };
+            if (!phieuId) continue;
 
-                filteredResults.push(itemWithTongTien);
+            if (!grouped.has(phieuId)) {
+                grouped.set(phieuId, {
+                    TongTien: gia,
+                    firstItem: item.toObject()
+                });
+            } else {
+                const current = grouped.get(phieuId);
+                current.TongTien += gia;
             }
         }
 
+        // Tạo mảng kết quả từ Map đã nhóm
+        const filteredResults = [];
+        for (const [_, value] of grouped.entries()) {
+            filteredResults.push({
+                ...value.firstItem,
+                TongTien: value.TongTien
+            });
+        }
 
+        // Phân trang thủ công
         const total = filteredResults.length;
         const paginated = filteredResults.slice(skip, skip + limit);
 
