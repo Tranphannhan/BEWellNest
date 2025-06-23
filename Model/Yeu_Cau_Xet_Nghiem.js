@@ -386,57 +386,67 @@ TimKiemBenhNhanBangSDTHoacIdTheKhamBenh__M = async (
 
 
 
-    // lấy những yêu cầu xét nghiệm chưa thanh toán để load cho thu ngân xem
-    Get_Not_yet_paid_Detail = async (page, limit, Ngay, TrangThaiThanhToan, Id_PhieuKhamBenh, Callback) => {
+  // lấy những yêu cầu xét nghiệm chưa thanh toán để load cho thu ngân xem
+Get_Not_yet_paid_Detail = async (page, limit, Ngay, TrangThaiThanhToan, Id_PhieuKhamBenh, Callback) => {
     try {
         await connectDB();
-        const skip = (page - 1)*limit;
-const result = await Yeucauxetnghiem.find({
+        const skip = (page - 1) * limit;
+
+        const result = await Yeucauxetnghiem.find({
             TrangThaiThanhToan: TrangThaiThanhToan,
             Ngay: Ngay,
-            TrangThaiHoatDong:true,
-            Id_PhieuKhamBenh:Id_PhieuKhamBenh
-            }).populate([
+            TrangThaiHoatDong: true,
+            Id_PhieuKhamBenh: Id_PhieuKhamBenh
+        })
+        .populate([
             {
                 path: 'Id_PhieuKhamBenh',
                 select: 'Ngay',
                 populate: [
-                {
-                    path: 'Id_TheKhamBenh'
-                },
-                {
-                    path: 'Id_Bacsi',
-                    select: 'TenBacSi'
-                }
+                    { path: 'Id_TheKhamBenh' },
+                    { path: 'Id_Bacsi', select: 'TenBacSi' }
                 ]
             },
             {
                 path: 'Id_LoaiXetNghiem',
                 select: 'TenXetNghiem',
-                populate:[
-                    {
-                    path:"Id_PhongThietBi",
-                    select: 'TenPhongThietBi'
-                },
-                {
-                    path:'Id_GiaDichVu'
-                }
+                populate: [
+                    { path: 'Id_PhongThietBi', select: 'TenPhongThietBi' },
+                    { path: 'Id_GiaDichVu', select: 'Giadichvu' }
                 ]
             }
-            ]).skip(skip).limit(limit).sort({ createdAt: 1 });
+        ])
+        .skip(skip)
+        .limit(limit)
+        .sort({ createdAt: 1 });
 
-    const total = await Yeucauxetnghiem.countDocuments({ 
-        TrangThaiThanhToan: TrangThaiThanhToan,
-        Ngay: Ngay,
-        TrangThaiHoatDong:true,
-        Id_PhieuKhamBenh:Id_PhieuKhamBenh
-    })
+        const total = await Yeucauxetnghiem.countDocuments({
+            TrangThaiThanhToan: TrangThaiThanhToan,
+            Ngay: Ngay,
+            TrangThaiHoatDong: true,
+            Id_PhieuKhamBenh: Id_PhieuKhamBenh
+        });
 
-        Callback(null, {totalItems:total, currentPage: page, totalPages: Math.ceil(total/limit),data:result});
+        // 👉 Tính tổng tiền
+        let TongTien = 0;
+        for (const item of result) {
+            const tien = item?.Id_LoaiXetNghiem?.Id_GiaDichVu?.Giadichvu || 0;
+            TongTien += tien;
+        }
+
+        Callback(null, {
+            totalItems: total,
+            currentPage: page,
+            totalPages: Math.ceil(total / limit),
+            TongTien: TongTien, // ✅ Gửi thêm tổng tiền
+            data: result
+        });
+
     } catch (error) {
         Callback(error);
     }
 };
+
 
 Get_Not_yet_paid = async (page, limit, Ngay, TrangThaiThanhToan, Callback) => {
     try {
