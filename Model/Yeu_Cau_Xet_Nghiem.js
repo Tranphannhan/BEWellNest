@@ -386,51 +386,105 @@ TimKiemBenhNhanBangSDTHoacIdTheKhamBenh__M = async (
 
 
 
-    // lấy những yêu cầu xét nghiệm chưa thanh toán để load cho thu ngân xem
-    Get_Not_yet_paid = async (page, limit, Ngay, TrangThaiThanhToan, Callback) => {
+//     // lấy những yêu cầu xét nghiệm chưa thanh toán để load cho thu ngân xem
+//     Get_Not_yet_paid = async (page, limit, Ngay, TrangThaiThanhToan, Callback) => {
+//     try {
+//         await connectDB();
+//         const skip = (page - 1)*limit;
+// const result = await Yeucauxetnghiem.find({
+//             TrangThaiThanhToan: TrangThaiThanhToan,
+//             Ngay: Ngay,
+//             TrangThaiHoatDong:true
+//             }).populate([
+//             {
+//                 path: 'Id_PhieuKhamBenh',
+//                 select: 'Ngay',
+//                 populate: [
+//                 {
+//                     path: 'Id_TheKhamBenh',
+//                     select: 'HoVaTen SoDienThoai'
+//                 },
+//                 {
+//                     path: 'Id_Bacsi',
+//                     select: 'TenBacSi'
+//                 }
+//                 ]
+//             },
+//             {
+//                 path: 'Id_LoaiXetNghiem',
+//                 select: 'TenXetNghiem',
+//                 populate:{
+//                     path:"Id_PhongThietBi",
+//                     select: 'TenPhongThietBi'
+//                 }
+//             }
+//             ]).skip(skip).limit(limit).sort({ createdAt: 1 });
+
+//     const total = await Yeucauxetnghiem.countDocuments({ 
+//         TrangThaiThanhToan: TrangThaiThanhToan,
+//         Ngay: Ngay,
+//         TrangThaiHoatDong:true
+//     })
+
+//         Callback(null, {totalItems:total, currentPage: page, totalPages: Math.ceil(total/limit),data:result});
+//     } catch (error) {
+//         Callback(error);
+//     }
+// };
+
+
+Get_Not_yet_paid = async (page, limit, Ngay, TrangThaiThanhToan, Callback) => {
     try {
         await connectDB();
-        const skip = (page - 1)*limit;
-const result = await Yeucauxetnghiem.find({
+
+        const skip = (page - 1) * limit;
+
+        // Lấy tất cả xét nghiệm chưa thanh toán, có populate
+        const allResults = await Yeucauxetnghiem.find({
             TrangThaiThanhToan: TrangThaiThanhToan,
             Ngay: Ngay,
-            TrangThaiHoatDong:true
-            }).populate([
+            TrangThaiHoatDong: true
+        })
+        .populate([
             {
                 path: 'Id_PhieuKhamBenh',
                 select: 'Ngay',
                 populate: [
-                {
-                    path: 'Id_TheKhamBenh',
-                    select: 'HoVaTen SoDienThoai'
-                },
-                {
-                    path: 'Id_Bacsi',
-                    select: 'TenBacSi'
-                }
+                    {
+                        path: 'Id_TheKhamBenh'
+                    },
                 ]
-            },
-            {
-                path: 'Id_LoaiXetNghiem',
-                select: 'TenXetNghiem',
-                populate:{
-                    path:"Id_PhongThietBi",
-                    select: 'TenPhongThietBi'
-                }
             }
-            ]).skip(skip).limit(limit).sort({ createdAt: 1 });
+        ])
+        .sort({ createdAt: 1 });
 
-    const total = await Yeucauxetnghiem.countDocuments({ 
-        TrangThaiThanhToan: TrangThaiThanhToan,
-        Ngay: Ngay,
-        TrangThaiHoatDong:true
-    })
+        // Lọc: mỗi phiếu khám bệnh chỉ lấy 1 xét nghiệm đầu tiên
+        const seenPhieuKham = new Map();
+        const filteredResults = [];
 
-        Callback(null, {totalItems:total, currentPage: page, totalPages: Math.ceil(total/limit),data:result});
+        for (const item of allResults) {
+            const phieuId = item?.Id_PhieuKhamBenh?._id?.toString();
+            if (phieuId && !seenPhieuKham.has(phieuId)) {
+                seenPhieuKham.set(phieuId, true);
+                filteredResults.push(item);
+            }
+        }
+
+        const total = filteredResults.length;
+        const paginated = filteredResults.slice(skip, skip + limit);
+
+        Callback(null, {
+            totalItems: total,
+            currentPage: page,
+            totalPages: Math.ceil(total / limit),
+            data: paginated
+        });
+
     } catch (error) {
         Callback(error);
     }
 };
+
 
 
 Filter_Yeucauxetnghiem_ByDate_M = async (limit, page, { fromDate, toDate, year }) => {
