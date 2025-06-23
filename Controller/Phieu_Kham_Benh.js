@@ -219,6 +219,23 @@ class Phieu_Kham_Benh {
     });
   }
 
+  Filter_PhieuKhamBenh_ByDate = async (req, res, next) => {
+  const { fromDate, toDate, year } = req.query;
+  const limit = parseInt(req.query.limit) || 10;
+  const page = parseInt(req.query.page) || 1;
+
+  try {
+    const result = await Connect_Data_Model.Filter_PhieuKhamBenh_ByDate_M(limit, page, { fromDate, toDate, year });
+
+    if (!result || result.data.length < 1) {
+      return res.status(404).json({ message: "Không tìm thấy phiếu khám bệnh theo thời gian." });
+    }
+
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
 
 
 }

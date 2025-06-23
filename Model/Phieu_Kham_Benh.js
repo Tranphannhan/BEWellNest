@@ -379,7 +379,44 @@ Add_Phieukhambenh_M = async (Data, Callback) => {
             Callback(error)
         }
     }
+    
+    Filter_PhieuKhamBenh_ByDate_M = async (limit, page, { fromDate, toDate, year }) => {
+  try {
+    await connectDB();
+    const skip = (page - 1) * limit;
 
+    let query = {TrangThaiThanhToan:true}; // tùy chỉnh theo điều kiện lọc
+
+    // Nếu lọc theo khoảng ngày
+    if (fromDate && toDate) {
+      query.Ngay = {
+        $gte: fromDate,
+        $lte: toDate,
+      };
+    }
+
+    // Nếu lọc theo năm
+    else if (year) {
+      query.Ngay = {
+        $regex: `^${year}`, // ví dụ: "2025" sẽ match "2025-01-01" đến "2025-12-31"
+      };
+    }
+
+    const result = await Phieu_Kham_Benh.find(query).populate({
+        path:'Id_GiaDichVu'
+    }).skip(skip).limit(limit).lean();
+    const total = await Phieu_Kham_Benh.countDocuments(query);
+
+    return {
+      totalItems: total,
+      currentPage: page,
+      totalPages: Math.ceil(total / limit),
+      data: result,
+    };
+  } catch (error) {
+    throw error;
+  }
+};
 
 }
 
