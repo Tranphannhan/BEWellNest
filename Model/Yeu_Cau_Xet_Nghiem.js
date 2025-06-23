@@ -429,7 +429,8 @@ const result = await Yeucauxetnghiem.find({
     const total = await Yeucauxetnghiem.countDocuments({ 
         TrangThaiThanhToan: TrangThaiThanhToan,
         Ngay: Ngay,
-        TrangThaiHoatDong:true
+        TrangThaiHoatDong:true,
+        Id_PhieuKhamBenh:Id_PhieuKhamBenh
     })
 
         Callback(null, {totalItems:total, currentPage: page, totalPages: Math.ceil(total/limit),data:result});
