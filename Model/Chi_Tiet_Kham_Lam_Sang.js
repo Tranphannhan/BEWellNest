@@ -16,6 +16,29 @@ class Database_ChiTietKhamLamSang {
         }   
     };
 
+
+LayTheoPhieuKhamBenh_M = async (Id_PhieuKhamBenh, Callback) => {
+  try {
+    await connectDB();
+
+    // ✅ Tìm khám lâm sàng theo phiếu khám bệnh
+    const kham = await Kham_Lam_Sang.findOne({ Id_PhieuKhamBenh });
+
+    if (!kham) {
+      return Callback(null, []); // Không có khám lâm sàng thì trả mảng rỗng
+    }
+
+    // ✅ Tìm danh sách chi tiết theo Id_KhamLamSang
+    const chiTiet = await Chitietkhamlamsang.find({ Id_KhamLamSang: kham._id });
+
+    Callback(null, chiTiet);
+
+  } catch (error) {
+    Callback(error);
+  }
+};
+
+
     KiemTraCoChiTietKhamLamSang_M = async (id, Callback) => {
     try {
         await connectDB();

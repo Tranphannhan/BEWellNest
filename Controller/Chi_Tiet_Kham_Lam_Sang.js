@@ -16,6 +16,18 @@ class Chitiet_Khamkhamlamsang_Controler {
         });
     };
 
+    LayTheoPhieuKhamBenh = (req, res, next) => {
+        const Id_PhieuKhamBenh = req.query.Id_PhieuKhamBenh;
+        if(!Id_PhieuKhamBenh)return res.status(404).json({ message: "Không có Id_PhieuKhamBenh" }); 
+        Connect_Data_Model.LayTheoPhieuKhamBenh_M (Id_PhieuKhamBenh,(error, result) => {
+        if (error) return next(error);
+        if (!result || result.length < 1) {
+            return res.status(404).json({ message: "Dữ liệu khám lâm sàng chi tiết rỗng" }); 
+        }
+            res.status(200).json(result);
+        });
+    };
+
     KiemTraCoChiTietKhamLamSang = (req, res, next) => {
         const id = req.query.Id_PhieuKhamBenh;
         if(!id) return res.status(404).json({ message: "Vui lòng truyền Id_PhieuKhamBenh" }); 
