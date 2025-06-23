@@ -623,10 +623,15 @@ Filter_Donthuoc_ByDate_M = async (limit, page, { fromDate, toDate, year }) => {
     }).skip(skip).limit(limit).lean();
 
     // Thêm tổng tiền tạm thời (giá trị ngẫu nhiên từ 100000 đến 400000)
-const resultWithTongTien = result.map(item => ({
-  ...item,
-  TongTien: Math.floor(Math.random() * (400000 - 100000 + 1)) + 100000
-}));
+    const resultWithTongTien = await Promise.all(
+      result.map(async (item) => {
+        const tongTien = await this.TinhTongTienDonThuocChiTiet(item._id);
+        return {
+          ...item,
+          TongTien: tongTien,
+        };
+      })
+    );
     const total = await Donthuoc.countDocuments(query);
 
     return {
