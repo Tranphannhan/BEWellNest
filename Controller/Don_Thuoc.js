@@ -265,7 +265,7 @@ ThayDoiTrangThai = (req, res, next) => {
     Connect_Data_Model.Select_Check_Status_Donthuoc_M (ID , (err , result) => {
     if (err) return res.status(500).json({ message: "Lỗi server", error: err });
 
-    if (result[0].TrangThai) return res.status(200).json ({message : "Trạng thái đã được xác nhận trước đó" , error: err });
+    if (result[0].TrangThai ==='DaPhatThuoc') return res.status(200).json ({message : "Trạng thái đã được xác nhận trước đó" , error: err });
      if (result[0].TrangThaiThanhToan === false) return res.status(200).json ({message : "Đơn thuốc này chưa được thanh toán" , error: err });
     Connect_Data_Model.Upload_Status_handling__M (Id_NguoiPhatThuoc , ID , (err , result) => {
         if (err) return res.status(500).json({ message: "Lỗi server", error: err });

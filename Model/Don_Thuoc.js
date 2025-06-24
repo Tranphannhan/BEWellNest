@@ -451,7 +451,7 @@ Get_Not_yet_paid = async (page, limit, ngay, TrangThaiThanhToan, Callback) => {
    Upload_Status_handling__M = async (Id_NguoiPhatThuoc,ID  , Callback) => {
     try {
       await connectDB();
-      const data = await Donthuoc.findByIdAndUpdate(ID,{ $set: { TrangThai: true, Id_NguoiPhatThuoc: Id_NguoiPhatThuoc}},{ new: true });
+      const data = await Donthuoc.findByIdAndUpdate(ID,{ $set: { TrangThai: 'DaPhatThuoc', Id_NguoiPhatThuoc: Id_NguoiPhatThuoc}},{ new: true });
       Callback(null, data);
     } catch (error){
       Callback(error)
