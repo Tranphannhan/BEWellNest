@@ -93,42 +93,53 @@ class Database_Yeu_Cau_Xet_Nghiem {
 
 
 
-    Select_Check_Status_Yeucauxetnghiem_M = async (Id_YeuCauXetNghiem , Callback) => {
+    Select_Check_Status_Yeucauxetnghiem_M = async (Id_PhieuKhamBenh , Callback) => {
         try {
             await connectDB();
-            const Data_YeuCauXetNghiem = await Yeucauxetnghiem.find({_id : Id_YeuCauXetNghiem}).populate({
-                path:'Id_LoaiXetNghiem'
-            })
+            const Data_YeuCauXetNghiem = await Yeucauxetnghiem.find({Id_PhieuKhamBenh : Id_PhieuKhamBenh, TrangThaiThanhToan: false, TrangThaiHoatDong:true})
             Callback(null, Data_YeuCauXetNghiem);
         } catch (error){
             Callback(error);
         }
     } 
 
-    PaymentConfirmation_M = async (id, nextSTT, Callback) => {
-        try {
-          await connectDB();
-          const Data_YeuCauXetNghiem = await Yeucauxetnghiem.findByIdAndUpdate(
-            id, // ✅ truyền trực tiếp id
+    PaymentConfirmation_M = async (arrID, nextSTT, Callback) => {
+    try {
+        await connectDB();
+
+        const updatePromises = arrID.map(id =>
+        Yeucauxetnghiem.findByIdAndUpdate(
+            id,
             { $set: { TrangThaiThanhToan: true, STT: nextSTT } },
             { new: true }
-          ).populate([
-                {
-            path:"Id_LoaiXetNghiem"
-            },
-            {path:"Id_PhieuKhamBenh",
-                select:'TrangThaiThanhToan',
-                populate:{
-                    path:"Id_TheKhamBenh",
-                    select:"HoVaTen"
-                }
+        ).populate([
+            { path: "Id_LoaiXetNghiem" },
+            {
+            path: "Id_PhieuKhamBenh",
+            select: "TrangThaiThanhToan",
+            populate: {
+                path: "Id_TheKhamBenh",
+                select: "HoVaTen"
             }
-          ]);
-          Callback(null, Data_YeuCauXetNghiem);
-        } catch (error) {
-          Callback(error); 
+            }
+        ])
+        );
+
+        const results = await Promise.all(updatePromises);
+
+        // Kiểm tra nếu có phần tử nào null (tức là cập nhật thất bại do không tìm thấy id)
+        const hasError = results.some(item => item === null);
+
+        if (hasError) {
+        return Callback("Thanh toán thất bại");
         }
-      };
+
+        return Callback(null, results); // tất cả cập nhật thành công
+    } catch (error) {
+        return Callback("Thanh toán thất bại");
+    }
+    };
+
       
 
 

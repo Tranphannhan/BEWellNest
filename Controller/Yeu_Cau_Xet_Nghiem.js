@@ -34,22 +34,25 @@ class Yeucauxetnghiem_Controler {
 
 
   PaymentConfirmation = (req, res, next) => {
-    const Id_YeuCauXetNghiem = req.params.ID_YeuCauXetNghiem;
-    Connect_Data_Model.Select_Check_Status_Yeucauxetnghiem_M ( Id_YeuCauXetNghiem , (error, result) => {
+    const Id_PhieuKhamBenh = req.query.Id_PhieuKhamBenh;
+    if(!Id_PhieuKhamBenh) return res.status(404).json({ message: "Không có Id_PhieuKhamBenh" });
+    Connect_Data_Model.Select_Check_Status_Yeucauxetnghiem_M ( Id_PhieuKhamBenh , (error, result) => {
       if (error) return next(error);
       if (!result || result.length === 0) {
-        return res.status(404).json({ message: "Không tìm thấy Yêu cầu xét nghiệm" });
+        return res.status(404).json({ message: "không có yêu cầu xét nghiệm cần thanh toán" });
       }
         
-      if(result[0].TrangThaiThanhToan === true){
+      if (result.length > 0 && result.every(item => item.TrangThaiThanhToan === true)) {
         return res.status(200).json({
-          message: "Yêu cầu xét nghiệm đã được thanh toán trước đó"
-        })
+          message: "Tất cả yêu cầu xét nghiệm đã được thanh toán trước đó"
+        });
       }
       
       else{
-        Connect_Data_Model.GetNextSTT_M(result[0].Ngay,result[0].Id_LoaiXetNghiem?.Id_PhongThietBi,(error,nextSTT)=>{
-          Connect_Data_Model.PaymentConfirmation_M(Id_YeuCauXetNghiem,nextSTT,(error, result)=>{
+        const listId = result.map(item => item._id);
+        // Connect_Data_Model.GetNextSTT_M(result[0].Ngay,result[0].Id_LoaiXetNghiem?.Id_PhongThietBi,(error,nextSTT)=>{
+          const nextSTT = 999
+          Connect_Data_Model.PaymentConfirmation_M(listId,nextSTT,(error, result)=>{
             if (error) return next(error);
             return res.status(200).json({
               message: "Xác nhận thanh toán yêu cầu xét nghiệm thành công",
@@ -58,13 +61,9 @@ class Yeucauxetnghiem_Controler {
 
 
           })
-        })
+        // })
       }
     });
-
-
-
-
   }
 
 
