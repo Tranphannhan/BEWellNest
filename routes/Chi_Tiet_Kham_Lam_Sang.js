@@ -8,7 +8,7 @@ router.get ('/LayTheoPhieuKhamBenh' , Chitietkhambenh.LayTheoPhieuKhamBenh);
 router.get ('/KiemTraCoChiTietKhamLamSang' , Chitietkhambenh.KiemTraCoChiTietKhamLamSang);
 router.post('/Add', Chitietkhambenh.add_Chitietkhambenh);
 
-router.delete('/Delete/:ID/:ID_Khamlamsang', Chitietkhambenh.Delete_Chitietkhambenh);
-router.put('/Upload/:ID/:ID_Khamlamsang', Chitietkhambenh.Update_Chitietkhambenh);
+router.delete('/Delete/:ID', Chitietkhambenh.Delete_Chitietkhambenh);
+router.patch('/Update/:ID', Chitietkhambenh.Update_Chitietkhambenh);
 // router.get ('/LayTheoDonThuoc/:ID' , Chitietkhambenh.Detail_Donthuoc);
 module.exports = router;

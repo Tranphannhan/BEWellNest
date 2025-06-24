@@ -76,44 +76,67 @@ LayTheoPhieuKhamBenh_M = async (Id_PhieuKhamBenh, Callback) => {
   
 
 
-    // Đăng sửa tại chỗ này ... 
-    Upload_Chitietkhambenh__M = async (ID , _id , Data , Callback) => {
-        try {
-            await connectDB();
-            const Result_Id_PhieuKhamBenh =  await Kham_Lam_Sang.find({_id }).select('Id_PhieuKhamBenh');
-            if (!Result_Id_PhieuKhamBenh[0].Id_PhieuKhamBenh) return Callback (null , 'x');
-            const Result_Static__Phieukhambenh = await Phieu_Kham_Benh.find ({_id : Result_Id_PhieuKhamBenh[0].Id_PhieuKhamBenh})
-                .select('TrangThaiThanhToan');
-                
-            // Upload
-            if (Result_Static__Phieukhambenh[0].TrangThaiThanhToan) return Callback (null , 'Phiếu khám bệnh đã được khám bạn không được phép sửa');
-            const Upload = await Chitietkhamlamsang.findByIdAndUpdate(ID , Data, { new: true });
-            Callback (null , Upload);
-        } catch (error) {
-            Callback(error);
+Upload_Chitietkhambenh__M = async (ID, Data, Callback) => {
+    try {
+        await connectDB();
+
+        // Bước 1: Lấy chi tiết khám lâm sàng hiện tại để lấy Id_KhamLamSang
+        const chitiet = await Chitietkhamlamsang.findById(ID).select('Id_KhamLamSang');
+        if (!chitiet) {
+            return Callback(new Error('Không tìm thấy chi tiết khám lâm sàng.'));
         }
+
+        // Bước 2: Kiểm tra trạng thái hoàn thành của phiếu Kham_Lam_Sang
+        const khamLamSang = await Kham_Lam_Sang.findById(chitiet.Id_KhamLamSang).select('TrangThaiHoanThanh');
+        if (!khamLamSang) {
+            return Callback(new Error('Không tìm thấy phiếu khám lâm sàng.'));
+        }
+
+        // Nếu đã hoàn thành thì không cho phép sửa
+        if (khamLamSang.TrangThaiHoanThanh === true) {
+            return Callback(new Error('Bạn không có quyền sửa khi phiếu khám đã hoàn thành.'));
+        }
+
+        // Bước 3: Cho phép sửa nếu chưa hoàn thành
+        const Upload = await Chitietkhamlamsang.findByIdAndUpdate(ID, Data, { new: true });
+        Callback(null, Upload);
+    } catch (error) {
+        Callback(error);
     }
+};
+
   
 
 
-    Delete_Chitietkhambenh__M =  async (ID , _id , Callback) => {
-       try {
-            await connectDB();
-            const Result_Id_PhieuKhamBenh =  await Kham_Lam_Sang.find({_id }).select('Id_PhieuKhamBenh');
-            if (!Result_Id_PhieuKhamBenh[0].Id_PhieuKhamBenh) return Callback (null , 'x');
-            const Result_Static__Phieukhambenh = await Phieu_Kham_Benh.find ({_id : Result_Id_PhieuKhamBenh[0].Id_PhieuKhamBenh})
-                .select('TrangThaiThanhToan');
-                
-            // Upload
-            if (Result_Static__Phieukhambenh[0].TrangThaiThanhToan) return Callback (null , 'Phiếu khám bệnh đã được khám bạn không được phép xóa');
-            const Result = await Chitietkhamlamsang.findByIdAndDelete (ID);
-            if (!Result) return Callback (null , "Xóa chi tiết phiếu khám bệnh thất bại");
-            Callback (null , "Xóa chi tiết phiếu khám bệnh thành công");
+Delete_Chitietkhambenh__M = async ( _id, Callback) => {
+  try {
+    await connectDB();
 
-        } catch (error) {
-            Callback(error);
-        }
+    // Bước 1: Tìm chi tiết khám lâm sàng để lấy Id_KhamLamSang
+    const chitiet = await Chitietkhamlamsang.findById(_id).select('Id_KhamLamSang');
+    if (!chitiet) {
+      return Callback(new Error('Không tìm thấy chi tiết khám lâm sàng.'));
     }
+
+    // Bước 2: Tìm phiếu khám lâm sàng từ Id_KhamLamSang
+    const kham = await Kham_Lam_Sang.findById(chitiet.Id_KhamLamSang).select('TrangThaiHoanThanh');
+    if (!kham) {
+      return Callback(new Error('Không tìm thấy phiếu khám lâm sàng.'));
+    }
+
+    // Bước 3: Nếu đã hoàn thành thì không được xóa
+    if (kham.TrangThaiHoanThanh === true) {
+      return Callback(new Error('Bạn không có quyền xóa khi phiếu khám đã hoàn thành.'));
+    }
+
+    // Bước 4: Tiến hành xóa
+    const Deleted = await Chitietkhamlamsang.findByIdAndDelete(_id);
+    Callback(null, Deleted);
+  } catch (error) {
+    Callback(error);
+  }
+};
+
 
 
 

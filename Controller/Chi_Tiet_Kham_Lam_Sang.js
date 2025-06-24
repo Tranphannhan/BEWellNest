@@ -59,29 +59,29 @@ class Chitiet_Khamkhamlamsang_Controler {
 
 
   Update_Chitietkhambenh = (req, res, next) => {
-    const { ID , ID_Khamlamsang } = req.params;
-    if (!ID || !ID_Khamlamsang ) return res.status(500).json({ message: "Thiếu ID để sửa ca khám" }); 
+    const { ID  } = req.params;
+    if (!ID  ) return res.status(500).json({ message: "Thiếu ID" }); 
     const Data = {
       TrieuChung: req.body.TrieuChung?.trim(),
       ChuanDoanSoBo: req.body.ChuanDoanSoBo?.trim()
     }
 
-    Connect_Data_Model.Upload_Chitietkhambenh__M (ID , ID_Khamlamsang  , Data , (error, Result) => {
+    Connect_Data_Model.Upload_Chitietkhambenh__M (ID , Data , (error, Result) => {
       if (error) return next (error);
-      if (!Result) return res.status(404).json({ message: 'Không tìm thấy '}); 
-      return res.status(404).json({ message: Result}); 
+      if (!Result) return res.status(404).json({ message: 'Sửa thất bại '}); 
+      return res.status(200).json({ message: Result}); 
     });
   };
 
   
 
   Delete_Chitietkhambenh = (req , res , next) => {
-    const { ID , ID_Khamlamsang } = req.params;
-    if (!ID || !ID_Khamlamsang ) return res.status(500).json({ message: "Thiếu ID để xóa ca khám" }); 
+    const { ID  } = req.params;
+    if (!ID  ) return res.status(500).json({ message: "Thiếu ID để xóa" }); 
 
-    Connect_Data_Model.Delete_Chitietkhambenh__M (ID , ID_Khamlamsang  , (error, Result) => {
+    Connect_Data_Model.Delete_Chitietkhambenh__M (ID , (error, Result) => {
       if (error) return next (error);
-      return res.status(404).json({ message: Result}); 
+      return res.status(200).json({ message: 'Xóa thành công', dataDelete:Result}); 
     });
 
   }
