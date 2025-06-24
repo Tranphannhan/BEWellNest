@@ -70,7 +70,7 @@ class Donthuoc_Controler {
     const Date = req.query.date;
     Connect_Data_Model.Select_Status_Donthuoc__M (Date , (error , result) => {
       if (error) return next (error);
-      if (result.length === 0) return res.status(200).json ({message : `Trạng thái đã phát hết thuốc cho bệnh nhân ngày : ${Date}`});
+      if (result.length === 0) return res.status(200).json ({message : `Không có đơn thuốc cần phát`});
       res.status(200).json ({
         message : `Số lượng bênh nhận chưa được phát thuốc ngày : ${Date} là : ${result.length}`,
         data : result

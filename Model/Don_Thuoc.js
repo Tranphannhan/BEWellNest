@@ -192,29 +192,24 @@ Detail__M = async (_id, Callback) => {
         const KQ_Select2 = await Donthuoc.find ({
           Id_PhieuKhamBenh :  Arr_ID,
           TrangThaiThanhToan : true,
-          TrangThai : false
+          TrangThai : 'DaXacNhan'
         }).populate({
             path: 'Id_PhieuKhamBenh',
-            select:'Ngay',
-            populate:[
-                {
-                  path: 'Id_TheKhamBenh',
-                  select: 'HoVaTen SoDienThoai'
-                },
-                {
-                  path: 'Id_CaKham',
-                  select:'TenCa',
-                  populate:{
-                    path:'Id_BacSi',
-                    select:'TenBacSi'
-                  }
-                }
+            select: 'Ngay',
+            populate: [
+              {
+                path: 'Id_TheKhamBenh'
+              },
+              {
+                path: 'Id_Bacsi',
+                select: 'TenBacSi'
+              }
             ]
-          }).skip(skip).limit(limit)
+    }).skip(skip).limit(limit)
         const total = await Donthuoc.countDocuments({
           Id_PhieuKhamBenh :  Arr_ID,
           TrangThaiThanhToan : true,
-          TrangThai : false
+          TrangThai : 'DaXacNhan'
         })
         Callback (null , {totalItems:total, currentPage: page, totalPages: Math.ceil(total/limit),data:KQ_Select2});
       } catch (error){
