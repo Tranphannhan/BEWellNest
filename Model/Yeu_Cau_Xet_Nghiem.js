@@ -103,42 +103,50 @@ class Database_Yeu_Cau_Xet_Nghiem {
         }
     } 
 
-    PaymentConfirmation_M = async (arrID, nextSTT, Callback) => {
+   PaymentConfirmation_M = async (arrID, Callback) => {
     try {
         await connectDB();
 
-        const updatePromises = arrID.map(id =>
-        Yeucauxetnghiem.findByIdAndUpdate(
-            id,
-            { $set: { TrangThaiThanhToan: true, STT: nextSTT } },
-            { new: true }
-        ).populate([
-            { path: "Id_LoaiXetNghiem" },
-            {
-            path: "Id_PhieuKhamBenh",
-            select: "TrangThaiThanhToan",
-            populate: {
-                path: "Id_TheKhamBenh",
-                select: "HoVaTen"
+        const results = [];
+
+        for (const id of arrID) {
+            const stt = await this.GetNextSTT_ByYeuCauId(id); // phải chờ STT mới nhất
+
+            const updated = await Yeucauxetnghiem.findByIdAndUpdate(
+                id,
+                {
+                    $set: {
+                        TrangThaiThanhToan: true,
+                        STT: stt,
+                    },
+                },
+                { new: true }
+            ).populate([
+                { path: "Id_LoaiXetNghiem" },
+                {
+                    path: "Id_PhieuKhamBenh",
+                    select: "TrangThaiThanhToan",
+                    populate: {
+                        path: "Id_TheKhamBenh",
+                        select: "HoVaTen"
+                    }
+                }
+            ]);
+
+            if (!updated) {
+                return Callback("Thanh toán thất bại");
             }
-            }
-        ])
-        );
 
-        const results = await Promise.all(updatePromises);
-
-        // Kiểm tra nếu có phần tử nào null (tức là cập nhật thất bại do không tìm thấy id)
-        const hasError = results.some(item => item === null);
-
-        if (hasError) {
-        return Callback("Thanh toán thất bại");
+            results.push(updated);
         }
 
-        return Callback(null, results); // tất cả cập nhật thành công
+        return Callback(null, results);
+
     } catch (error) {
         return Callback("Thanh toán thất bại");
     }
-    };
+};
+
 
       
 
@@ -210,34 +218,56 @@ Delete_Yeucauxetnghiem_M = async (id, Callback) => {
 
 
 
-GetNextSTT_M = async (ngay, Id_PhongThietBi, Callback) => {
-    try {
-        await connectDB();
+GetNextSTT_ByYeuCauId = async (idYeuCauXetNghiem) => {
+  try {
+    await connectDB();
 
-        // Bước 1: Lấy danh sách Id_LoaiXetNghiem theo Id_PhongThietBi
-        const dsLoaiXetNghiem = await Loaixetnghiem.find({ Id_PhongThietBi: Id_PhongThietBi }).select('_id');
-        const danhSachIdLoai = dsLoaiXetNghiem.map(item => item._id);
+    const yc = await Yeucauxetnghiem.findById(idYeuCauXetNghiem);
+    if (!yc) return;
 
-        // Bước 2: Tìm yêu cầu xét nghiệm theo ngày và danh sách Id_LoaiXetNghiem đó
-        const Yeu_Cau_Xet_Nghiem = await Yeucauxetnghiem.find({
-            Ngay: ngay,
-            Id_LoaiXetNghiem: { $in: danhSachIdLoai },
-            TrangThaiThanhToan: true,
-            TrangThaiHoatDong: true
-        }).sort({ STT: -1 }).limit(1);
+    const { Ngay: ngay, Id_LoaiXetNghiem: idLoaiXN, Id_PhieuKhamBenh: idPhieuKham } = yc;
 
-        // Bước 3: Trả về STT
-        if (Yeu_Cau_Xet_Nghiem.length === 0) {
-            Callback(null, "1");
-        } else {
-            const nextSTT = (parseInt(Yeu_Cau_Xet_Nghiem[0].STT) + 1).toString();
-            Callback(null, nextSTT);
-        }
+    const loaiXN = await Loaixetnghiem.findById(idLoaiXN);
+    if (!loaiXN) return;
 
-    } catch (error) {
-        Callback(error);
+    const idPhongThietBi = loaiXN.Id_PhongThietBi;
+
+    const dsLoaiCungPhong = await Loaixetnghiem.find({ Id_PhongThietBi: idPhongThietBi }).select('_id');
+    const danhSachIdLoai = dsLoaiCungPhong.map(item => item._id);
+
+    // ❗ CHỈ dùng lại STT nếu cùng phiếu khám + cùng phòng
+    const ycCungPhieuVaPhong = await Yeucauxetnghiem.findOne({
+      Id_PhieuKhamBenh: idPhieuKham,
+      Id_LoaiXetNghiem: { $in: danhSachIdLoai },
+      STT: { $gt: 0 }
+    });
+
+    if (ycCungPhieuVaPhong) {
+      return parseInt(ycCungPhieuVaPhong.STT);
     }
+
+    // Tìm STT lớn nhất trong ngày + cùng phòng
+    const ycCungPhongTrongNgay = await Yeucauxetnghiem.find({
+      Ngay: ngay,
+      Id_LoaiXetNghiem: { $in: danhSachIdLoai },
+      STT: { $ne: null },
+      TrangThaiThanhToan: true,
+      TrangThaiHoatDong: true,
+      TrangThai: false
+    }).sort({ STT: -1 }).limit(1);
+
+    if (ycCungPhongTrongNgay.length === 0) {
+      return 1;
+    } else {
+      const nextSTT = parseInt(ycCungPhongTrongNgay[0].STT) + 1;
+      return nextSTT;
+    }
+
+  } catch (error) {
+    throw new Error(error);
+  }
 }
+
 
 
     // Dùng để load dữ liệu cho mỗi phòng thiết bị khi đã thanh toán và có số thứ tự rồi mới load, đã sắp xếp

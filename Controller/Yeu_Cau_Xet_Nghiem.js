@@ -51,8 +51,7 @@ class Yeucauxetnghiem_Controler {
       else{
         const listId = result.map(item => item._id);
         // Connect_Data_Model.GetNextSTT_M(result[0].Ngay,result[0].Id_LoaiXetNghiem?.Id_PhongThietBi,(error,nextSTT)=>{
-          const nextSTT = 999
-          Connect_Data_Model.PaymentConfirmation_M(listId,nextSTT,(error, result)=>{
+          Connect_Data_Model.PaymentConfirmation_M(listId,(error, result)=>{
             if (error) return next(error);
             return res.status(200).json({
               message: "Xác nhận thanh toán yêu cầu xét nghiệm thành công",

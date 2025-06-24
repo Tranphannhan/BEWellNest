@@ -13,7 +13,7 @@ const Yeu_Cau_Xet_Nghiem_Schema = new mongoose.Schema({
     Gio:String,
     TrangThaiThanhToan : Boolean,  
     Ngay : String,   
-    STT : String,
+    STT : Number,
     // Trang thái đã xét nghiệm hay chưa (Không được sửa)
     TrangThai: Boolean,
     TrangThaiHoatDong : Boolean
