@@ -72,6 +72,7 @@ class Donthuoc_Chitiet_Controler {
     const { id } = req.params;
     const data = {
       NhacNho: req.body.NhacNho?.trim(),
+      SoLuong: req.body.SoLuong,
     };
 
       // ✅ Kiểm tra dữ liệu hợp lệ
