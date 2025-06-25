@@ -71,12 +71,11 @@ class Donthuoc_Chitiet_Controler {
   updateDonthuoc_Chitiet = (req, res, next) => {
     const { id } = req.params;
     const data = {
-      SoLuong: req.body.SoLuong?.trim(),
       NhacNho: req.body.NhacNho?.trim(),
     };
 
       // ✅ Kiểm tra dữ liệu hợp lệ
-    if (!data.Id_DonThuoc || !data.Id_Thuoc || !data.SoLuong || !data.DonVi || !data.NhacNho) {
+    if (!data.NhacNho) {
       return res.status(400).json({ message: "Thiếu dữ liệu cần thiết" }); // ✅ Kiểm tra dữ liệu hợp lệ
     }
 
