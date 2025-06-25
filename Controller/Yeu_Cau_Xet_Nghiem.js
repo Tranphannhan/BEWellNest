@@ -150,7 +150,7 @@ Add_Yeucauxetnghiem = (req, res, next) => {
       if (err) return res.status(500).json({ message: "Lỗi server", error: err });
 
       if (!result || result.length === 0) {
-        return res.status(404).json({ message: "Không tìm thấy yêu cầu nào phù hợp" });
+        return res.status(404).json({ message: "Không có yều cầu xét nghiệm" });
       }
 
       res.status(200).json(result);

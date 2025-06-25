@@ -271,55 +271,57 @@ GetNextSTT_ByYeuCauId = async (idYeuCauXetNghiem) => {
 
 
     // Dùng để load dữ liệu cho mỗi phòng thiết bị khi đã thanh toán và có số thứ tự rồi mới load, đã sắp xếp
-    Get_By_PTB_Date_M = async (page,limit,TrangThai,Id_PhongThietBi, ngay, Callback) => {
-        try {
-            await connectDB();
-            const dsLoaiXetNghiem = await Loaixetnghiem.find({ Id_PhongThietBi: Id_PhongThietBi }).select('_id');
-            const danhSachIdLoai = dsLoaiXetNghiem.map(item => item._id);
-            const skip = (page - 1)* limit;
-            const result = await Yeucauxetnghiem.find({
-                Id_LoaiXetNghiem: { $in: danhSachIdLoai },
-                Ngay: ngay,
-                TrangThai: TrangThai,
-                TrangThaiThanhToan:true
-            }).sort({ STT: 1 }).populate([
-  {
-    path: 'Id_PhieuKhamBenh',
-    select: 'Ngay',
-    populate: [
-      {
-        path: 'Id_TheKhamBenh',
-        select: 'HoVaTen SoDienThoai'
-      },
-      {
-        path: 'Id_CaKham',
-        select: 'TenCa',
-        populate:[
-            {
-            path: 'Id_BacSi',
-            select: 'TenBacSi'
-                },
-            {
-            path: 'Id_PhongKham',
-            select: 'SoPhongKham'
-                },
-        ] 
-      }
-    ]
-  }
-]).skip(skip).limit(limit);
+Get_By_PTB_Date_M = async (page, limit, TrangThai, Id_PhongThietBi, ngay, Callback) => {
+  try {
+    await connectDB();
 
-            const total = await Yeucauxetnghiem.countDocuments({
-                Id_PhongThietBi: Id_PhongThietBi,
-                Ngay: ngay,
-                TrangThai: TrangThai,
-                TrangThaiThanhToan:true
-            })
-            Callback(null, {totalItems:total, currentPage: page, totalPages: Math.ceil(total/limit),data:result});
-        } catch (error) {
-            Callback(error);
+    const dsLoaiXetNghiem = await Loaixetnghiem.find({ Id_PhongThietBi: Id_PhongThietBi }).select('_id');
+    const danhSachIdLoai = dsLoaiXetNghiem.map(item => item._id);
+
+    const allResults = await Yeucauxetnghiem.find({
+      Id_LoaiXetNghiem: { $in: danhSachIdLoai },
+      Ngay: ngay,
+      TrangThai: TrangThai,
+      TrangThaiThanhToan: true
+    })
+      .select('Ngay STT Id_PhieuKhamBenh')
+      .sort({ STT: 1 })
+      .populate([
+        {
+          path: 'Id_PhieuKhamBenh',
+          select: 'LyDoDenKham',
+          populate: [{ path: 'Id_TheKhamBenh' }]
         }
-    };
+      ]);
+
+    // Lọc bỏ các bản ghi trùng Id_PhieuKhamBenh
+    const uniqueByPhieu = [];
+    const seen = new Set();
+
+    for (const item of allResults) {
+      const id = item.Id_PhieuKhamBenh?._id?.toString();
+      if (id && !seen.has(id)) {
+        seen.add(id);
+        uniqueByPhieu.push(item);
+      }
+    }
+
+    // Phân trang sau khi lọc trùng
+    const skip = (page - 1) * limit;
+    const paginated = uniqueByPhieu.slice(skip, skip + limit);
+
+    Callback(null, {
+      totalItems: uniqueByPhieu.length,
+      currentPage: page,
+      totalPages: Math.ceil(uniqueByPhieu.length / limit),
+      data: paginated
+    });
+
+  } catch (error) {
+    Callback(error);
+  }
+};
+
 
 
     
