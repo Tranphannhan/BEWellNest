@@ -167,67 +167,76 @@ Update_SoLanKhongCoMat_M = async (id, Callback) => {
         }
     }
 
-    TimKiemBenhNhanBangSDTHoacIdTheKhamBenh__M = async (page, limit, Id_CaKham, Ngay, TrangThai, TrangThaiHoatDong, TrangThaiThanhToan, SoDienThoai, IdTheKhamBenh, Callback) => {
-    try {
-        await connectDB();
+TimKiemBenhNhanBangTenHoacSDT__M = async (
+  page,
+  limit,
+  ngay,
+  trangThai,
+  trangThaiHoatDong,
+  trangThaiThanhToan,
+  soDienThoai,
+  hoVaTen,
+  idBacSi,
+  callback
+) => {
+  try {
+    await connectDB();
 
-        const query = {
-            Ngay: Ngay,
-        };
+    const query = { Ngay: ngay };
 
-        if(TrangThai !== null && TrangThai !== undefined){
-            query.TrangThai = TrangThai
-        }
-
-        if(Id_CaKham !== null && Id_CaKham !== undefined){
-            query.Id_CaKham = Id_CaKham
-        }
-
-        if(TrangThaiThanhToan !== null && TrangThaiThanhToan !== undefined){
-            query.TrangThaiThanhToan = TrangThaiThanhToan
-        }
-
-        if (TrangThaiHoatDong !== null && TrangThaiHoatDong !== undefined) {
-            query.TrangThaiHoatDong = TrangThaiHoatDong;
-        }
-
-        // Trường hợp tìm bằng mã thẻ khám
-        if (IdTheKhamBenh) {
-            query.Id_TheKhamBenh = IdTheKhamBenh;
-        }
-
-        const skip = (page - 1) * limit;
-
-        // Nếu tìm theo số điện thoại, cần lọc sau khi populate
-        let Check_Donthuoc = await Phieu_Kham_Benh.find(query)
-            .populate({ path: "Id_TheKhamBenh" })
-            .sort({ STTKham: 1 })
-            .skip(skip)
-            .limit(limit)
-            .lean();
-
-        // Nếu có tìm theo số điện thoại thì lọc trong kết quả đã populate
-        if (SoDienThoai) {
-            Check_Donthuoc = Check_Donthuoc.filter(
-                item => item.Id_TheKhamBenh?.SoDienThoai?.includes(SoDienThoai)
-            );
-        }
-
-        // Đếm lại total nếu có lọc theo SDT
-        const total = SoDienThoai
-            ? Check_Donthuoc.length
-            : await Phieu_Kham_Benh.countDocuments(query);
-
-        Callback(null, {
-            totalItems: total,
-            currentPage: page,
-            totalPages: Math.ceil(total / limit),
-            data: Check_Donthuoc,
-        });
-    } catch (error) {
-        Callback(error);
+    if (trangThai !== null && trangThai !== undefined) {
+      query.TrangThai = trangThai;
     }
-}
+
+    if (trangThaiThanhToan !== null && trangThaiThanhToan !== undefined) {
+      query.TrangThaiThanhToan = trangThaiThanhToan;
+    }
+
+    if (trangThaiHoatDong !== null && trangThaiHoatDong !== undefined) {
+      query.TrangThaiHoatDong = trangThaiHoatDong;
+    }
+
+    if (idBacSi !== null && idBacSi !== undefined) {
+      query.Id_Bacsi = idBacSi;
+    }
+
+    const skip = (page - 1) * limit;
+
+    let danhSachPhieuKham = await Phieu_Kham_Benh.find(query)
+      .populate({ path: "Id_TheKhamBenh" }) // chứa HoVaTen, SoDienThoai
+      .sort({ STTKham: 1 })
+      .lean();
+
+    // Lọc theo hoVaTen và soDienThoai
+    if (soDienThoai || hoVaTen) {
+      danhSachPhieuKham = danhSachPhieuKham.filter((item) => {
+        const thongTin = item.Id_TheKhamBenh || {};
+        const matchTen =
+          hoVaTen && thongTin.HoVaTen
+            ? thongTin.HoVaTen.toLowerCase().includes(hoVaTen.toLowerCase())
+            : true;
+        const matchSDT =
+          soDienThoai && thongTin.SoDienThoai
+            ? thongTin.SoDienThoai.includes(soDienThoai)
+            : true;
+        return matchTen && matchSDT;
+      });
+    }
+
+    const total = danhSachPhieuKham.length;
+    const paginatedData = danhSachPhieuKham.slice(skip, skip + limit);
+
+    callback(null, {
+      totalItems: total,
+      currentPage: page,
+      totalPages: Math.ceil(total / limit),
+      data: paginatedData,
+    });
+  } catch (error) {
+    callback(error);
+  }
+};
+
 
 
 

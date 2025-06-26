@@ -93,15 +93,22 @@ class Database_Yeu_Cau_Xet_Nghiem {
 
 
 
-    Select_Check_Status_Yeucauxetnghiem_M = async (Id_PhieuKhamBenh , Callback) => {
-        try {
-            await connectDB();
-            const Data_YeuCauXetNghiem = await Yeucauxetnghiem.find({Id_PhieuKhamBenh : Id_PhieuKhamBenh, TrangThaiThanhToan: false, TrangThaiHoatDong:true})
-            Callback(null, Data_YeuCauXetNghiem);
-        } catch (error){
-            Callback(error);
-        }
-    } 
+Select_Check_Status_Yeucauxetnghiem_M = async (_id, Callback) => {
+  try {
+    await connectDB();
+    const data = await Yeucauxetnghiem.find({
+      _id,
+      TrangThaiThanhToan: true,
+      TrangThaiHoatDong: true,
+      TrangThai: false,
+    });
+    Callback(null, data);
+  } catch (error) {
+    console.error("❌ Lỗi truy vấn trong Select_Check_Status_Yeucauxetnghiem_M:", error);
+    Callback(error);
+  }
+};
+
 
    PaymentConfirmation_M = async (arrID, Callback) => {
     try {
@@ -325,15 +332,40 @@ Get_By_PTB_Date_M = async (page, limit, TrangThai, Id_PhongThietBi, ngay, Callba
 
 
     
-    Upload_Status_handling__M = async (ID  , Callback) => {
-        try {
-            await connectDB();
-            const data = await Yeucauxetnghiem.findByIdAndUpdate(ID,{ $set: { TrangThai: true}},{ new: true });
-          Callback(null, data);
-        } catch (error){
-            Callback(error)
-        }
+Upload_Status_handling__M = async (ID, Callback) => {
+  try {
+    await connectDB();
+
+    // 1. Tìm phiếu yêu cầu xét nghiệm cần cập nhật
+    const record = await Yeucauxetnghiem.findOne({
+      _id: ID,
+      TrangThaiThanhToan: true,
+      TrangThaiHoatDong: true,
+    });
+
+    // 2. Không thỏa điều kiện thì trả về lỗi
+    if (!record) {
+      return Callback(new Error("Không thể cập nhật: Phiếu không tồn tại hoặc chưa được thanh toán / đã bị khóa."));
     }
+
+    // 3. Cập nhật TrangThai = true
+    const updated = await Yeucauxetnghiem.findByIdAndUpdate(
+      ID,
+      { $set: { TrangThai: true } },
+      { new: true }
+    );
+
+    if (!updated) {
+      return Callback(new Error("Cập nhật thất bại: không tìm thấy bản ghi."));
+    }
+
+    Callback(null, updated);
+  } catch (error) {
+    console.error("❌ Lỗi trong Upload_Status_handling__M:", error);
+    Callback(error);
+  }
+};
+
 
 
 TimKiemBenhNhanBangSDTHoacIdTheKhamBenh__M = async (

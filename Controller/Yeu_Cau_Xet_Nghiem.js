@@ -209,18 +209,17 @@ Add_Yeucauxetnghiem = (req, res, next) => {
 
 
   //    
-  Status_handling = (req , res , next) => {
-    const ID = req.params.ID;
-    Connect_Data_Model.Select_Check_Status_Yeucauxetnghiem_M (ID , (err , result) => {
-      if (err) return res.status(500).json({ message: "Lỗi server 1", error: err });
-      if (result[0].TrangThai) return res.status(200).json ({message : "Trạng thái đã được xác nhận trước đó" , error: err });
-        Connect_Data_Model.Upload_Status_handling__M (ID , (err , result) => {
-        if (err) return res.status(500).json({ message: "Lỗi server 2", error: err });
-          console.error("Lỗi cập nhật xét nghiệm: 2", err);
-          return res.status(200).json({ message: "Xác nhận trạng thái thành công" });
-        });
-      });
-  }
+Status_handling = (req, res, next) => {
+  const ID = req.params.ID;
+    Connect_Data_Model.Upload_Status_handling__M(ID, (err, resultUpdate) => {
+      if (err) {
+        console.error("Lỗi cập nhật xét nghiệm: 2", err);
+        return res.status(500).json({ message: "Lỗi server 2", error: err });
+      }
+
+      return res.status(200).json({ message: "Xác nhận trạng thái thành công", data: resultUpdate });
+    });
+};
 
 
 Filter_Yeucauxetnghiem_ByDate = async (req, res, next) => {
