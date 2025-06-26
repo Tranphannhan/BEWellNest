@@ -98,7 +98,7 @@ Select_Check_Status_Yeucauxetnghiem_M = async (_id, Callback) => {
     await connectDB();
     const data = await Yeucauxetnghiem.find({
       _id,
-      TrangThaiThanhToan: true,
+      TrangThaiThanhToan: false,
       TrangThaiHoatDong: true,
       TrangThai: false,
     });
@@ -470,6 +470,7 @@ Get_Not_yet_paid_Detail = async (page, limit, Ngay, TrangThaiThanhToan, Id_Phieu
         const query = {
         Ngay: Ngay,
         TrangThaiHoatDong: true,
+        TrangThai:false,
         Id_PhieuKhamBenh: Id_PhieuKhamBenh,
         };
 
@@ -501,12 +502,7 @@ Get_Not_yet_paid_Detail = async (page, limit, Ngay, TrangThaiThanhToan, Id_Phieu
         .limit(limit)
         .sort({ createdAt: 1 });
 
-        const total = await Yeucauxetnghiem.countDocuments({
-            TrangThaiThanhToan: TrangThaiThanhToan,
-            Ngay: Ngay,
-            TrangThaiHoatDong: true,
-            Id_PhieuKhamBenh: Id_PhieuKhamBenh
-        });
+        const total = await Yeucauxetnghiem.countDocuments(query);
 
         // 👉 Tính tổng tiền
         let TongTien = 0;

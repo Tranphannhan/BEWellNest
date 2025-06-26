@@ -40,17 +40,8 @@ class Yeucauxetnghiem_Controler {
       if (error) return next(error);
       if (!result || result.length === 0) {
         return res.status(404).json({ message: "không có yêu cầu xét nghiệm cần thanh toán" });
-      }
-        
-      if (result.length > 0 && result.every(item => item.TrangThaiThanhToan === true)) {
-        return res.status(200).json({
-          message: "Tất cả yêu cầu xét nghiệm đã được thanh toán trước đó"
-        });
-      }
-      
-      else{
+      }else{
         const listId = result.map(item => item._id);
-        // Connect_Data_Model.GetNextSTT_M(result[0].Ngay,result[0].Id_LoaiXetNghiem?.Id_PhongThietBi,(error,nextSTT)=>{
           Connect_Data_Model.PaymentConfirmation_M(listId,(error, result)=>{
             if (error) return next(error);
             return res.status(200).json({
@@ -60,7 +51,6 @@ class Yeucauxetnghiem_Controler {
 
 
           })
-        // })
       }
     });
   }
