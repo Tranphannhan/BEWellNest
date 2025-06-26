@@ -93,11 +93,11 @@ class Database_Yeu_Cau_Xet_Nghiem {
 
 
 
-Select_Check_Status_Yeucauxetnghiem_M = async (_id, Callback) => {
+Select_Check_Status_Yeucauxetnghiem_M = async (id, Callback) => {
   try {
     await connectDB();
     const data = await Yeucauxetnghiem.find({
-      _id,
+      Id_PhieuKhamBenh: id,
       TrangThaiThanhToan: false,
       TrangThaiHoatDong: true,
       TrangThai: false,
