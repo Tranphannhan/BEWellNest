@@ -507,7 +507,7 @@ Get_Not_yet_paid_Detail = async (page, limit, Ngay, TrangThaiThanhToan, Id_Phieu
         // 👉 Tính tổng tiền
         let TongTien = 0;
         for (const item of result) {
-            if(item.TrangThaiThanhToan === true){
+            if(item.TrangThaiThanhToan === false){
                 const tien = item?.Id_LoaiXetNghiem?.Id_GiaDichVu?.Giadichvu || 0;
                 TongTien += tien;
             }
