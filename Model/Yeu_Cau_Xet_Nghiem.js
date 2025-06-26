@@ -466,13 +466,19 @@ Get_Not_yet_paid_Detail = async (page, limit, Ngay, TrangThaiThanhToan, Id_Phieu
     try {
         await connectDB();
         const skip = (page - 1) * limit;
+            // Tạo object query động
+        const query = {
+        Ngay: Ngay,
+        TrangThaiHoatDong: true,
+        Id_PhieuKhamBenh: Id_PhieuKhamBenh,
+        };
 
-        const result = await Yeucauxetnghiem.find({
-            TrangThaiThanhToan: TrangThaiThanhToan,
-            Ngay: Ngay,
-            TrangThaiHoatDong: true,
-            Id_PhieuKhamBenh: Id_PhieuKhamBenh
-        })
+        // 👉 Nếu có trạng thái thanh toán thì thêm vào query
+        if (TrangThaiThanhToan !== null && TrangThaiThanhToan !== undefined) {
+        query.TrangThaiThanhToan = TrangThaiThanhToan;
+        }
+
+        const result = await Yeucauxetnghiem.find(query)
         .populate([
             {
                 path: 'Id_PhieuKhamBenh',

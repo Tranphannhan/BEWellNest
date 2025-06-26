@@ -177,7 +177,7 @@ Add_Yeucauxetnghiem = (req, res, next) => {
     const ngayHienTai = new Date().toISOString().split('T')[0];
     const ngay = req.query.ngay || ngayHienTai;
     const Id_PhieuKhamBenh = req.query.Id_PhieuKhamBenh;
-    const TrangThaiThanhToan = req.query.TrangThaiThanhToan || false;
+    const TrangThaiThanhToan = req.query.TrangThaiThanhToan || null;
     const limit = parseInt (req.query.limit)||7;
     const page = parseInt (req.query.page)||1;
     if(!Id_PhieuKhamBenh) return res.status(500).json({massage:"Vui lòng truyền vào Id_PhieuKhamBenh"})
