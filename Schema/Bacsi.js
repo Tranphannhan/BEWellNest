@@ -19,6 +19,7 @@ const BacSiSchema = new mongoose.Schema({
     Matkhau : String,
     Image : String ,
     VaiTro : String,
+    SoCCCD: String,
     TrangThaiHoatDong : Boolean
 
 }, { collection: "Bac_Si" }); 

@@ -77,6 +77,7 @@ class Bacsi_Controler {
       SoDienThoai: req.body.SoDienThoai?.trim(),
       HocVi: req.body.HocVi?.trim(),
       NamSinh: req.body['NamSinh']?.trim() ? Number(req.body['NamSinh'].trim()) : null,
+      SoCCCD: req.body.SoCCCD?.trim(),
       Matkhau : Matkhau_Mahoa,
       Image : Image, 
       VaiTro : 'BacSi',
@@ -156,6 +157,7 @@ class Bacsi_Controler {
       SoDienThoai: req.body.SoDienThoai?.trim(),
       HocVi: req.body.HocVi?.trim(),
       NamSinh: req.body.NamSinh?.trim(),
+      SoCCCD: req.body.SoCCCD?.trim(),
       VaiTro: "BacSi",
       TrangThaiHoatDong: req.body.TrangThaiHoatDong,
     };
