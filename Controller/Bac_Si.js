@@ -134,43 +134,62 @@ class Bacsi_Controler {
 
  
   updateBacSi = async (req, res, next) => {
-    try {
-      const Image = req.file ?  `http://localhost:5000/image/${req.file.filename}` : null;
-      const Matkhau_Mahoa = await Connect_Handle_Password.hashPassword(req.body.Matkhau);
-      const { id } = req.params;
- 
-      let data = {
-        ID_Khoa : req.body.ID_Khoa?.trim(),
-        Id_PhongKham  : req.body.Id_PhongKham?.trim(),
-        TenBacSi: req.body.TenBacSi?.trim(),
-        GioiTinh: req.body.GioiTinh?.trim(),
-        SoDienThoai: req.body.SoDienThoai?.trim(),
-        HocVi: req.body.HocVi?.trim(),
-        NamSinh: req.body.Namsinh,
-        Matkhau : Matkhau_Mahoa,
-        Image : Image,
-        VaiTro : 'BacSi',
-        TrangThaiHoatDong : req.body.TrangThaiHoatDong?.trim(),
-      };
+  try {
+    const { id } = req.params;
 
-      if (!Image) {
-        delete data.Image;
+    // Xử lý ảnh nếu có upload
+    const Image = req.file
+      ? `http://localhost:5000/image/${req.file.filename}`
+      : null;
+
+    // Chỉ hash mật khẩu nếu có gửi lên
+    let Matkhau_Mahoa = null;
+    if (req.body.Matkhau && req.body.Matkhau.trim() !== "") {
+      Matkhau_Mahoa = await Connect_Handle_Password.hashPassword(req.body.Matkhau);
+    }
+
+    const data = {
+      ID_Khoa: req.body.ID_Khoa?.trim(),
+      Id_PhongKham: req.body.Id_PhongKham?.trim(),
+      TenBacSi: req.body.TenBacSi?.trim(),
+      GioiTinh: req.body.GioiTinh?.trim(),
+      SoDienThoai: req.body.SoDienThoai?.trim(),
+      HocVi: req.body.HocVi?.trim(),
+      NamSinh: req.body.NamSinh?.trim(),
+      VaiTro: "BacSi",
+      TrangThaiHoatDong: req.body.TrangThaiHoatDong,
+    };
+
+    if (Image) data.Image = Image;
+    if (Matkhau_Mahoa) data.Matkhau = Matkhau_Mahoa;
+
+    // Cập nhật vào DB
+    Connect_Data_Model.Update_Bacsi_M(id, data, (error, updatedBacSi) => {
+      if (error) {
+        return res.status(500).json({
+          message: "Lỗi khi cập nhật bác sĩ",
+          error,
+        });
       }
 
-
-      Connect_Data_Model.Update_Bacsi_M(id, data, (error, updatedBacSi) => {
-        if (error) return res.status(500).json({ message: 'Lỗi khi cập nhật bác sĩ', error });
-        if (!updatedBacSi) return res.status(404).json({ message: 'Không tìm thấy bác sĩ để cập nhật' });
-        return res.status(200).json({
-          message: 'Cập nhật bác sĩ thành công',
-          updatedBacSi
+      if (!updatedBacSi) {
+        return res.status(404).json({
+          message: "Không tìm thấy bác sĩ để cập nhật",
         });
-      });
+      }
 
-    } catch (err) {
-      res.status(500).json({ message: 'Lỗi server', error: err.message });
-    }
-  };
+      return res.status(200).json({
+        message: "Cập nhật bác sĩ thành công",
+        updatedBacSi,
+      });
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: "Lỗi server",
+      error: err.message,
+    });
+  }
+};
 
 
 
