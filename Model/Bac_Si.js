@@ -9,9 +9,14 @@ class Database_Bacsi {
     try {
       const skip = (page - 1)* limit
       await connectDB();
-      const Select_Bacsi = await Bac_Si.find({}).populate({
+      const Select_Bacsi = await Bac_Si.find({}).populate([
+        {
         path:"ID_Khoa"
-      }).skip(skip).limit(limit);
+      },  
+      {
+        path:"Id_PhongKham"
+      }
+      ]).skip(skip).limit(limit);
 
       const total = await Bac_Si.countDocuments()
 
