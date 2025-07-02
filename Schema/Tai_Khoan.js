@@ -8,9 +8,11 @@ const Tai_Khoan_Schema = new mongoose.Schema({
         },
     TenTaiKhoan : String,
     MatKhau : String,
+    GioiTinh:String,
     SoDienThoai : String,
     SoCCCD: String,
-    Image : String
+    Image : String,
+    TraiThaiHoatDong:Boolean
 
 }, { collection: "Tai_Khoan" }); 
 module.exports = mongoose.model("Tai_Khoan", Tai_Khoan_Schema);    

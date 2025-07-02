@@ -22,6 +22,8 @@ router.get ('/LayTheoPhieuKhamBenh/:ID' , Handle_Yeucauxetnghiem.GET_LayTheoPhie
 router.patch ('/ThayDoiTrangThaiHoatDong/:ID' , Handle_Yeucauxetnghiem.Boquatrangthaihoatdong);
 router.get ('/TimKiemTheoSDTHoacIdPhieuKhamBenh/Pagination', Handle_Yeucauxetnghiem.TimKiemBenhNhanBangSDTHoacIdTheKhamBenh);
 
+// thay đổi bỏ qua
+router.patch ('/ThayDoiBoQua' , Handle_Yeucauxetnghiem.Update_BoQua_Yeucauxetnghiem);
 // Thống kê doanh thu
 router.get('/filter-by-date', Handle_Yeucauxetnghiem.Filter_Yeucauxetnghiem_ByDate);
 

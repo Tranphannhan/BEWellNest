@@ -55,7 +55,9 @@ class Tai_Khoan_Controler {
             MatKhau: this.Password,
             SoDienThoai: req.body.SoDienThoai.trim(),
             SoCCCD: req.body.SoCCCD.trim(),
-            Image : `http://localhost:5000/image/${this.Image}`
+            GioiTinh: req.body.GioiTinh.trim(),
+            Image : `http://localhost:5000/image/${this.Image}`,
+            TraiThaiHoatDong:true,
         };
 
 

@@ -90,6 +90,21 @@ class Database_Yeu_Cau_Xet_Nghiem {
     }
 
 
+    Update_BoQua_Yeucauxetnghiem_M = async (id, newValue, Callback) => {
+  try {
+    await connectDB();
+    const result = await Yeucauxetnghiem.findByIdAndUpdate(
+      id,
+      { BoQua: newValue },
+      { new: true }
+    );
+
+    if (!result) return Callback(new Error('Không tìm thấy yêu cầu xét nghiệm'));
+    Callback(null, result);
+  } catch (error) {
+    Callback(error);
+  }
+};
 
 
 
@@ -278,9 +293,13 @@ GetNextSTT_ByYeuCauId = async (idYeuCauXetNghiem) => {
 
 
     // Dùng để load dữ liệu cho mỗi phòng thiết bị khi đã thanh toán và có số thứ tự rồi mới load, đã sắp xếp
-Get_By_PTB_Date_M = async (page, limit, TrangThai, Id_PhongThietBi, ngay, Callback) => {
+Get_By_PTB_Date_M = async (page, limit, TrangThai, BoQua, Id_PhongThietBi, ngay, Callback) => {
   try {
     await connectDB();
+    const queryBoQua = {};
+    if(BoQua !== null){
+        queryBoQua.BoQua = BoQua
+    }
 
     const dsLoaiXetNghiem = await Loaixetnghiem.find({ Id_PhongThietBi: Id_PhongThietBi }).select('_id');
     const danhSachIdLoai = dsLoaiXetNghiem.map(item => item._id);
@@ -289,7 +308,8 @@ Get_By_PTB_Date_M = async (page, limit, TrangThai, Id_PhongThietBi, ngay, Callba
       Id_LoaiXetNghiem: { $in: danhSachIdLoai },
       Ngay: ngay,
       TrangThai: TrangThai,
-      TrangThaiThanhToan: true
+      TrangThaiThanhToan: true,
+      ...queryBoQua
     })
       .select('Ngay STT Id_PhieuKhamBenh')
       .sort({ STT: 1 })
@@ -343,9 +363,10 @@ Upload_Status_handling__M = async (ID, Callback) => {
       TrangThaiHoatDong: true,
     });
 
+
     // 2. Không thỏa điều kiện thì trả về lỗi
     if (!record) {
-      return Callback(new Error("Không thể cập nhật: Phiếu không tồn tại hoặc chưa được thanh toán / đã bị khóa."));
+      Callback(null,{message:'Yêu cầu xét nghiệm đã được xác nhận trước đó'});
     }
 
     // 3. Cập nhật TrangThai = true
@@ -462,7 +483,7 @@ TimKiemBenhNhanBangSDTHoacIdTheKhamBenh__M = async (
 
 
   // lấy những yêu cầu xét nghiệm chưa thanh toán để load cho thu ngân xem
-Get_Not_yet_paid_Detail = async (page, limit, Ngay, TrangThaiThanhToan, Id_PhieuKhamBenh, Callback) => {
+Get_Not_yet_paid_Detail = async (page, limit, Ngay, TrangThaiThanhToan, TrangThai, Id_PhieuKhamBenh, Callback) => {
     try {
         await connectDB();
         const skip = (page - 1) * limit;
@@ -470,7 +491,6 @@ Get_Not_yet_paid_Detail = async (page, limit, Ngay, TrangThaiThanhToan, Id_Phieu
         const query = {
         Ngay: Ngay,
         TrangThaiHoatDong: true,
-        TrangThai:false,
         Id_PhieuKhamBenh: Id_PhieuKhamBenh,
         };
 
@@ -478,6 +498,12 @@ Get_Not_yet_paid_Detail = async (page, limit, Ngay, TrangThaiThanhToan, Id_Phieu
         if (TrangThaiThanhToan !== null && TrangThaiThanhToan !== undefined) {
         query.TrangThaiThanhToan = TrangThaiThanhToan;
         }
+
+                // 👉 Nếu có trạng thái thanh toán thì thêm vào query
+        if (TrangThai !== null && TrangThai !== undefined) {
+        query.TrangThai = TrangThai;
+        }
+
 
         const result = await Yeucauxetnghiem.find(query)
         .populate([
