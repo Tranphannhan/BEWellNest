@@ -75,8 +75,8 @@ class Tai_Khoan_Controler {
 
 
     Check_Login = async (req , res , next) => {
-        const Password_Login  = req.body.MatKhau.trim();
-        const SDT_Login  = req.body.SoDienThoai.trim();
+        const Password_Login  = req.body.MatKhau?.trim();
+        const SDT_Login  = req.body.SoDienThoai?.trim();
         const Id_LoaiTaiKhoan = req.params.Id_LoaiTaiKhoan;
         if (!Password_Login || !SDT_Login || !Id_LoaiTaiKhoan) return res.status(400).json ({message : "Đăng Nhập Tài Khoản Thất Bại"});
     

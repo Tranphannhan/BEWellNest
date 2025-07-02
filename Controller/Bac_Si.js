@@ -94,8 +94,8 @@ class Bacsi_Controler {
 
 
   Check_Login = async (req , res , next) => {
-    const Password_Login  = req.body.MatKhau.trim();
-    const SDT_Login  = req.body.SoDienThoai.trim();
+    const Password_Login  = req.body.MatKhau?.trim();
+    const SDT_Login  = req.body.SoDienThoai?.trim();
     if (!Password_Login || !SDT_Login) return res.status(400).json ({message : "Đăng Nhập Tài Khoản Thất Bại"});
 
     Connect_Data_Model.Check_Login__M  (SDT_Login , async (error , result) => {
