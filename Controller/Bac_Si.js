@@ -66,7 +66,7 @@ class Bacsi_Controler {
      
             
   add_Bacsi = async (req, res, next) => {
-    const Image = req.file ?  `http://localhost:5000/image/${req.file.filename}`  : 'http://localhost:5000/image/bacsi.jpg';
+    const Image = req.file ?  `${req.file.filename}`  : 'bacsi.jpg';
     const Matkhau_Mahoa = await Connect_Handle_Password.hashPassword(req.body.Matkhau);
 
     const data = {
@@ -140,7 +140,7 @@ class Bacsi_Controler {
 
     // Xử lý ảnh nếu có upload
     const Image = req.file
-      ? `http://localhost:5000/image/${req.file.filename}`
+      ? `${req.file.filename}`
       : null;
 
     // Chỉ hash mật khẩu nếu có gửi lên
