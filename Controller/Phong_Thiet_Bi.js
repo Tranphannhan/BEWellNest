@@ -28,7 +28,8 @@ class Phong_Thiet_Bi_Controler {
     const data = {
       TenPhongThietBi: req.body.TenPhongThietBi?.trim(),
       TenXetNghiem: req.body.TenXetNghiem?.trim(),
-      Image : `${Image}`
+      Image : `${Image}`,
+      TrangThaiHoatDong:true
     };
 
     if (!data.TenPhongThietBi || !data.Image) return res.status(400).json({ message: "Thiếu dữ liệu để thêm phòng thiết bị" });

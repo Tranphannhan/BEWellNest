@@ -36,7 +36,8 @@ class Phong_Kham_Controler {
   add_Phong_Kham = (req, res, next) => {
     const data = {
       Id_Khoa: req.body.Id_Khoa,
-      SoPhongKham: req.body.SoPhongKham?.trim()
+      SoPhongKham: req.body.SoPhongKham?.trim(),
+      TrangThaiHoatDong:true
     };
 
     if (!data.Id_Khoa || !data.SoPhongKham) {

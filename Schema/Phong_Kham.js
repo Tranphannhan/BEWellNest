@@ -8,6 +8,7 @@ const Phong_Kham_Schema = new mongoose.Schema({
                 },
     
     SoPhongKham : String,
+    TrangThaiHoatDong:Boolean,
 
 }, { collection: "Phong_Kham" }); 
 module.exports = mongoose.model("Phong_Kham", Phong_Kham_Schema);

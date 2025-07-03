@@ -262,29 +262,25 @@ Detail__M = async (_id, Callback) => {
         const KQ_Select2 = await Donthuoc.find ({
           Id_PhieuKhamBenh :  Arr_ID,
           TrangThaiThanhToan : true,
-          TrangThai : true
+          TrangThai : 'DaPhatThuoc'
         }).populate({
-            path: 'Id_PhieuKhamBenh',
-            select:'Ngay',
-            populate:[
-                {
-                  path: 'Id_TheKhamBenh',
-                  select: 'HoVaTen SoDienThoai'
-                },
-                {
-                  path: 'Id_CaKham',
-                  select:'TenCa',
-                  populate:{
-                    path:'Id_BacSi',
-                    select:'TenBacSi'
-                  }
-                }
-            ]
-          }).skip(skip).limit(limit)
+      path: 'Id_PhieuKhamBenh',
+      select: 'Ngay',
+      populate: [
+        {
+          path: 'Id_TheKhamBenh',
+          select: 'HoVaTen SoDienThoai'
+        },
+        {
+          path: 'Id_Bacsi',
+          select: 'TenBacSi'
+        }
+      ]
+    }).skip(skip).limit(limit)
         const total = await Donthuoc.countDocuments({
           Id_PhieuKhamBenh :  Arr_ID,
           TrangThaiThanhToan : true,
-          TrangThai : true
+          TrangThai : 'DaPhatThuoc'
         })
         Callback (null , {totalItems:total, currentPage: page, totalPages: Math.ceil(total/limit),data:KQ_Select2});
       } catch (error){
@@ -582,12 +578,15 @@ Get_Not_yet_paid = async (page, limit, ngay, TrangThaiThanhToan, Callback) => {
 };
 
 // Thống kê đơn thuốc 
-Filter_Donthuoc_ByDate_M = async (limit, page, { fromDate, toDate, year }) => {
+Filter_Donthuoc_ByDate_M = async (limit, page, all, { fromDate, toDate, year }) => {
   try {
     await connectDB();
     const skip = (page - 1) * limit;
-
-    let query = {TrangThaiThanhToan:true};
+    
+    let query = {};
+    if(all === false || all === 'false'){
+      query.TrangThaiThanhToan = true
+    }
 
     // Lọc theo khoảng ngày
     if (fromDate && toDate) {
