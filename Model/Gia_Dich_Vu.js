@@ -27,7 +27,6 @@ class Database_Dichvu {
     };
 
 
-
     Select_GiaKham__M = async (page, limit, Callback) => {
         const Loaigia = "GiaKham";
         try {

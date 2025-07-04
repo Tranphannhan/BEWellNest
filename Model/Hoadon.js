@@ -49,32 +49,36 @@ class Database_Hoadon {
             await connectDB();
             const skip = (page - 1) * limit;
             const condition = { LoaiHoaDon };
-
             const Select_Hoadon = await Hoadon.find(condition)
             .skip(skip)
             .limit(limit)
             .populate({
                 path: "Id_PhieuKhamBenh",
                 select: "Ngay",
-                populate: {
+                populate: [{
                 path: "Id_TheKhamBenh",
                 select: "HoVaTen"
-                }
+                } , {
+                    path: "Id_GiaDichVu",
+                    select : 'Giadichvu'
+                }]
             });
 
             const total = await Hoadon.countDocuments(condition);
-
             Callback(null, {
             totalItems: total,
             currentPage: page,
             totalPages: Math.ceil(total / limit),
             data: Select_Hoadon,
             });
-
         } catch (error) {
             Callback(error);
         }
     };
+
+
+
+    
 
 
 
