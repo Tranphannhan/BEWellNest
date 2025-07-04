@@ -635,11 +635,14 @@ Get_Not_yet_paid = async (page, limit, Ngay, TrangThaiThanhToan, Callback) => {
 
 
 
-Filter_Yeucauxetnghiem_ByDate_M = async (limit, page, { fromDate, toDate, year }) => {
+Filter_Yeucauxetnghiem_ByDate_M = async (limit, page,all, { fromDate, toDate, year }) => {
   try {
     await connectDB();
     const skip = (page - 1) * limit;
-    let query = { TrangThaiThanhToan: true };
+    let query = {};
+    if(all == false || all === 'false'){
+        query.TrangThaiThanhToan=true
+    }
 
     if (fromDate && toDate) {
       const start = new Date(fromDate);

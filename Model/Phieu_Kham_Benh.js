@@ -389,12 +389,15 @@ Add_Phieukhambenh_M = async (Data, Callback) => {
         }
     }
     
-    Filter_PhieuKhamBenh_ByDate_M = async (limit, page, { fromDate, toDate, year }) => {
+    Filter_PhieuKhamBenh_ByDate_M = async (limit, page,all, { fromDate, toDate, year }) => {
   try {
     await connectDB();
     const skip = (page - 1) * limit;
 
-    let query = {TrangThaiThanhToan:true}; // tùy chỉnh theo điều kiện lọc
+    let query = {}
+    if(all == false || all == 'false'){
+      query.TrangThaiThanhToan=true
+    } // tùy chỉnh theo điều kiện lọc
 
     // Nếu lọc theo khoảng ngày
     if (fromDate && toDate) {
