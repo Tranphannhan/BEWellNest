@@ -43,24 +43,42 @@ class Database_Hoadon {
     }
 
 
-
-    Select_LayTheoLoai__M = async ( LoaiHoaDon ,Callback) => {
+    
+    Select_LayTheoLoai__M = async (LoaiHoaDon, page, limit, Callback) => {
         try {
             await connectDB();
-            const Select_Hoadon = await Hoadon.find({LoaiHoaDon : LoaiHoaDon}).populate({
-                path:"Id_PhieuKhamBenh",
-                select:"Ngay",
-                populate:{
-                    path:"Id_TheKhamBenh",
-                    select:"HoVaTen"
-                }
-            })
+            const skip = (page - 1) * limit;
+            const condition = { LoaiHoaDon };
 
-            Callback (null , Select_Hoadon);
-        } catch (error){
+            const Select_Hoadon = await Hoadon.find(condition)
+            .skip(skip)
+            .limit(limit)
+            .populate({
+                path: "Id_PhieuKhamBenh",
+                select: "Ngay",
+                populate: {
+                path: "Id_TheKhamBenh",
+                select: "HoVaTen"
+                }
+            });
+
+            const total = await Hoadon.countDocuments(condition);
+
+            Callback(null, {
+            totalItems: total,
+            currentPage: page,
+            totalPages: Math.ceil(total / limit),
+            data: Select_Hoadon,
+            });
+
+        } catch (error) {
             Callback(error);
         }
-    }
+    };
+
+
+
+
 
    
     Detail__M = async (_id , Callback) => {
