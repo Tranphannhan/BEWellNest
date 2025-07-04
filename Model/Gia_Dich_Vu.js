@@ -3,15 +3,55 @@ const connectDB = require("../Model/Db");
 const Hoadon = require("../Schema/Gia_Dich_Vu"); 
 
 class Database_Dichvu {
-    Select_Giadichvu__M = async (Callback) => {
+  
+    Select_Giadichvu__M = async (page, limit, Callback) => {
+        const Loaigia = "GiaXetNghiem";
         try {
+            const skip = (page - 1) * limit;
             await connectDB();
-            const Select_Giadichvu = await Hoadon.find({});
-            Callback(null, Select_Giadichvu);
+            const condition = { Loaigia }; 
+
+            const Select_Giadichvu = await Hoadon.find(condition)
+                .skip(skip).limit(limit);
+            const total = await Hoadon.countDocuments(condition); 
+
+            Callback(null, {
+                totalItems: total,
+                currentPage: page,
+                totalPages: Math.ceil(total / limit),
+                data: Select_Giadichvu,
+            });
         } catch (error) {
             Callback(error);
-        }    
+        }
     };
+
+
+    Select_GiaKham__M = async (page, limit, Callback) => {
+        const Loaigia = "GiaKham";
+        try {
+            const skip = (page - 1) * limit;
+            await connectDB();
+            const condition = { Loaigia }; 
+
+            const Select_Giadichvu = await Hoadon.find(condition)
+                .skip(skip).limit(limit);
+            const total = await Hoadon.countDocuments(condition); 
+
+            Callback(null, {
+                totalItems: total,
+                currentPage: page,
+                totalPages: Math.ceil(total / limit),
+                data: Select_Giadichvu,
+            });
+        } catch (error) {
+            Callback(error);
+        }
+    };
+
+
+
+
 
 
     Add_Giadichvu__M = async (Data , Callback) => {

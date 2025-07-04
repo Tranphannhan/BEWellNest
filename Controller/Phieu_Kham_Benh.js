@@ -235,9 +235,10 @@ TimKiemBenhNhanBangTenHoacSDT = (req, res, next) => {
   const { fromDate, toDate, year } = req.query;
   const limit = parseInt(req.query.limit) || 10;
   const page = parseInt(req.query.page) || 1;
+  const all = req.query.all || false;
 
   try {
-    const result = await Connect_Data_Model.Filter_PhieuKhamBenh_ByDate_M(limit, page, { fromDate, toDate, year });
+    const result = await Connect_Data_Model.Filter_PhieuKhamBenh_ByDate_M(limit, page,all, { fromDate, toDate, year });
 
     if (!result || result.data.length < 1) {
       return res.status(404).json({ message: "Không tìm thấy phiếu khám bệnh theo thời gian." });

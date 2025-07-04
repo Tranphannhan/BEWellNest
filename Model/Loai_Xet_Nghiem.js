@@ -3,15 +3,28 @@ const connectDB = require("../Model/Db");
 const Loaixetnghiem = require("../Schema/Loai_Xet_Nghiem"); 
 
 class Database_Loaixetnghiem {
-    Select_Giadichvu__M = async (Callback) => {
+    Select_Loai_Xet_Nghiem__M = async (page,limit, Callback) => {
         try {
+            const skip = (page - 1) * limit;
             await connectDB();
-            const Select_Giadichvu = await Loaixetnghiem.find({});
-            Callback(null, Select_Giadichvu);
+            const Select_Giadichvu = await Loaixetnghiem.find({})
+            .populate ([ 
+                {path: 'Id_PhongThietBi',
+                    select: 'TenPhongThietBi'
+                } ,
+                {path: 'Id_GiaDichVu',
+                    select: 'Giadichvu'
+                }
+            ])
+            .skip(skip).limit(limit);
+            const total = await Loaixetnghiem.countDocuments({});
+
+            Callback(null, {totalItems:total, currentPage: page, totalPages: Math.ceil(total/limit),data:Select_Giadichvu});
         } catch (error) {
             Callback(error);
         }    
-    };
+    }; 
+
 
     LayTheoIdPhongThietBi_M = async (Id_PhongThietBi,Callback) => {
         try {

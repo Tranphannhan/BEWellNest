@@ -5,15 +5,19 @@ class Loaixetnghiem_Controler {
     Runviews = (req, res, next) => {
         res.status(200).json({ message: "Loading Thành Công" }); 
     };
-
+ 
     Select_LoaiXetNghiem = (req, res, next) => {
-        Connect_Data_Model.Select_Loai_Xet_Nghiem__M((error, result) => {
-        if (error) return next(error);
-        if (result.length === 0) return res.status(404).json({ message: "Không có Loai_Xet_Nghiem hệ thống" }); 
-        res.status(200).json(result);
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 7;
+
+        Connect_Data_Model.Select_Loai_Xet_Nghiem__M(page,limit, (error, result) => {
+            if (error) return next(error);
+            if (result.length === 0) return res.status(404).json({ message: "Không có Loai_Xet_Nghiem hệ thống" }); 
+            res.status(200).json(result);        
         });
-    };
-  
+    }; 
+
+
 
     ThayDoiTrangThaiHoatDong = (req , res , next) => {
         const Trangthai = req.query.TrangThaiHoatDong;

@@ -18,7 +18,7 @@ class Database_Bacsi {
       }
       ]).skip(skip).limit(limit);
 
-      const total = await Bac_Si.countDocuments()
+      const total = await Bac_Si.countDocuments({})
 
       Callback(null, {totalItems:total, currentPage: page, totalPages: Math.ceil(total/limit),data:Select_Bacsi});
     } catch (error) {

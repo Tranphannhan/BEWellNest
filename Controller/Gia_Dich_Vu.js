@@ -8,12 +8,28 @@ class Giadichvu_Controler {
    
 
     Select_Giadichvu = (req, res, next) => {
-        Connect_Data_Model.Select_Giadichvu__M((error, result) => {
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 7;
+
+        Connect_Data_Model.Select_Giadichvu__M(page , limit , (error, result) => {
         if (error) return next(error);
         if (result.length === 0) return res.status(404).json({ message: "Không có giá dịch vụ trên hệ thống" }); 
         res.status(200).json(result);
         });
     };
+
+
+     Select_GiaKham = (req, res, next) => {
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 7;
+
+        Connect_Data_Model.Select_GiaKham__M (page , limit , (error, result) => {
+        if (error) return next(error);
+        if (result.length === 0) return res.status(404).json({ message: "Không có giá dịch vụ trên hệ thống" }); 
+        res.status(200).json(result);
+        });
+    };
+
 
   
     Add_Giadichvu = (req, res, next) => {

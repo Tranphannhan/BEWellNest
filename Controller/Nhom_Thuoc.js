@@ -22,6 +22,7 @@ class Thuoc_Controler {
   Add_Nhomthuoc = (req, res, next) => {
     const Data_Add = {
       TenNhomThuoc: req.body.TenNhomThuoc.trim(),
+      TrangThaiHoatDong : true
     };
 
     if (!Data_Add) return res.status(400).json({ message: "Không có dữ liệu" });
@@ -31,12 +32,12 @@ class Thuoc_Controler {
     });
   };
 
-
-
+  
   Edit_Nhomthuoc = (req, res, next) => {
     const { ID } = req.params;
     const Data_Edit = {
       TenNhomThuoc: req.body.TenNhomThuoc.trim(),
+      TrangThaiHoatDong : req.body.TrangThaiHoatDong,
     };
 
     if (!Data_Edit) return res.status(400).json({ message: "Không có dữ liệu" });

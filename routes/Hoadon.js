@@ -11,4 +11,4 @@ router.put('/Edit/:ID', Handle_Hoadon.Upload_Hoadon);
 router.delete('/Delete/:ID', Handle_Hoadon.Delete_Hoadon);
 router.get ('/Detail/:ID' , Handle_Hoadon.Detail_Hoadon); 
 router.get ('/LayTheoPhieuKhamBenhLoaiHoaDon/:ID' ,Handle_Hoadon.LayTheoPhieuKhamBenhLoaiHoaDon);
-module.exports = router;    
+module.exports = router;     
