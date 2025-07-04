@@ -482,77 +482,83 @@ TimKiemBenhNhanBangSDTHoacIdTheKhamBenh__M = async (
 
 
 
-  // lấy những yêu cầu xét nghiệm chưa thanh toán để load cho thu ngân xem
-Get_Not_yet_paid_Detail = async (page, limit, Ngay, TrangThaiThanhToan, TrangThai, Id_PhieuKhamBenh, Callback) => {
-    try {
-        await connectDB();
-        const skip = (page - 1) * limit;
-            // Tạo object query động
-        const query = {
-        Ngay: Ngay,
-        TrangThaiHoatDong: true,
-        Id_PhieuKhamBenh: Id_PhieuKhamBenh,
-        };
+Get_Not_yet_paid_Detail = async (page, limit, Ngay, TrangThaiThanhToan, TrangThai, Id_PhieuKhamBenh, Id_PhongThietBi, Callback) => {
+  try {
+    await connectDB();
+    const skip = (page - 1) * limit;
 
-        // 👉 Nếu có trạng thái thanh toán thì thêm vào query
-        if (TrangThaiThanhToan !== null && TrangThaiThanhToan !== undefined) {
-        query.TrangThaiThanhToan = TrangThaiThanhToan;
-        }
+    const query = {
+      Ngay,
+      TrangThaiHoatDong: true,
+      Id_PhieuKhamBenh,
+    };
 
-                // 👉 Nếu có trạng thái thanh toán thì thêm vào query
-        if (TrangThai !== null && TrangThai !== undefined) {
-        query.TrangThai = TrangThai;
-        }
-
-
-        const result = await Yeucauxetnghiem.find(query)
-        .populate([
-            {
-                path: 'Id_PhieuKhamBenh',
-                select: 'Ngay',
-                populate: [
-                    { path: 'Id_TheKhamBenh' },
-                    { path: 'Id_Bacsi', select: 'TenBacSi' }
-                ]
-            },
-            {
-                path: 'Id_LoaiXetNghiem',
-                select: 'TenXetNghiem',
-                populate: [
-                    { path: 'Id_PhongThietBi', select: 'TenPhongThietBi' },
-                    { path: 'Id_GiaDichVu', select: 'Giadichvu' }
-                ]
-            }
-        ])
-        .skip(skip)
-        .limit(limit)
-        .sort({ createdAt: 1 });
-
-        const total = await Yeucauxetnghiem.countDocuments(query);
-
-        // 👉 Tính tổng tiền
-        let TongTien = 0;
-        for (const item of result) {
-            if(item.TrangThaiThanhToan === false){
-                const tien = item?.Id_LoaiXetNghiem?.Id_GiaDichVu?.Giadichvu || 0;
-                TongTien += tien;
-            }
-
-          
-        }
-
-        Callback(null, {
-            totalItems: total,
-            currentPage: page,
-            totalPages: Math.ceil(total / limit),
-            TongTien: TongTien, // ✅ Gửi thêm tổng tiền
-            data: result
-        });
-
-    } catch (error) {
-        Callback(error);
+    if (TrangThaiThanhToan !== null && TrangThaiThanhToan !== undefined) {
+      query.TrangThaiThanhToan = TrangThaiThanhToan;
     }
+
+    if (TrangThai !== null && TrangThai !== undefined) {
+      query.TrangThai = TrangThai;
+    }
+
+    // ❌ KHÔNG lọc theo Id_PhongThietBi ở đây vì nó nằm trong Id_LoaiXetNghiem
+    const allResults = await Yeucauxetnghiem.find(query)
+      .populate([
+        {
+          path: "Id_PhieuKhamBenh",
+          select: "Ngay LyDoDenKham",
+          populate: [
+            { path: "Id_TheKhamBenh" },
+            { path: "Id_Bacsi", select: "TenBacSi" },
+          ],
+        },
+        {
+          path: "Id_LoaiXetNghiem",
+          select: "TenXetNghiem",
+          populate: [
+            { path: "Id_PhongThietBi", select: "TenPhongThietBi _id" },
+            { path: "Id_GiaDichVu", select: "Giadichvu" },
+          ],
+        },
+      ])
+      .sort({ createdAt: 1 });
+
+    // 👉 Lọc theo phòng thiết bị nếu có
+    const filteredResults = Id_PhongThietBi
+      ? allResults.filter(
+          (item) =>
+            item?.Id_LoaiXetNghiem?.Id_PhongThietBi?._id?.toString() ===
+            Id_PhongThietBi
+        )
+      : allResults;
+
+    const total = filteredResults.length;
+
+    // 👉 Lấy phân trang
+    const paginatedResults = filteredResults.slice(skip, skip + limit);
+
+    // 👉 Tính tổng tiền
+    const TongTien = filteredResults.reduce((sum, item) => {
+      if (item.TrangThaiThanhToan === false) {
+        return (
+          sum + (item?.Id_LoaiXetNghiem?.Id_GiaDichVu?.Giadichvu || 0)
+        );
+      }
+      return sum;
+    }, 0);
+
+    Callback(null, {
+      totalItems: total,
+      currentPage: page,
+      totalPages: Math.ceil(total / limit),
+      TongTien,
+      data: paginatedResults,
+    });
+  } catch (error) {
+    Callback(error);
+  }
 };
+
 
 
 Get_Not_yet_paid = async (page, limit, Ngay, TrangThaiThanhToan, Callback) => {

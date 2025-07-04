@@ -171,10 +171,11 @@ Add_Yeucauxetnghiem = (req, res, next) => {
     const Id_PhieuKhamBenh = req.query.Id_PhieuKhamBenh;
     const TrangThaiThanhToan = req.query.TrangThaiThanhToan || null;
     const TrangThai = req.query.TrangThai || null;
+    const Id_PhongThietBi = req.query.Id_PhongThietBi || null
     const limit = parseInt (req.query.limit)||7;
     const page = parseInt (req.query.page)||1;
     if(!Id_PhieuKhamBenh) return res.status(500).json({massage:"Vui lòng truyền vào Id_PhieuKhamBenh"})
-    Connect_Data_Model.Get_Not_yet_paid_Detail(page, limit, ngay, TrangThaiThanhToan, TrangThai,Id_PhieuKhamBenh, (err,result)=>{
+    Connect_Data_Model.Get_Not_yet_paid_Detail(page, limit, ngay, TrangThaiThanhToan, TrangThai,Id_PhieuKhamBenh, Id_PhongThietBi, (err,result)=>{
       if (err) return res.status(500).json({ message: "Lỗi server", error: err });
       if (!result || result.length === 0) {
         return res.status(404).json({ message: "Không tìm thấy yêu cầu nào phù hợp" });
