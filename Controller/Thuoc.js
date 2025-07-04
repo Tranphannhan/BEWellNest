@@ -39,6 +39,7 @@ class Thuoc_Controler {
       TenThuoc: req.body.TenThuoc?.trim(),
       Gia : req.body.Gia,
       DonVi: req.body.DonVi?.trim(),
+      TrangThaiHoatDong : true,
     };
 
     if (!Data_Add) return res.status(400).json({ message: "Không có dữ liệu" });
@@ -55,6 +56,7 @@ class Thuoc_Controler {
       Id_NhomThuoc: req.body.Id_NhomThuoc.trim(),
       TenThuoc: req.body.TenThuoc.trim(),
       Gia : req.body.Gia,
+      TrangThaiHoatDong : req.body.TrangThaiHoatDong
     };
 
     if (!Data_Edit) return res.status(400).json({ message: "Không có dữ liệu" });

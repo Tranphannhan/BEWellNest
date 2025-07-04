@@ -12,4 +12,4 @@ router.delete('/Delete/:ID', Handle_Loaixetnghiem.Delete_LoaiXetNghiem);
 router.patch ('/ThayDoiTrangThaiHoatDong/:ID', Handle_Loaixetnghiem.ThayDoiTrangThaiHoatDong);
 router.get ('/LayTheoIdPhongThietBi/:ID' , Handle_Loaixetnghiem.LayTheoIdPhongThietBi);
 
-module.exports = router; 
+module.exports = router;  
