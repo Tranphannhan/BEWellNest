@@ -9,6 +9,7 @@ const Thuoc_Schema = new mongoose.Schema({
     DonVi: String,
     TenThuoc:String,
     Gia : Number,   
+    TrangThaiHoatDong : Boolean
 
 }, { collection: "Thuoc" }); 
 module.exports = mongoose.model("Thuoc", Thuoc_Schema);
