@@ -17,6 +17,19 @@ class Database_Taikhoan {
         }   
     };
 
+    Get_Tai_Khoan_ById_M = async (id, Callback) => {
+    try {
+        await connectDB();
+        const taiKhoan = await Taikhoan.findById(id).populate({
+            path: "Id_LoaiTaiKhoan"
+        });
+        Callback(null, taiKhoan);
+    } catch (error) {
+        Callback(error);
+    }
+};
+
+
     Get_ByLoai_M = async (limit , page , Id_Loai,Callback) => {
         try {
             await connectDB();

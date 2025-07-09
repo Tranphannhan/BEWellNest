@@ -23,6 +23,17 @@ class Database_Khoa {
       }
     };
 
+    Get_Khoa_ByID = async (id, Callback) => {
+  try {
+    await connectDB();
+    const foundKhoa = await Khoa.findById(id);
+    Callback(null, foundKhoa);
+  } catch (error) {
+    Callback(error);
+  }
+};
+
+
     // Thêm khoa
     Insert_Khoa_M = async (data, Callback) => {
       try {

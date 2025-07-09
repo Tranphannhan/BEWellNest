@@ -29,7 +29,16 @@ class Tai_Khoan_Controler {
         });
     };  
 
+        Get_Tai_Khoan_ById = (req, res, next) => {
+        this.ID = req.params.ID;
+        if (!this.ID) return res.status(400).json({ message: "Thiếu ID tài khoản" });
 
+        Connect_Data_Model.Get_Tai_Khoan_ById_M(this.ID, (Error, Result) => {
+            if (Error) return next(Error);
+            if (!Result) return res.status(404).json({ message: "Không tìm thấy tài khoản" });
+            res.status(200).json(Result);
+        });
+    }
 
     Get_ByLoai = (req, res, next) => {
         const Id_Loai = req.params.ID;
@@ -109,31 +118,60 @@ class Tai_Khoan_Controler {
 
       
 
-    Edit_Tai_Khoan = async (req, res, next) => {
-        this.Password = await Connect_Handle_Password.hashPassword(req.body.MatKhau.trim());
-        this.ID = req.params.ID;
-        this.Image =  req.file ? req.file.filename : false;
-        if (!this.Password || !this.ID) return res.status(400).json({ message: "Cập Nhật Tài Khoản Thất Bại" });
+ Edit_Tai_Khoan = async (req, res, next) => {
+        try {
+            this.ID = req.params.ID;
+            this.Image = req.file ? req.file.filename : false;
 
-        this.Data = {
-            Id_LoaiTaiKhoan: req.body.Id_LoaiTaiKhoan.trim(),
-            TenTaiKhoan: req.body.TenTaiKhoan.trim(),
-            MatKhau: this.Password,
-            SoDienThoai: req.body.SoDienThoai.trim(),
-            SoCCCD: req.body.SoCCCD.trim(),
-            Image : `http://localhost:5000/image/${this.Image}`
-        };
+            if (!this.ID) return res.status(400).json({ message: "Thiếu ID để cập nhật tài khoản" });
 
-        if (!this.Image){
-            delete this.Data.Image;
+            // Build dữ liệu cập nhật
+            this.Data = {
+                Id_LoaiTaiKhoan: req.body.Id_LoaiTaiKhoan,
+                TenTaiKhoan: req.body.TenTaiKhoan?.trim(),
+                SoDienThoai: req.body.SoDienThoai?.trim(),
+                SoCCCD: req.body.SoCCCD?.trim(),
+                GioiTinh: req.body.GioiTinh?.trim(),
+                TrangThaiHoatDong: req.body.TrangThaiHoatDong,
+            };
+
+            // Thêm Image nếu có upload
+            if (this.Image) {
+                this.Data.Image = `${this.Image}`;
+            }
+
+            // Chỉ hash & update mật khẩu nếu client có gửi MatKhau
+            if (req.body.MatKhau && req.body.MatKhau.trim() !== "") {
+                this.Password = await Connect_Handle_Password.hashPassword(req.body.MatKhau.trim());
+                this.Data.MatKhau = this.Password;
+            }
+
+            // Chỉ loại bỏ các field undefined hoặc null, nhưng giữ TrangThaiHoatDong
+            Object.keys(this.Data).forEach(key => {
+                if (this.Data[key] === undefined || this.Data[key] === null) {
+                    delete this.Data[key];
+                }
+            });
+
+            if (!this.Data || Object.keys(this.Data).length === 0) {
+                return res.status(400).json({ message: "Không có dữ liệu để cập nhật" });
+            }
+
+            Connect_Data_Model.Edit_Tai_Khoan_M(this.ID, this.Data, async (Error, Result) => {
+                if (Error) return next(Error);
+                // Lấy dữ liệu tài khoản sau khi cập nhật
+                const updatedAccount = await Connect_Data_Model.Get_Tai_Khoan_ById_M(this.ID, (err, result) => {
+                    if (err) return next(err);
+                    return result;
+                });
+                res.status(200).json({ message: "Cập Nhật Tài Khoản Thành Công", data: updatedAccount });
+            });
+
+        } catch (error) {
+            console.error("Lỗi Edit_Tai_Khoan:", error);
+            res.status(500).json({ message: "Có lỗi xảy ra khi cập nhật tài khoản" });
         }
-
-        if (!this.Data) return res.status(400).json({ message: "Không có dữ liệu" });
-        Connect_Data_Model.Edit_Tai_Khoan_M(this.ID, this.Data, (Error, Result) => {
-            if (Error) return next(Error);
-            res.status(200).json({ message: "Cập Nhật Tài Khoản Thành Công" }); 
-        });
-    }
+    };
 
 
 

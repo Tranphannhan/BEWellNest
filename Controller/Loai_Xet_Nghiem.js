@@ -56,21 +56,58 @@ class Loaixetnghiem_Controler {
         });
     };
     
+    Detail_LoaiXetNghiem = (req, res, next) => {
+    const { ID } = req.params;
+
+    Connect_Data_Model.Get_Detail_LoaiXetNghiem__M(ID, (error, result) => {
+        if (error) return next(error);
+        if (!result) return res.status(404).json({ message: "Không tìm thấy loại xét nghiệm" });
+        res.status(200).json({ message: "Lấy chi tiết loại xét nghiệm thành công", data: result });
+    });
+};
 
 
-    Upload_LoaiXetNghiem = (req, res, next) => {
-        const { ID } = req.params;
-        const data = {
-            Tendichvu: req.body.Tendichvu?.trim(),
-            Loaigia : req.body.Loaigia,
-            Giadichvu: req.body.Giadichvu
-        };
+Upload_LoaiXetNghiem = (req, res, next) => {
+    const { ID } = req.params;
 
-        Connect_Data_Model. Upload_Loai_Xet_Nghiem__M (ID , data, (error, result) => {
-            if (error) return res.status(500).json({ message: "Cập nhật Loai_Xet_Nghiem thất bại"});
-            res.status(201).json({ message: "cập nhật Loai_Xet_Nghiem thành công"}); 
-        });
+    // Lấy image mới nếu có
+    const GET_Image = req.file ? req.file.filename : undefined;
+
+    // Log thông tin request
+    console.log("======== UPDATE LOAI XET NGHIEM ========");
+    console.log("ID:", ID);
+    console.log("BODY:", req.body);
+    console.log("FILE:", req.file);
+    console.log("GET_Image:", GET_Image);
+
+    const data = {
+        Id_PhongThietBi: req.body.Id_PhongThietBi?.trim(),
+        Id_GiaDichVu : req.body.Id_GiaDichVu?.trim(),
+        MoTaXetNghiem : req.body.MoTaXetNghiem?.trim(),
+        TenXetNghiem : req.body.TenXetNghiem?.trim(),
+        TrangThaiHoatDong: req.body.TrangThaiHoatDong ?? true
     };
+
+    if (GET_Image) {
+        data.Image = GET_Image;
+    }
+
+    console.log("DATA SEND TO DB:", data);
+
+    Connect_Data_Model.Upload_Loai_Xet_Nghiem__M(ID, data, (error, result) => {
+        if (error) {
+            console.error("DB UPDATE ERROR:", error);
+            return res.status(500).json({ message: "Cập nhật Loai_Xet_Nghiem thất bại" });
+        }
+        if (!result) {
+            console.log("Không tìm thấy Loai_Xet_Nghiem để cập nhật");
+            return res.status(404).json({ message: "Không tìm thấy Loai_Xet_Nghiem để cập nhật" });
+        }
+        console.log("UPDATED DATA:", result);
+        res.status(200).json({ message: "Cập nhật Loai_Xet_Nghiem thành công", data: result });
+    });
+};
+
 
     
     Delete_LoaiXetNghiem = (req, res, next) => {

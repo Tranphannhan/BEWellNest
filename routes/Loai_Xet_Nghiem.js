@@ -7,7 +7,8 @@ const Upload  = require ('../Middleware/upload');
 
 router.get ('/' , Handle_Loaixetnghiem.Select_LoaiXetNghiem);
 router.post('/Add',  Upload.Upload_Image__.single("Image") , Handle_Loaixetnghiem.Add_LoaiXetNghiem);
-router.put('/Edit/:ID', Handle_Loaixetnghiem.Upload_LoaiXetNghiem);
+router.get('/Detail/:ID',Upload.Upload_Image__.single("Image"), Handle_Loaixetnghiem.Detail_LoaiXetNghiem);
+router.put('/Edit/:ID', Upload.Upload_Image__.single("Image"),Handle_Loaixetnghiem.Upload_LoaiXetNghiem);
 router.delete('/Delete/:ID', Handle_Loaixetnghiem.Delete_LoaiXetNghiem);
 router.patch ('/ThayDoiTrangThaiHoatDong/:ID', Handle_Loaixetnghiem.ThayDoiTrangThaiHoatDong);
 router.get ('/LayTheoIdPhongThietBi/:ID' , Handle_Loaixetnghiem.LayTheoIdPhongThietBi);

@@ -18,6 +18,28 @@ class Khoa_Controler {
     });
   };
   
+  getDetailKhoa = (req, res) => {
+  const { id } = req.params;
+  if (!id) {
+    return res.status(400).json({ message: "Thiếu ID để lấy chi tiết khoa" });
+  }
+
+  Connect_Data_Model.Get_Khoa_ByID(id, (error, foundKhoa) => {
+    if (error) {
+      return res.status(500).json({ message: 'Lỗi khi lấy chi tiết khoa', error });
+    }
+
+    if (!foundKhoa) {
+      return res.status(404).json({ message: 'Không tìm thấy khoa' });
+    }
+
+    return res.status(200).json({
+      message: 'Lấy chi tiết khoa thành công',
+      data: foundKhoa,
+    });
+  });
+};
+
   
   add_Khoa = (req, res, next) => {
     const data = {
@@ -78,30 +100,37 @@ class Khoa_Controler {
   };
 
   updateKhoa = (req, res) => {
-    const { id } = req.params;
-    const data = {
-      TenKhoa: req.body.TenKhoa?.trim(),
-    };
+  const { id } = req.params;
+  const data = {
+    TenKhoa: req.body.TenKhoa?.trim(),
+    TrangThaiHoatDong: req.body.TrangThaiHoatDong
+  };
 
-    if (!data.TenKhoa) {
-      return res.status(400).json({ message: "Tên khoa không được để trống" }); // ✅ Đã sửa thành chuẩn response JSON
+  if (!data.TenKhoa) {
+    return res.status(400).json({ message: "Tên khoa không được để trống" });
+  }
+
+  // Nếu không truyền TrangThaiHoatDong, thì không update field đó
+  if (typeof data.TrangThaiHoatDong === 'undefined') {
+    delete data.TrangThaiHoatDong;
+  }
+
+  Connect_Data_Model.Update_Khoa_M(id, data, (error, updatedKhoa) => {
+    if (error) {
+      return res.status(500).json({ message: 'Lỗi khi cập nhật khoa', error });
     }
 
-    Connect_Data_Model.Update_Khoa_M(id, data, (error, updatedKhoa) => {
-      if (error) {
-        return res.status(500).json({ message: 'Lỗi khi cập nhật khoa', error }); // ✅ Đã sửa thành chuẩn response JSON
-      }
+    if (!updatedKhoa) {
+      return res.status(404).json({ message: 'Không tìm thấy khoa để cập nhật' });
+    }
 
-      if (!updatedKhoa) {
-        return res.status(404).json({ message: 'Không tìm thấy khoa để cập nhật' }); // ✅ Đã sửa thành chuẩn response JSON
-      }
-
-      return res.status(200).json({
-        message: 'Cập nhật khoa thành công',
-        data: updatedKhoa, // ✅ Trả lại dữ liệu khoa đã cập nhật
-      });
+    return res.status(200).json({
+      message: 'Cập nhật khoa thành công',
+      data: updatedKhoa,
     });
-  };
+  });
+};
+
 }
 
 module.exports = Khoa_Controler;

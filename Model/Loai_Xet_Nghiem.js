@@ -44,6 +44,21 @@ class Database_Loaixetnghiem {
         }    
     };
 
+    Get_Detail_LoaiXetNghiem__M = async (id, Callback) => {
+    try {
+        await connectDB();
+        const Result = await Loaixetnghiem.findById(id)
+        .populate([
+            { path:"Id_GiaDichVu", select:"Giadichvu" },
+            { path:"Id_PhongThietBi", select:"TenPhongThietBi" }
+        ]);
+        Callback(null, Result);
+    } catch (error) {
+        Callback(error);
+    }
+};
+
+
     Add_Loai_Xet_Nghiem__M = async (Data , Callback) => {
         try {
             await connectDB();
