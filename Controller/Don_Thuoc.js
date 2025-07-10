@@ -208,20 +208,40 @@ class Donthuoc_Controler {
     })
   }  
 
-  TimKiemBenhNhanBangSDTHoacIdTheKhamBenh =  (req,res,next) =>{
-    const ngayHienTai = new Date().toISOString().split('T')[0];
+ TimKiemBenhNhanBangTenVaSDT = (req, res, next) => {
+  try {
+    const ngayHienTai = new Date().toISOString().split("T")[0];
     const Ngay = req.query.ngay || ngayHienTai;
     const TrangThai = req.query.TrangThai || null;
     const TrangThaiThanhToan = req.query.TrangThaiThanhToan || null;
-    const Id_TheKhamBenh = req.query.Id_TheKhamBenh || null;
+    const HoVaTen = req.query.HoVaTen || null;
     const SoDienThoai = req.query.SDT || null;
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 7;
-    Connect_Data_Model.TimKiemBenhNhanBangSDTHoacIdTheKhamBenh_M(page,limit,TrangThai, TrangThaiThanhToan, Ngay, Id_TheKhamBenh, SoDienThoai,(err , result)=>{
-      if (err) return res.status(500).json({ message: "Lỗi server", error: err });
-      res.status(200).json(result)
-    })
+
+    Connect_Data_Model.TimKiemBenhNhanBangTenVaSDT_M(
+      page,
+      limit,
+      TrangThai,
+      TrangThaiThanhToan,
+      Ngay,
+      HoVaTen,
+      SoDienThoai,
+      (err, result) => {
+        if (err) {
+          console.error("❌ Lỗi trong callback:", err);
+          return res.status(500).json({ message: "Lỗi server", error: err });
+        }
+        res.status(200).json(result);
+      }
+    );
+  } catch (e) {
+    console.error("❌ Lỗi ngoài callback:", e);
+    res.status(500).json({ message: "Lỗi server", error: e });
   }
+};
+
+
 
 ThayDoiTrangThai = (req, res, next) => {
   const { ID } = req.params;

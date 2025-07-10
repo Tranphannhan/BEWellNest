@@ -32,7 +32,8 @@ class Loaixetnghiem_Controler {
 
     LayTheoIdPhongThietBi = (req, res, next) => {
         const Id_PhongThietBi = req.params.ID;
-        Connect_Data_Model.LayTheoIdPhongThietBi_M(Id_PhongThietBi,(error, result) => {
+        const TrangThaiHoatDong = req.query.TrangThaiHoatDong || null;
+        Connect_Data_Model.LayTheoIdPhongThietBi_M(Id_PhongThietBi,TrangThaiHoatDong ,(error, result) => {
         if (error) return next(error);
         if (result.length === 0) return res.status(404).json({ message: "Không có Loai_Xet_Nghiem hệ thống" }); 
         res.status(200).json(result);

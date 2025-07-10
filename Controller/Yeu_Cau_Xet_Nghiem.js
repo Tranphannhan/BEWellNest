@@ -184,22 +184,29 @@ Add_Yeucauxetnghiem = (req, res, next) => {
     })
   }
 
-  TimKiemBenhNhanBangSDTHoacIdTheKhamBenh = (req, res, next) => {
-    const ngayHienTai = new Date().toISOString().split('T')[0];
-    const id_PhongThietBi = req.query.Id || null;
-    const SDT = req.query.SDT||null;
-    const Id_TheKhamBenh = req.query.Id_TheKhamBenh||null;
-    const ngay = req.query.ngay || ngayHienTai;
-    const TrangThaiThanhToan = req.query.TrangThaiThanhToan||null;
-    const TrangThai = req.query.TrangThai || false;
-    const limit = parseInt(req.query.limit)||7;
-    const page = parseInt(req.query.page)||1;
-    const TrangThaiHoatDong = req.query.TrangThaiHoatDong || null;
-    Connect_Data_Model.TimKiemBenhNhanBangSDTHoacIdTheKhamBenh__M (page,limit,id_PhongThietBi, ngay, TrangThai,TrangThaiHoatDong, TrangThaiThanhToan, SDT,Id_TheKhamBenh,(error, result) => {
+TimKiemBenhNhanBangSDTHoacIdTheKhamBenh = (req, res, next) => {
+  const ngayHienTai = new Date().toISOString().split('T')[0];
+  const id_PhongThietBi = req.query.Id || null;
+  const SDT = req.query.SDT || null;
+  const HoVaTen = req.query.HoVaTen || null;
+  const ngay = req.query.ngay || ngayHienTai;
+  const TrangThaiThanhToan = req.query.TrangThaiThanhToan || null;
+  const TrangThai = req.query.TrangThai || false;
+  const limit = parseInt(req.query.limit) || 7;
+  const page = parseInt(req.query.page) || 1;
+  const TrangThaiHoatDong = req.query.TrangThaiHoatDong || null;
+
+  Connect_Data_Model.TimKiemBenhNhanBangSDTHoacIdTheKhamBenh__M(
+    page, limit, id_PhongThietBi, ngay,
+    TrangThai, TrangThaiHoatDong, TrangThaiThanhToan,
+    SDT, HoVaTen, // Truyền đúng tham số
+    (error, result) => {
       if (error) return next(error);
       res.status(200).json({ data: result });
-    });
-  };
+    }
+  );
+};
+
 
 
   //    

@@ -9,8 +9,8 @@ class Phong_Thiet_Bi_Controler {
   Select_Phong_Thiet_Bi = (req, res, next) => {
     const limit = parseInt(req.query.limit) || 7;
     const page = parseInt(req.query.page) || 1;
-
-    Connect_Data_Model.Select_Phong_Thiet_Bi_M(limit, page, (error, result) => {
+    const TrangThaiHoatDong = req.query.TrangThaiHoatDong || null;
+    Connect_Data_Model.Select_Phong_Thiet_Bi_M(limit, page,TrangThaiHoatDong, (error, result) => {
       if (error) return next(error);
       if (!result || result.length === 0) {
         // ✅ kiểm tra rỗng

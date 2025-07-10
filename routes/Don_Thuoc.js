@@ -18,7 +18,7 @@ router.patch ('/Xacnhanthanhtoan/:ID_DonThuoc', Handle_Donthuoc.PaymentConfirmat
 router.get('/DonThuocThuNgan/Pagination', Handle_Donthuoc.Get_Not_Yet_Paid);
 router.patch ('/XacNhanTrangThai/:ID' , Handle_Donthuoc.Status_handling);
 
-router.get('/TimKiemTheoSDTHoacIdPhieuKhamBenh/Pagination', Handle_Donthuoc.TimKiemBenhNhanBangSDTHoacIdTheKhamBenh);
+router.get('/TimKiemTheoSDTHoacIdPhieuKhamBenh/Pagination', Handle_Donthuoc.TimKiemBenhNhanBangTenVaSDT);
   
 
 router.get('/DanhSachPhatThuoc' , Handle_Donthuoc.Select_Status_Donthuoc);

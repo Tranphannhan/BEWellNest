@@ -66,7 +66,7 @@ class Tai_Khoan_Controler {
             SoCCCD: req.body.SoCCCD.trim(),
             GioiTinh: req.body.GioiTinh.trim(),
             Image : `http://localhost:5000/image/${this.Image}`,
-            TraiThaiHoatDong:true,
+            TrangThaiHoatDong:true,
         };
 
 
