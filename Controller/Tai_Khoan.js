@@ -128,6 +128,7 @@ class Tai_Khoan_Controler {
             // Build dữ liệu cập nhật
             this.Data = {
                 Id_LoaiTaiKhoan: req.body.Id_LoaiTaiKhoan,
+                Id_PhongThietBi: req.body.Id_PhongThietBi,
                 TenTaiKhoan: req.body.TenTaiKhoan?.trim(),
                 SoDienThoai: req.body.SoDienThoai?.trim(),
                 SoCCCD: req.body.SoCCCD?.trim(),
