@@ -60,12 +60,13 @@ class Tai_Khoan_Controler {
         if (!this.Password) return res.status(400).json({ message: "Thêm Tài Khoản Thất Bại" });
         this.Data = {
             Id_LoaiTaiKhoan: req.body.Id_LoaiTaiKhoan.trim(),
+            Id_PhongThietBi: req.body.Id_PhongThietBi,
             TenTaiKhoan: req.body.TenTaiKhoan.trim(),
             MatKhau: this.Password,
             SoDienThoai: req.body.SoDienThoai.trim(),
             SoCCCD: req.body.SoCCCD.trim(),
             GioiTinh: req.body.GioiTinh.trim(),
-            Image : `http://localhost:5000/image/${this.Image}`,
+            Image : this.Image,
             TrangThaiHoatDong:true,
         };
 
@@ -128,6 +129,7 @@ class Tai_Khoan_Controler {
             // Build dữ liệu cập nhật
             this.Data = {
                 Id_LoaiTaiKhoan: req.body.Id_LoaiTaiKhoan,
+                Id_PhongThietBi: req.body.Id_PhongThietBi,
                 TenTaiKhoan: req.body.TenTaiKhoan?.trim(),
                 SoDienThoai: req.body.SoDienThoai?.trim(),
                 SoCCCD: req.body.SoCCCD?.trim(),

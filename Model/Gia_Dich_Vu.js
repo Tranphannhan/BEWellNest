@@ -26,6 +26,16 @@ class Database_Dichvu {
         }
     };
 
+    GetDetail_Giadichvu__M = async (id, Callback) => {
+        try {
+            await connectDB();
+            const result = await Hoadon.findById(id);
+            Callback(null, result);
+        } catch (error) {
+            Callback(error);
+        }
+    }
+
 
     Select_GiaKham__M = async (page, limit, Callback) => {
         const Loaigia = "GiaKham";
