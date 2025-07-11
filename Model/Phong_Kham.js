@@ -26,6 +26,23 @@ class Database_Phong_Kham {
     }
   };
 
+
+  SearchRoom__M = async (SoPhongKham, Callback) => {
+    try {
+      await connectDB();
+      const result = await Phong_Kham.find({
+        SoPhongKham: { $regex: SoPhongKham, $options: "i" },
+      }).populate({
+        path: "Id_Khoa",
+      });
+
+      Callback(null, result);
+    } catch (error) {
+      Callback(error);
+    }
+  };
+
+
   GetDetail_Phong_Kham_M = async (id, Callback) => {
     try {
       await connectDB();

@@ -20,6 +20,21 @@ class Phong_Kham_Controler {
     });
   };
 
+  
+  SearchRoom = (req, res, next) => {
+    const SoPhongKham = req.params.room;
+    if (!SoPhongKham) return res.status(400).json({ message: "Thiếu số phòng" });
+
+    Connect_Data_Model.SearchRoom__M(SoPhongKham, (error, result) => {
+      if (error) return next(error);
+      if (!result) return res.status(404).json([]);
+      return res.status(200).json(result);
+    });
+  };
+
+
+
+
   getDetailPhong_Kham = (req, res) => {
     const { id } = req.params;
 

@@ -5,7 +5,6 @@ class Hoadon_Controler {
     Runviews = (req, res, next) => {
         res.status(200).json({ message: "Loading Thành Công" }); 
     };
-  
 
     Select_Hoadon = (req, res, next) => {
         const limit = parseInt(req.query.limit)||7;

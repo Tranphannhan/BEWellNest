@@ -19,7 +19,7 @@ class Giadichvu_Controler {
     };
 
 
-     Select_GiaKham = (req, res, next) => {
+    Select_GiaKham = (req, res, next) => {
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 7;
 
@@ -27,6 +27,21 @@ class Giadichvu_Controler {
         if (error) return next(error);
         if (result.length === 0) return res.status(404).json({ message: "Không có giá dịch vụ trên hệ thống" }); 
         res.status(200).json(result);
+        });
+    };
+
+    Search = (req, res, next) => {
+        const Tendichvu = req.query.Key;
+        const limit = parseInt(req.query.limit) || 7;
+        const page = parseInt(req.query.page) || 1;
+        const Loaigia = req.query.Loaigia;
+
+        if (!Tendichvu || !Loaigia) return res.status(400).json({ message: "Thiếu key tìm kiếm" });
+
+        Connect_Data_Model.Search__M(page, limit, Tendichvu, Loaigia, (error, result) => {
+            if (error) return next(error);
+            if (!result) return res.status(404).json([]);
+            return res.status(200).json(result);
         });
     };
 

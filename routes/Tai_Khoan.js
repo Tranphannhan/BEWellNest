@@ -12,4 +12,5 @@ router.post ('/Add' , Upload.Upload_Image__.single("Image"), Handle_Tai_Khoan.Ad
 router.put ('/Edit/:ID' , Upload.Upload_Image__.single("Image") , Handle_Tai_Khoan.Edit_Tai_Khoan);
 router.delete ('/Delete/:ID' , Handle_Tai_Khoan.Delete_Tai_Khoan);
 router.post ('/Login/:Id_LoaiTaiKhoan' , Handle_Tai_Khoan.Check_Login);
+router.get ('/Search' , Handle_Tai_Khoan.Search);
 module.exports = router;    

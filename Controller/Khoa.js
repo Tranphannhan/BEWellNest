@@ -17,6 +17,22 @@ class Khoa_Controler {
       res.status(200).json(result);
     });
   };
+
+
+  Search = (req, res, next) => {
+    const TenKhoa = req.query.Key;
+
+    if (!TenKhoa) return res.status(400).json({ message: "Thiếu key tìm kiếm" });
+    Connect_Data_Model.Search__M (TenKhoa , (error, result) => {
+      if (error) return next(error);
+      if (!result) return res.status(404).json([]);
+      return res.status(200).json(result);
+    });
+  };
+
+
+
+
   
   getDetailKhoa = (req, res) => {
   const { id } = req.params;

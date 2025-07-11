@@ -10,7 +10,6 @@ class Bacsi_Controler {
     res.status(200).json({ message: "Loading Thành Công" }); 
   };
 
-
   Select_Bacsi = (req, res, next) => {
     const limit = parseInt(req.query.limit)||7;
     const page = parseInt(req.query.page)||1;
@@ -20,6 +19,20 @@ class Bacsi_Controler {
         return res.status(404).json({ message: "Không có bác sĩ nào trong hệ thống" }); 
       }
       res.status(200).json(result);
+    });
+  };
+
+
+  Search = (req, res, next) => {
+    const TenBacSi = req.query.Key;
+    const limit = parseInt(req.query.limit)|| 7;
+    const page = parseInt(req.query.page)|| 1;
+
+    if (!TenBacSi) return res.status(400).json({ message: "Thiếu key tìm kiếm" });
+    Connect_Data_Model.Search__M ( page,limit,TenBacSi , (error, result) => {
+      if (error) return next(error);
+      if (!result) return res.status(404).json([]);
+      return res.status(200).json(result);
     });
   };
 

@@ -26,6 +26,40 @@ class Database_Bacsi {
     }
   };
 
+  
+  Search__M = async (page, limit, TenBacSi, Callback) => {
+    try {
+      const skip = (page - 1) * limit;
+      await connectDB();
+
+      const filter = {
+        TenBacSi: { $regex: TenBacSi, $options: "i" }
+      };
+
+      const Select_Bacsi = await Bac_Si.find(filter)
+        .populate([
+          { path: "ID_Khoa" },
+          { path: "Id_PhongKham" }
+        ])
+        .skip(skip)
+        .limit(limit);
+
+      const total = await Bac_Si.countDocuments(filter);
+
+      Callback(null, {
+        totalItems: total,
+        currentPage: page,
+        totalPages: Math.ceil(total / limit),
+        data: Select_Bacsi
+      });
+
+    } catch (error) {
+      Callback(error);
+    }
+  };
+
+
+
   Get_ByTrangThaiHoatDong_M = async (page,limit,TrangThaiHoatDong,Callback) => {
     try {
       const skip = (page - 1)* limit

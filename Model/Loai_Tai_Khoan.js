@@ -15,6 +15,23 @@ class Database_Loaitaikhoan {
         }     
     };
 
+    
+    Search__M = async (TenLoaiTaiKhoan, Callback) => {
+        try {
+            await connectDB();
+            const filter = {
+                TenLoaiTaiKhoan: { $regex: TenLoaiTaiKhoan , $options: "i" }
+            };
+
+            const Result = await Loai_Tai_Khoan.find(filter)
+            Callback(null, Result);
+            
+        } catch (error) {
+        Callback(error);
+        }
+    };
+
+
 
     Add_Loaitaikhoan_M = async (Data , Callback) => {
         try {

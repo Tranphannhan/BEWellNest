@@ -27,9 +27,23 @@ class Tai_Khoan_Controler {
                 return res.status(404).json({ message: "Dữ liệu Tài Khoản Rỗng" });
             res.status(200).json(result);
         });
-    };  
+    };
+    
+    Search = (req, res, next) => {
+        const TenTaiKhoan = req.query.Key;
+        const limit = parseInt(req.query.limit)|| 7;
+        const page = parseInt(req.query.page)|| 1;
 
-        Get_Tai_Khoan_ById = (req, res, next) => {
+        if (!TenTaiKhoan) return res.status(400).json({ message: "Thiếu key tìm kiếm" });
+        Connect_Data_Model.Search__M ( page,limit,TenTaiKhoan , (error, result) => {
+            if (error) return next(error);
+            if (!result) return res.status(404).json([]);
+            return res.status(200).json(result);
+        });
+    };
+
+
+    Get_Tai_Khoan_ById = (req, res, next) => {
         this.ID = req.params.ID;
         if (!this.ID) return res.status(400).json({ message: "Thiếu ID tài khoản" });
 
@@ -39,6 +53,11 @@ class Tai_Khoan_Controler {
             res.status(200).json(Result);
         });
     }
+
+    
+
+
+
 
     Get_ByLoai = (req, res, next) => {
         const Id_Loai = req.params.ID;

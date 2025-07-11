@@ -22,6 +22,21 @@ class Database_Phong_Thiet_Bi {
     }
   };
 
+ 
+  SearchRoom__M = async (TenPhongThietBi, Callback) => {
+    try {
+      await connectDB();
+      const result = await Phong_Thiet_Bi.find({
+        TenPhongThietBi: { $regex: TenPhongThietBi, $options: "i" }})
+
+      Callback(null, result);
+    } catch (error) {
+      Callback(error);
+    }
+  };
+
+
+
   Get_Detail_Phong_Thiet_Bi_M = async (id, Callback) => {
     try {
       await connectDB();

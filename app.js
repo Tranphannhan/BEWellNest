@@ -45,7 +45,6 @@ app.options('*', cors(corsOptions)); // Bắt buộc phải có để xử lý p
 
 
 
-
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.use(logger('dev'));
