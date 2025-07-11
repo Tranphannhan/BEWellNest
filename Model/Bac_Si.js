@@ -92,7 +92,7 @@ class Database_Bacsi {
     try {
       const skip = (page - 1)* limit
       await connectDB();
-      const Select_Bacsi = await Bac_Si.find({ID_Khoa:id}).populate([
+      const Select_Bacsi = await Bac_Si.find({ID_Khoa:id, TrangThaiHoatDong:true}).populate([
        {
           path:'Id_PhongKham',
           select:'SoPhongKham'

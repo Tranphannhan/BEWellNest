@@ -18,6 +18,17 @@ class Database_Nhom_Thuoc {
         }   
     };
 
+    Detail_NhomNhomThuoc__M = async (id, Callback) => {
+    try {
+        await connectDB();
+        const Result = await NhomThuoc.findById(id);
+        Callback(null, Result);
+    } catch (error) {
+        Callback(error);
+    }
+}
+
+
 
 
     Add_Nhom_NhomThuoc__M = async (Data , Callback) => {

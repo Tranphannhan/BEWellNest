@@ -2,6 +2,7 @@ const connectDB = require("../Model/Db");
 
 const Donthuoc = require("../Schema/Don_Thuoc"); 
 const Donthuoc_Chitiet = require("../Schema/Don_Thuoc_Chi_Tiet"); 
+const The_Kham_Benh = require("../Schema/The_Kham_Benh"); 
 const Phieu_Kham_Benh = require ('../Schema/Phieu_Kham_Benh');
 
 class Database_Donthuoc {
@@ -454,78 +455,117 @@ Get_Not_yet_paid = async (page, limit, ngay, TrangThaiThanhToan, Callback) => {
     }
   }
 
-  TimKiemBenhNhanBangSDTHoacIdTheKhamBenh_M = async (page,limit,TrangThai, TrangThaiThanhToan, Ngay,Id_TheKhamBenh, SoDienThoai, Callback ) => {
-      try {
-        const skip = (page - 1)* limit;
-        const query = {};
-        
-        if(TrangThai !== null && TrangThai !== undefined){
-          query.TrangThai = TrangThai;
-        }
+TimKiemBenhNhanBangTenVaSDT_M = async (
+  page,
+  limit,
+  TrangThai,
+  TrangThaiThanhToan,
+  Ngay,
+  HoVaTen,
+  SoDienThoai,
+  Callback
+) => {
+  try {
+    const skip = (page - 1) * limit;
+    const query = {};
 
-        if(TrangThaiThanhToan !== null && TrangThaiThanhToan !== undefined){
-          query.TrangThaiThanhToan = TrangThaiThanhToan;
-        }
+    if (TrangThai !== null && TrangThai !== undefined) {
+      query.TrangThai = TrangThai;
+    }
 
-        const search = {}
-        if(Id_TheKhamBenh !== null && Id_TheKhamBenh !== undefined){
-            search.Id_TheKhamBenh = Id_TheKhamBenh;
-        }
+    if (TrangThaiThanhToan !== null && TrangThaiThanhToan !== undefined) {
+      query.TrangThaiThanhToan = TrangThaiThanhToan;
+    }
 
-        search.Ngay = Ngay;
+    await connectDB();
 
-        let PhieuKhamBenhDaTimQuaId = await Phieu_Kham_Benh.find(search)       
-            .populate({ path: "Id_TheKhamBenh" })
-            .sort({ STTKham: 1 })
-            .lean();
-        
-                // 2. Nếu có SDT thì lọc thêm theo số điện thoại
-        if (SoDienThoai) {
-            PhieuKhamBenhDaTimQuaId = PhieuKhamBenhDaTimQuaId.filter(
-                item => item.Id_TheKhamBenh?.SoDienThoai === SoDienThoai
-            );
-        }
+    // 1. Tìm danh sách thẻ khám bệnh theo tên và số điện thoại
+    const dieuKienTheKhamBenh = {};
+    if (HoVaTen) {
+      dieuKienTheKhamBenh.HoVaTen = { $regex: HoVaTen, $options: "i" };
+    }
+    if (SoDienThoai) {
+      dieuKienTheKhamBenh.SoDienThoai = SoDienThoai;
+    }
 
-        // 3. Lấy danh sách ID
-        const danhSachIdLoai = PhieuKhamBenhDaTimQuaId.map(item => item._id);
-        
-        if (danhSachIdLoai.length === 0) {
-          return Callback(null, {
-            totalItems: 0,
-            currentPage: page,
-            totalPages: 0,
-            data: []
-          });
-        }
+    const danhSachThe = await The_Kham_Benh.find(dieuKienTheKhamBenh).select("_id");
+    const listIdThe = danhSachThe.map((item) => item._id);
 
-        // 4. Lấy tất cả các yêu cầu xét nghiệm theo danh sách phiếu khám bệnh
-        let dataQuery = { Id_PhieuKhamBenh: { $in: danhSachIdLoai }, ...query };
+    if (listIdThe.length === 0) {
+      return Callback(null, {
+        totalItems: 0,
+        currentPage: page,
+        totalPages: 0,
+        data: [],
+      });
+    }
 
-        await connectDB();
-        const Select_Donthuoc = await Donthuoc.find(dataQuery).populate({
-            path: 'Id_PhieuKhamBenh',
-            select:'Ngay',
-            populate:[
-                {
-                  path: 'Id_TheKhamBenh',
-                  select: 'HoVaTen SoDienThoai'
-                },
-                {
-                  path: 'Id_CaKham',
-                  select:'TenCa',
-                  populate:{
-                    path:'Id_BacSi',
-                    select:'TenBacSi'
-                  }
-                }
-            ]
-          }).skip(skip).limit(limit);
-        const total = await Donthuoc.countDocuments(dataQuery)
-        Callback(null, {totalItems:total, currentPage: page, totalPages: Math.ceil(total/limit),data:Select_Donthuoc});
-      } catch (error) {
-        Callback(error);
-      }
+    // 2. Tìm phiếu khám bệnh
+    const phieuKham = await Phieu_Kham_Benh.find({
+      Id_TheKhamBenh: { $in: listIdThe },
+      Ngay: Ngay,
+    }).select("_id");
+    const danhSachIdPhieu = phieuKham.map((item) => item._id);
+
+    if (danhSachIdPhieu.length === 0) {
+      return Callback(null, {
+        totalItems: 0,
+        currentPage: page,
+        totalPages: 0,
+        data: [],
+      });
+    }
+
+    // 3. Tìm đơn thuốc
+    const dataQuery = {
+      Id_PhieuKhamBenh: { $in: danhSachIdPhieu },
+      ...query,
+    };
+
+    const donthuocList = await Donthuoc.find(dataQuery)
+      .populate({
+        path: "Id_PhieuKhamBenh",
+        select: "Ngay",
+        populate: [
+          {
+            path: "Id_TheKhamBenh",
+            select: "HoVaTen SoDienThoai",
+          },
+          {
+            path: "Id_Bacsi",
+            select: "TenBacSi",
+          },
+        ],
+      })
+      .skip(skip)
+      .limit(limit)
+      .sort({ createdAt: 1 });
+
+    // ✅ Tính tổng tiền từng đơn thuốc
+    const dataWithTongTien = [];
+    for (const item of donthuocList) {
+      const tongTien = await this.TinhTongTienDonThuocChiTiet(item._id);
+      dataWithTongTien.push({
+        ...item.toObject(),
+        TongTien: tongTien,
+      });
+    }
+
+    const total = await Donthuoc.countDocuments(dataQuery);
+
+    Callback(null, {
+      totalItems: total,
+      currentPage: page,
+      totalPages: Math.ceil(total / limit),
+      data: dataWithTongTien,
+    });
+  } catch (error) {
+    console.error("Lỗi khi tìm kiếm đơn thuốc:", error);
+    Callback({ message: "Lỗi server", error: error?.message || error });
   }
+};
+
+
 
   SearchDS_M = async (page,limit,search, Callback) => {
   try {

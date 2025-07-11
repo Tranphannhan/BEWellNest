@@ -32,6 +32,18 @@ class Thuoc_Controler {
     });
   };
 
+  Detail_Nhomthuoc = (req, res, next) => {
+    const { ID } = req.params;
+    if (!ID) return res.status(400).json({ message: "Thiếu ID để lấy chi tiết" });
+
+    Connect_Data_Model.Detail_NhomNhomThuoc__M(ID, (error, result) => {
+        if (error) return next(error);
+        if (!result) return res.status(404).json({ message: "Không tìm thấy Nhóm Thuốc" });
+        res.status(200).json(result);
+    });
+};
+
+
   
   Edit_Nhomthuoc = (req, res, next) => {
     const { ID } = req.params;

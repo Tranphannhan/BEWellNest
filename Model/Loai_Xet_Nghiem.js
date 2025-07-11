@@ -65,10 +65,14 @@ class Database_Loaixetnghiem {
 
 
 
-    LayTheoIdPhongThietBi_M = async (Id_PhongThietBi,Callback) => {
+    LayTheoIdPhongThietBi_M = async (Id_PhongThietBi, TrangThaiHoatDong, Callback) => {
         try {
             await connectDB();
-            const data = await Loaixetnghiem.find({Id_PhongThietBi}).populate([
+            const query = {Id_PhongThietBi: Id_PhongThietBi};
+            if(TrangThaiHoatDong !== null){
+                query.TrangThaiHoatDong = TrangThaiHoatDong
+            }
+            const data = await Loaixetnghiem.find(query).populate([
                 { path:"Id_GiaDichVu",
                 select:'Giadichvu'},
                 {path:"Id_PhongThietBi",

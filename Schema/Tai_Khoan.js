@@ -6,13 +6,18 @@ const Tai_Khoan_Schema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Loai_Tai_Khoan', 
         },
+    Id_PhongThietBi : {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Phong_Thiet_Bi', 
+        } || null,
+
     TenTaiKhoan : String,
     MatKhau : String,
     GioiTinh:String,
     SoDienThoai : String,
     SoCCCD: String,
     Image : String,
-    TrangThaiHoatDong:Boolean
+    TrangThaiHoatDong:Boolean,
 
 }, { collection: "Tai_Khoan" }); 
 module.exports = mongoose.model("Tai_Khoan", Tai_Khoan_Schema);    

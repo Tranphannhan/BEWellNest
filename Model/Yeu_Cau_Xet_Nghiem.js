@@ -388,96 +388,118 @@ Upload_Status_handling__M = async (ID, Callback) => {
 };
 
 
-
 TimKiemBenhNhanBangSDTHoacIdTheKhamBenh__M = async (
-    page, limit, id_PhongThietBi, Ngay,
-    TrangThai, TrangThaiHoatDong, TrangThaiThanhToan,
-    SDT, Id_TheKhamBenh, Callback
+  page, limit, id_PhongThietBi, Ngay,
+  TrangThai, TrangThaiHoatDong, TrangThaiThanhToan,
+  SDT, HoVaTen, Callback
 ) => {
-    try {
-        await connectDB();
+  try {
+    await connectDB();
+    const skip = (page - 1) * limit;
 
-        const query = {};
-        if (Ngay) query.Ngay = Ngay;
-        if (TrangThai !== null && TrangThai !== undefined) query.TrangThai = TrangThai;
-        if (TrangThaiHoatDong !== null && TrangThaiHoatDong !== undefined) query.TrangThaiHoatDong = TrangThaiHoatDong;
-        if (TrangThaiThanhToan !== null && TrangThaiThanhToan !== undefined) query.TrangThaiThanhToan = TrangThaiThanhToan;
+    // 1. Tìm phiếu khám bệnh theo ngày + lọc theo SDT hoặc HoVaTen
+    const searchPhieu = { Ngay };
+    let danhSachPhieu = await Phieu_Kham_Benh.find(searchPhieu)
+      .populate({
+        path: "Id_TheKhamBenh",
+        select: "HoVaTen SoDienThoai"
+      })
+      .lean();
 
-        const search = {};
-
-        if (Id_TheKhamBenh) {
-            search.Id_TheKhamBenh = Id_TheKhamBenh;
-        }
-        if(Ngay) search.Ngay = Ngay;
-
-        // 1. Lấy toàn bộ danh sách phiếu khám bệnh (không skip/limit ở đây)
-        let KetQuaTimTheoId_TheKhamBenh = await Phieu_Kham_Benh.find(search)
-            .populate({ path: "Id_TheKhamBenh" })
-            .sort({ STTKham: 1 })
-            .lean();
-
-        // 2. Nếu có SDT thì lọc thêm theo số điện thoại
-        if (SDT) {
-            KetQuaTimTheoId_TheKhamBenh = KetQuaTimTheoId_TheKhamBenh.filter(
-                item => item.Id_TheKhamBenh?.SoDienThoai === SDT
-            );
-        }
-
-        // 3. Lấy danh sách ID
-        const danhSachIdLoai = KetQuaTimTheoId_TheKhamBenh.map(item => item._id);
-
-        // 4. Lấy tất cả các yêu cầu xét nghiệm theo danh sách phiếu khám bệnh
-        let dataQuery = { Id_PhieuKhamBenh: { $in: danhSachIdLoai }, ...query };
-
-        const total = await Yeucauxetnghiem.countDocuments(dataQuery);
-        const data = await Yeucauxetnghiem.find(dataQuery).populate([
-            {
-                path: 'Id_PhieuKhamBenh',
-                select: 'Ngay',
-                populate: [
-                {
-                    path: 'Id_TheKhamBenh',
-                    select: 'HoVaTen SoDienThoai'
-                },
-                {
-                    path: 'Id_CaKham',
-                    select: 'TenCa',
-                    populate:[
-                        {
-                        path: 'Id_BacSi',
-                        select: 'TenBacSi'
-                            },
-                        {
-                        path: 'Id_PhongKham',
-                        select: 'SoPhongKham'
-                            },
-                    ] 
-                }
-                ]
-            },
-            {
-                path: 'Id_LoaiXetNghiem',
-                select: 'TenXetNghiem',
-                populate:{
-                    path:"Id_PhongThietBi",
-                    select: 'TenPhongThietBi'
-                }
-            }
-            ])
-            .skip((page - 1) * limit)
-            .limit(limit)
-            .lean();
-
-        Callback(null, {
-            totalItems: total,
-            currentPage: page,
-            totalPages: Math.ceil(total / limit),
-            data: data,
-        });
-    } catch (error) {
-        Callback(error);
+    // 2. Lọc theo Họ và tên hoặc Số điện thoại
+    if (SDT || HoVaTen) {
+      danhSachPhieu = danhSachPhieu.filter((item) => {
+        const ten = item?.Id_TheKhamBenh?.HoVaTen?.toLowerCase() || "";
+        const sdt = item?.Id_TheKhamBenh?.SoDienThoai || "";
+        return (
+          (SDT && sdt.includes(SDT)) ||
+          (HoVaTen && ten.includes(HoVaTen.toLowerCase()))
+        );
+      });
     }
+
+    const danhSachIdPhieu = danhSachPhieu.map((item) => item._id);
+
+    // 3. Truy vấn yêu cầu xét nghiệm từ danh sách Id phiếu khám
+    const query = {
+      Ngay,
+      TrangThaiHoatDong: true,
+      Id_PhieuKhamBenh: { $in: danhSachIdPhieu }
+    };
+
+    if (TrangThaiThanhToan !== null && TrangThaiThanhToan !== undefined) {
+      query.TrangThaiThanhToan = TrangThaiThanhToan;
+    }
+
+    if (TrangThai !== null && TrangThai !== undefined) {
+      query.TrangThai = TrangThai;
+    }
+
+    const allResults = await Yeucauxetnghiem.find(query)
+      .populate([
+        {
+          path: 'Id_PhieuKhamBenh',
+          select: 'Ngay',
+          populate: [
+            { path: 'Id_TheKhamBenh', select: 'HoVaTen SoDienThoai' }
+          ]
+        },
+        {
+          path: 'Id_LoaiXetNghiem',
+          select: 'TenXetNghiem',
+          populate: {
+            path: 'Id_GiaDichVu',
+            select: 'Giadichvu'
+          }
+        }
+      ])
+      .sort({ createdAt: 1 });
+
+    // 4. Gom nhóm theo phiếu khám bệnh để tính tổng tiền
+    const grouped = new Map();
+
+    for (const item of allResults) {
+      const phieuId = item?.Id_PhieuKhamBenh?._id?.toString();
+      const gia = item?.Id_LoaiXetNghiem?.Id_GiaDichVu?.Giadichvu || 0;
+
+      if (!phieuId) continue;
+
+      if (!grouped.has(phieuId)) {
+        grouped.set(phieuId, {
+          TongTien: gia,
+          firstItem: item.toObject()
+        });
+      } else {
+        const current = grouped.get(phieuId);
+        current.TongTien += gia;
+      }
+    }
+
+    // 5. Chuyển Map → Array
+    const filteredResults = [];
+    for (const [_, value] of grouped.entries()) {
+      filteredResults.push({
+        ...value.firstItem,
+        TongTien: value.TongTien
+      });
+    }
+
+    // 6. Phân trang
+    const total = filteredResults.length;
+    const paginated = filteredResults.slice(skip, skip + limit);
+
+    // 7. Trả kết quả
+    Callback(null, {
+      totalItems: total,
+      currentPage: page,
+      totalPages: Math.ceil(total / limit),
+      data: paginated
+    });
+  } catch (error) {
+    Callback(error);
+  }
 };
+
 
 
 

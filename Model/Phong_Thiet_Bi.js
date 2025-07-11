@@ -2,15 +2,19 @@ const connectDB = require("../Model/Db");
 const Phong_Thiet_Bi = require("../Schema/Phong_Thiet_Bi");
 
 class Database_Phong_Thiet_Bi {
-  Select_Phong_Thiet_Bi_M = async (limit, page, Callback) => {
+  Select_Phong_Thiet_Bi_M = async (limit, page,TrangThaiHoatDong, Callback) => {
     try {
       const skip = (page - 1) * limit;
+      const query = {};
+      if(TrangThaiHoatDong !== null){
+        query.TrangThaiHoatDong = TrangThaiHoatDong;
+      }
       await connectDB();
-      const Select_Phong_Thiet_Bi = await Phong_Thiet_Bi.find({})
+      const Select_Phong_Thiet_Bi = await Phong_Thiet_Bi.find(query)
         .skip(skip)
         .limit(limit);
 
-      const total = await Phong_Thiet_Bi.countDocuments();
+      const total = await Phong_Thiet_Bi.countDocuments(query);
       Callback(null, {
         totalItems: total,
         currentPage: page,

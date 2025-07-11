@@ -46,6 +46,17 @@ class Giadichvu_Controler {
     };
 
 
+        GetDetail_Giadichvu = (req, res, next) => {
+    const { ID } = req.params;
+
+    Connect_Data_Model.GetDetail_Giadichvu__M(ID, (error, result) => {
+        if (error) return res.status(500).json({ message: "Lấy chi tiết giá dịch vụ thất bại" });
+        if (!result) return res.status(404).json({ message: "Không tìm thấy giá dịch vụ" });
+
+        res.status(200).json(result);
+    });
+}
+
   
     Add_Giadichvu = (req, res, next) => {
         const data = {

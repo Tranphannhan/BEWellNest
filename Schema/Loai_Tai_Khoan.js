@@ -7,7 +7,7 @@ const Loai_Tai_Khoan_Schema = new mongoose.Schema({
         type: String,
         enum: ['ThuNgan', 'TiepNhan', 'QuanLyKhoThuoc', 'Admin', 'BacSiXetNghiem','DuocSi'], 
         required: true
-    }
+    }   
 
 
 }, { collection: "Loai_Tai_Khoan" }); 
