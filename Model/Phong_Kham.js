@@ -1,5 +1,6 @@
 const connectDB = require("../Model/Db");
 const Phong_Kham = require("../Schema/Phong_Kham");
+const Bac_Si = require("../Schema/Bacsi"); 
 
 class Database_Phong_Kham {
   // Lấy danh sách phòng khám
@@ -49,6 +50,28 @@ class Database_Phong_Kham {
       Callback(error);
     }
   };
+
+Get_ByKhoa_Empty_M = async (Id_Khoa, Callback) => {
+  try {
+    await connectDB();
+
+    // Lấy tất cả các phòng thuộc khoa đó (có thể populate Id_Khoa nếu muốn)
+    const phongTrongKhoa = await Phong_Kham.find({ Id_Khoa }).populate("Id_Khoa").lean();
+
+    // Lấy danh sách các Id_PhongKham mà bác sĩ đang quản lý
+    const phongDangCoBacSi = await Bac_Si.distinct("Id_PhongKham");
+
+    // Lọc ra những phòng không có trong danh sách trên
+    const phongKhongCoBacSi = phongTrongKhoa.filter(
+      (phong) => !phongDangCoBacSi.map(id => id.toString()).includes(phong._id.toString())
+    );
+
+    Callback(null, phongKhongCoBacSi);
+  } catch (error) {
+    Callback(error);
+  }
+};
+
 
   // Thêm phòng khám
   Insert_Phong_Kham_M = async (data, Callback) => {
