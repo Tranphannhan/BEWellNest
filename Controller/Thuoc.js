@@ -55,6 +55,7 @@ class Thuoc_Controler {
     const Data_Edit = {
       Id_NhomThuoc: req.body.Id_NhomThuoc.trim(),
       TenThuoc: req.body.TenThuoc.trim(),
+      DonVi: req.body.DonVi.trim(),
       Gia : req.body.Gia,
       TrangThaiHoatDong : req.body.TrangThaiHoatDong
     };
