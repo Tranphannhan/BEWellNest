@@ -25,6 +25,45 @@ class Database_Loaixetnghiem {
         }    
     }; 
 
+    
+    Search__M = async (page, limit, TenXetNghiem, Callback) => {
+        try {
+            const skip = (page - 1) * limit;
+            await connectDB();
+
+            const filter = TenXetNghiem
+            ? { TenXetNghiem: { $regex: TenXetNghiem, $options: "i" } }
+            : {};
+
+            const Select_Bacsi = await Loaixetnghiem.find(filter)
+            .populate([
+                {
+                path: "Id_PhongThietBi",
+                select: "TenPhongThietBi",
+                },
+                {
+                path: "Id_GiaDichVu",
+                select: "Giadichvu",
+                },
+            ])
+            .skip(skip)
+            .limit(limit);
+
+            const total = await Loaixetnghiem.countDocuments(filter);
+
+            Callback(null, {
+            totalItems: total,
+            currentPage: page,
+            totalPages: Math.ceil(total / limit),
+            data: Select_Bacsi, // ✅ đúng biến
+            });
+        } catch (error) {
+            Callback(error);
+        }
+    };
+
+
+
 
     LayTheoIdPhongThietBi_M = async (Id_PhongThietBi, TrangThaiHoatDong, Callback) => {
         try {

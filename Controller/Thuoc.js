@@ -23,9 +23,8 @@ class Thuoc_Controler {
    
 
   TimKiemTenThuoc =  (req, res, next) => {
-    const Key_Select = req.query.search || null;
-    const NhomThuoc = req.query.NhomThuoc || null;
-    Connect_Data_Model.TimKiemTenThuoc__M  (Key_Select ,NhomThuoc,(error, result) => {
+    const TenThuoc = req.query.TenThuoc || null;
+    Connect_Data_Model.TimKiemTenThuoc__M  (TenThuoc ,(error, result) => {
       if (error) return next(error);
       if (result.length < 1) return res.status(404).json({ message: "Không tìm thấy thuốc trong kho" });
       res.status(200).json(result);
@@ -55,6 +54,7 @@ class Thuoc_Controler {
     const Data_Edit = {
       Id_NhomThuoc: req.body.Id_NhomThuoc.trim(),
       TenThuoc: req.body.TenThuoc.trim(),
+      DonVi: req.body.DonVi.trim(),
       Gia : req.body.Gia,
       TrangThaiHoatDong : req.body.TrangThaiHoatDong
     };

@@ -14,6 +14,19 @@ class Loai_Tai_Khoan {
     });
   };
 
+
+  Search = (req, res, next) => {
+    const TenLoaiTaiKhoan = req.query.Key;
+    if (!TenLoaiTaiKhoan) return res.status(400).json({ message: "Thiếu key tìm kiếm" });
+    Connect_Data_Model.Search__M (TenLoaiTaiKhoan , (error, result) => {
+      if (error) return next(error);
+      if (!result) return res.status(404).json([]);
+      return res.status(200).json(result);
+    });
+  };
+
+
+
   Add_Loai_Tai_Khoan = (req, res, next) => {
     const Data_Add = {
       TenLoaiTaiKhoan: req.body.TenLoaiTaiKhoan.trim(),

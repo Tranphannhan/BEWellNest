@@ -12,5 +12,5 @@ router.put('/Edit/:ID', Upload.Upload_Image__.single("Image"),Handle_Loaixetnghi
 router.delete('/Delete/:ID', Handle_Loaixetnghiem.Delete_LoaiXetNghiem);
 router.patch ('/ThayDoiTrangThaiHoatDong/:ID', Handle_Loaixetnghiem.ThayDoiTrangThaiHoatDong);
 router.get ('/LayTheoIdPhongThietBi/:ID' , Handle_Loaixetnghiem.LayTheoIdPhongThietBi);
-
+router.get ('/Search' , Handle_Loaixetnghiem.Search);
 module.exports = router;  

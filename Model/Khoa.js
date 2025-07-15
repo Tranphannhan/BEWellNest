@@ -34,6 +34,31 @@ class Database_Khoa {
 };
 
 
+
+
+    
+  // tìm kiếm khoa
+  Search__M = async (TenKhoa, Callback) => {
+    try {
+      await connectDB();
+
+      const filter = {
+        TenKhoa: { $regex: TenKhoa, $options: "i" }
+      };
+
+      const Select_Khoa = await Khoa.find(filter);
+      Callback(null, Select_Khoa);
+    } catch (error) {
+      Callback(error);
+    }
+  };
+
+
+
+
+
+
+
     // Thêm khoa
     Insert_Khoa_M = async (data, Callback) => {
       try {

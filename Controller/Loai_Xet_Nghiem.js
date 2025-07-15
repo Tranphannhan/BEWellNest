@@ -18,6 +18,20 @@ class Loaixetnghiem_Controler {
     }; 
 
 
+    Search = (req, res, next) => {
+        const TenXetNghiem = req.query.Key;
+        const limit = parseInt(req.query.limit)|| 7;
+        const page = parseInt(req.query.page)|| 1;
+
+        if (!TenXetNghiem) return res.status(400).json({ message: "Thiếu key tìm kiếm" });
+            Connect_Data_Model.Search__M ( page,limit,TenXetNghiem , (error, result) => {
+            if (error) return next(error);
+            if (!result) return res.status(404).json([]);
+            return res.status(200).json(result);
+        });
+    };
+
+
 
     ThayDoiTrangThaiHoatDong = (req , res , next) => {
         const Trangthai = req.query.TrangThaiHoatDong;
@@ -39,6 +53,10 @@ class Loaixetnghiem_Controler {
         res.status(200).json(result);
         });
     };
+
+
+
+
 
     Add_LoaiXetNghiem = (req, res, next) => {
         const GET_Image =  req.file ? req.file.filename : 'AnhMacDinhKetQuaXetNghiem.png';

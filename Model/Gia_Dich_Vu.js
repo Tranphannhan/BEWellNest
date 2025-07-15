@@ -60,6 +60,31 @@ class Database_Dichvu {
     };
 
 
+        
+   Search__M = async (page, limit, Tendichvu, Loaigia, Callback) => {
+        try {
+            const skip = (page - 1) * limit;
+            await connectDB();
+
+            const filter = {
+                Tendichvu: { $regex: Tendichvu, $options: "i" },
+                Loaigia: Loaigia,
+            };
+
+            const Select_Gia = await Hoadon.find(filter).skip(skip).limit(limit);
+            const total = await Hoadon.countDocuments(filter);
+
+            Callback(null, {
+            totalItems: total,
+            currentPage: page,
+            totalPages: Math.ceil(total / limit),
+            data: Select_Gia,
+            });
+        } catch (error) {
+            Callback(error);
+        }
+    };
+
 
 
 

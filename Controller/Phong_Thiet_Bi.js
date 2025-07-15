@@ -19,6 +19,19 @@ class Phong_Thiet_Bi_Controler {
       res.status(200).json(result);
     });
   };
+  
+
+  SearchRoom = (req, res, next) => {
+    const TenPhongThietBi = req.params.room;
+    if (!TenPhongThietBi) return res.status(400).json({ message: "Thiếu số phòng khám"});
+
+    Connect_Data_Model.SearchRoom__M( TenPhongThietBi , (error, result) => {
+      if (error) return next(error);
+      if (!result) return res.status(404).json([]);
+      return res.status(200).json(result);
+    });
+  };
+
 
   getDetailPhong_Thiet_Bi = (req, res) => {
     const { id } = req.params;

@@ -9,5 +9,6 @@ router.post('/Add', Handle_Khoa.add_Khoa);
 router.delete('/:id', Handle_Khoa.deleteKhoa);
 router.put('/:id', Handle_Khoa.updateKhoa);
 router.patch ('/TrangThaiHoatDong/:ID' , Handle_Khoa.ThayDoiTrangThaiHoatDong);
+router.get ('/Search' , Handle_Khoa.Search);
 module.exports = router;    
    

@@ -11,4 +11,5 @@ router.get('/Detail/:id', Handle_Phong_Kham.getDetailPhong_Kham);
 router.post('/', Handle_Phong_Kham.add_Phong_Kham);
 router.delete('/:id', Handle_Phong_Kham.deletePhong_Kham);
 router.put('/:id', Handle_Phong_Kham.updatePhong_Kham);
+router.get ('/Search/:room' , Handle_Phong_Kham.SearchRoom);
 module.exports = router;      

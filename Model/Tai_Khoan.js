@@ -17,17 +17,47 @@ class Database_Taikhoan {
         }   
     };
 
+
+    Search__M = async (page, limit, TenTaiKhoan, Callback) => {
+        try {
+            const skip = (page - 1) * limit;
+            await connectDB();
+
+            const filter = TenTaiKhoan
+            ? { TenTaiKhoan: { $regex: TenTaiKhoan, $options: "i" } }
+            : {}; // nếu không có từ khóa tìm thì trả tất cả
+
+            const Select_Bacsi = await Taikhoan.find(filter)
+            .populate({ path: "Id_LoaiTaiKhoan" })
+            .skip(skip)
+            .limit(limit);
+
+            const total = await Taikhoan.countDocuments(filter);
+
+            Callback(null, {
+            totalItems: total,
+            currentPage: page,
+            totalPages: Math.ceil(total / limit),
+            data: Select_Bacsi,
+            });
+        } catch (error) {
+            Callback(error);
+        }
+    };
+
+
+
     Get_Tai_Khoan_ById_M = async (id, Callback) => {
-    try {
-        await connectDB();
-        const taiKhoan = await Taikhoan.findById(id).populate({
-            path: "Id_LoaiTaiKhoan"
-        });
-        Callback(null, taiKhoan);
-    } catch (error) {
-        Callback(error);
-    }
-};
+        try {
+            await connectDB();
+            const taiKhoan = await Taikhoan.findById(id).populate({
+                path: "Id_LoaiTaiKhoan"
+            });
+            Callback(null, taiKhoan);
+        } catch (error) {
+            Callback(error);
+        }
+    };
 
 
     Get_ByLoai_M = async (limit , page , Id_Loai,Callback) => {
