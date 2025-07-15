@@ -24,7 +24,7 @@ Select_Phieukhambenh_M = async (NgayHienTai, TrangThai, TrangThaiHoatDong, Callb
       query["Ngay"] = formattedDate;
     }
 
-    const total = await Phieu_Kham_Benh.find(query)
+    const total = await Phieu_Kham_Benh.countDocuments(query)
     Callback(null, {total:total});
   } catch (error) {
     Callback(error);
