@@ -59,7 +59,7 @@ Get_ByKhoa_Empty_M = async (Id_Khoa, Callback) => {
     const phongTrongKhoa = await Phong_Kham.find({ Id_Khoa }).populate("Id_Khoa").lean();
 
     // Lấy danh sách các Id_PhongKham mà bác sĩ đang quản lý
-    const phongDangCoBacSi = await Bac_Si.distinct("Id_PhongKham");
+    const phongDangCoBacSi = await Bac_Si.find({TrangThaiHoatDong:true}).distinct("Id_PhongKham");
 
     // Lọc ra những phòng không có trong danh sách trên
     const phongKhongCoBacSi = phongTrongKhoa.filter(
