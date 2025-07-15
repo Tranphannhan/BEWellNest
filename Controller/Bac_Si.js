@@ -110,14 +110,14 @@ class Bacsi_Controler {
   Check_Login = async (req , res , next) => {
     const Password_Login  = req.body.MatKhau?.trim();
     const SDT_Login  = req.body.SoDienThoai?.trim();
-    if (!Password_Login || !SDT_Login) return res.status(400).json ({message : "Đăng Nhập Tài Khoản Thất Bại"});
+    if (!Password_Login || !SDT_Login) return res.status(400).json ({message : "Đăng nhập thất bại"});
 
     Connect_Data_Model.Check_Login__M  (SDT_Login , async (error , result) => {
       if (error) return next (error);
-      if (!result) return res.status(200).json ({message : "Không Tìm Thấy Tài Khoản Đăng Nhập Vui Lòng Đăng Nhập Lại"});
-      if (result.TrangThaiHoatDong === false) return  res.status(200).json ({message : "Tài khoản đã ngừng hoạt động vui lòng liên hệ đến quản trị viên"});
+      if (!result) return res.status(404).json ({message : "Số điện thoại không chính xác"});
       const isMatch = await bcrypt.compare(Password_Login, result.Matkhau);
-      if (!isMatch) return  res.status (200).json ({message : 'Mật khẩu không chính xác' , Data_Token_ : false });
+      if (!isMatch) return  res.status (401).json ({message : 'Mật khẩu không chính xác' , Data_Token_ : false });
+      if (result.TrangThaiHoatDong === false) return  res.status(403).json ({message : "Tài khoản đã ngừng hoạt động"});
 
       const Data_Token_ = {
         _id : result._id,

@@ -27,6 +27,7 @@ router.get ('/TimKiemBenhNhanBangTenHoacSDT/Pagination', Handle_Phieu_Kham_Benh.
 //Thống kê từ ngày đến ngày / Năm
 router.get('/filter-phieu-kham-benh', Handle_Phieu_Kham_Benh.Filter_PhieuKhamBenh_ByDate);
 
+
        
     
 

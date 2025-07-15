@@ -111,9 +111,9 @@ class Tai_Khoan_Controler {
     
         Connect_Data_Model.Check_Login__M  (SDT_Login ,Id_LoaiTaiKhoan , async (error , result) => {
             if (error) return next (error);
-            if (!result) return res.status(200).json ({message : "Không Tìm Thất Tài Khoản Đăng Nhập Vui Lòng Đăng Nhập Lại"});
+            if (!result) return res.status(404).json ({message : "Số điện thoại không chính xác"});
             const isMatch = await bcrypt.compare(Password_Login, result.MatKhau);
-            if (!isMatch) return  res.status (200).json ({message : 'Đăng Nhập Thất Bại' ,Data_Token_ : false });
+            if (!isMatch) return  res.status (401).json ({message : 'Mật khẩu không chính xác' ,Data_Token_ : false });
             
             const Data_Token_ = {
                 _id : result._id,

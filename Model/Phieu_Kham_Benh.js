@@ -3,15 +3,34 @@ const connectDB = require("../Model/Db");
 const Phieu_Kham_Benh = require("../Schema/Phieu_Kham_Benh"); 
 
 class Database_Phieu_Kham_Benh {
-    Select_Phieukhambenh_M = async (Callback) => {
-        try {
-            await connectDB();
-            const Select_Phieukhambenh = await Phieu_Kham_Benh.find({});
-            Callback(null, Select_Phieukhambenh);
-        } catch (error) {
-            Callback(error);
-        }   
-    };   
+Select_Phieukhambenh_M = async (NgayHienTai, TrangThai, TrangThaiHoatDong, Callback) => {
+  try {
+    await connectDB();
+
+    const query = {};
+
+    if (TrangThai) {
+      query["TrangThai"] = TrangThai;
+    }
+
+    if (TrangThaiHoatDong) {
+      query["TrangThaiHoatDong"] = TrangThaiHoatDong;
+    }
+
+    if (NgayHienTai === true || NgayHienTai === 'true') {
+      const ngayHienTai = new Date().toISOString().split('T')[0];
+      const formattedDate = ngayHienTai;
+
+      query["Ngay"] = formattedDate;
+    }
+
+    const total = await Phieu_Kham_Benh.find(query)
+    Callback(null, {total:total});
+  } catch (error) {
+    Callback(error);
+  }
+};
+
     
 
     Select_Check_Status_Phieukhambenh_M = async (Id_PhieuKhamBenh , Callback) => {
