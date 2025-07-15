@@ -29,18 +29,35 @@ class Hoadon_Controler {
     };
 
 
-    // 
+    // Lấy theo loại hóa đơn
     LayTheoLoai = (req, res, next) => {
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 7;
-
         const LoaiHoaDon = req.query.LoaiHoaDon;
+
         Connect_Data_Model.Select_LayTheoLoai__M (LoaiHoaDon , page , limit , (error, result) => {
             if (error) return next(error);
             if (result.length === 0) return res.status(404).json({ message: "Không có loại hóa đơn nào trong hệ thống" }); 
             res.status(200).json(result);
         });
     }
+
+    // Tìm kiếm theo loại
+    SearchByType = (req, res, next) => {
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 7;
+        const LoaiHoaDon = req.query.LoaiHoaDon;
+        const HoVaTen = (req.query.HoVaTen || "").trim(); 
+
+        if (!LoaiHoaDon) return res.status(400).json({ message: "Thiếu loại hóa đơn" });
+
+        Connect_Data_Model.SearchByType__M(page, limit, LoaiHoaDon, HoVaTen, (error, result) => {
+            if (error) return next(error);
+            if (!result || result.data.length === 0) return res.status(404).json({ message: "Không có kết quả" }); 
+            res.status(200).json(result);
+        });
+    };
+
 
 
     Detail_Hoadon =  (req, res, next) => {

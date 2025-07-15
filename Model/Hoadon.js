@@ -44,6 +44,7 @@ class Database_Hoadon {
 
 
     
+    // cái này nhé --- 
     Select_LayTheoLoai__M = async (LoaiHoaDon, page, limit, Callback) => {
         try {
             await connectDB();
@@ -77,14 +78,61 @@ class Database_Hoadon {
     };
 
 
+    SearchByType__M = async (page, limit, LoaiHoaDon, HoVaTen, Callback) => {
+    try {
+        await connectDB();
+        const skip = (page - 1) * limit;
+        const keyword = (HoVaTen || "").trim().toLowerCase();
 
-    
+        const condition = { LoaiHoaDon };
 
+        // Lấy tất cả dữ liệu trước
+        let fullList = await Hoadon.find(condition)
+            .populate({
+                path: "Id_PhieuKhamBenh",
+                select: "Ngay Id_TheKhamBenh Id_GiaDichVu",
+                populate: [
+                    {
+                        path: "Id_TheKhamBenh",
+                        select: "HoVaTen"
+                    },
+                    {
+                        path: "Id_GiaDichVu",
+                        select: "Giadichvu"
+                    }
+                ]
+            });
 
+        // 🔍 Lọc theo HoVaTen sau khi populate
+        if (keyword) {
+            fullList = fullList.filter((item) => {
+                const name = item?.Id_PhieuKhamBenh?.Id_TheKhamBenh?.HoVaTen || "";
+                return name.toLowerCase().includes(keyword);
+            });
+        }
 
+        const total = fullList.length;
+
+        // ⏳ Phân trang sau khi lọc
+        const paginatedData = fullList.slice(skip, skip + limit);
+
+        Callback(null, {
+            totalItems: total,
+            currentPage: page,
+            totalPages: Math.ceil(total / limit),
+            data: paginatedData,
+        });
+    } catch (error) {
+        Callback(error);
+    }
+};
 
 
    
+
+
+
+
     Detail__M = async (_id , Callback) => {
         try {
             await connectDB ();

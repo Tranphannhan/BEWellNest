@@ -63,6 +63,33 @@ class Database_Nhom_Thuoc {
             Callback(error);
         }
     }
+
+
+
+    TimKiemNhomThuoc__M = async (TenNhomThuoc, Callback) => {
+        try {
+            await connectDB();
+            const query = {};
+
+            if (TenNhomThuoc) {
+                query.TenNhomThuoc = { $regex: '^' + TenNhomThuoc, $options: 'i' }; // bắt đầu bằng từ khóa
+            }
+
+            const SelectNhomthuoc = await NhomThuoc.find(query).limit(7);
+            const total = await NhomThuoc.countDocuments(query);
+
+            Callback(null, {
+                totalItems: total,
+                currentPage: 1,
+                totalPages: Math.ceil(total / 7),
+                data: SelectNhomthuoc
+            });
+        } catch (error) {
+            Callback(error);
+        }
+    };
+
+
 }
 
 module.exports = Database_Nhom_Thuoc;

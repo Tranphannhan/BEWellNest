@@ -69,7 +69,16 @@ class Thuoc_Controler {
     });
   };
 
+  TimKiemNhomThuoc = (req, res, next) => {
+    const TenNhomThuoc = req.query.TenNhomThuoc || null;
+    Connect_Data_Model.TimKiemNhomThuoc__M  (TenNhomThuoc ,(error, result) => {
+      if (error) return next(error);
+      if (result.length < 1) return res.status(404).json({ message: "Không tìm thấy nhóm thuốc nào" });
+      res.status(200).json(result);
+    });
+  };  
 
+  
 }
 
 module.exports = Thuoc_Controler;

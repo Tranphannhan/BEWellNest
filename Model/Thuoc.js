@@ -25,37 +25,32 @@ class Database_Thuoc {
             Callback(error);
         }   
     };
- 
+    
 
-TimKiemTenThuoc__M = async (Key_Search, Id_NhomThuoc, Callback) => {
-    try {
-        await connectDB();
+    TimKiemTenThuoc__M = async (TenThuoc, Callback) => {
+        try {
+            await connectDB();
+            const query = {};
 
-        const query = {};
+            if (TenThuoc) {
+                query.TenThuoc = { $regex: '^' + TenThuoc, $options: 'i' }; // bắt đầu bằng từ khóa
+            }
 
-        // Gán điều kiện theo nhóm thuốc nếu có
-        if (Id_NhomThuoc) {
-            query.Id_NhomThuoc = Id_NhomThuoc;
+            const Select_Thuoc = await Thuoc.find(query).limit(7);
+            const total = await Thuoc.countDocuments(query);
+
+            Callback(null, {
+                totalItems: total,
+                currentPage: 1,
+                totalPages: Math.ceil(total / 7),
+                data: Select_Thuoc
+            });
+        } catch (error) {
+            Callback(error);
         }
+    };
 
-        // Gán điều kiện tìm kiếm theo tên thuốc nếu có
-        if (Key_Search) {
-            query.TenThuoc = { $regex: '^' + Key_Search, $options: 'i' }; // bắt đầu bằng từ khóa
-        }
 
-        const Select_Thuoc = await Thuoc.find(query).limit(7);
-        const total = await Thuoc.countDocuments(query);
-
-        Callback(null, {
-            totalItems: total,
-            currentPage: 1,
-            totalPages: Math.ceil(total / 7),
-            data: Select_Thuoc
-        });
-    } catch (error) {
-        Callback(error);
-    }
-};
 
 
 

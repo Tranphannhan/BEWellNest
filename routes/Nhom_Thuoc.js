@@ -8,6 +8,8 @@ router.get('/Detail/:ID', Handle_Thuoc.Detail_Nhomthuoc);
 router.post ('/Add' , Handle_Thuoc.Add_Nhomthuoc);
 router.put ('/Edit/:ID' , Handle_Thuoc.Edit_Nhomthuoc);
 router.delete ('/Delete/:ID' , Handle_Thuoc.Delete_Nhomthuoc);
+router.get ('/TimKiemNhomThuoc' , Handle_Thuoc.TimKiemNhomThuoc);
+
 module.exports = router;    
 
     
