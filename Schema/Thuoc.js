@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const ObjectId = mongoose.Types.ObjectId;
  
 const Thuoc_Schema = new mongoose.Schema({
     Id_NhomThuoc:{

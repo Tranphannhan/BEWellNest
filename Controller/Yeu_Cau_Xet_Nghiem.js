@@ -8,7 +8,11 @@ class Yeucauxetnghiem_Controler {
   };
 
   Select_Yeucauxetnghiem = (req, res, next) => {
-    Connect_Data_Model.Select_Yeucauxetnghiem_M((error, result) => {
+    const TrangThaiThanhToan = req.query.TrangThaiThanhToan || null;
+    const TrangThai = req.query.TrangThai || null;
+    const NgayHienTai = req.query.NgayHienTai || null;
+    const TrangThaiHoatDong = req.query.TrangThaiHoatDong || null;
+    Connect_Data_Model.Select_Yeucauxetnghiem_M(NgayHienTai, TrangThaiThanhToan, TrangThai, TrangThaiHoatDong,(error, result) => {
       if (error) return next(error);
       if (result.length < 1) return res.status(404).json({ message: "Dữ liệu Yeucauxetnghiem Rỗng" });
       res.status(200).json(result);

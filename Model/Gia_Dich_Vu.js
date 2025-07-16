@@ -131,6 +131,45 @@ class Database_Dichvu {
             Callback(error);
         }
     }
+
+    Activate_GiaKham__M = async (id, Callback) => {
+    try {
+        await connectDB();
+
+        // 1. Tắt tất cả giá GiaKham
+        await Hoadon.updateMany(
+            { Loaigia: "GiaKham" },
+            { $set: { TrangThaiHoatDong: false } }
+        );
+
+        // 2. Bật giá mà người dùng chọn
+        const updated = await Hoadon.findByIdAndUpdate(
+            id,
+            { TrangThaiHoatDong: true },
+            { new: true }
+        );
+
+        Callback(null, updated);
+    } catch (error) {
+        Callback(error);
+    }
+}
+
+GetActive_GiaKham__M = async (Callback) => {
+    try {
+        await connectDB();
+        const activeExaminationPrices = await Hoadon.find({
+            Loaigia: "GiaKham",
+            TrangThaiHoatDong: true
+        });
+        Callback(null, activeExaminationPrices);
+    } catch (error) {
+        Callback(error);
+    }
+};
+
+
+
 }
 
 module.exports = Database_Dichvu;

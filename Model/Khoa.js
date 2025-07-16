@@ -104,6 +104,18 @@ class Database_Khoa {
         Callback(error);
       }
     };
+
+   Update_CanLamSang = async (id, CanLamSang, Callback) => {
+  try {
+    await connectDB();
+    const updated = await Khoa.findByIdAndUpdate(id, { CanLamSang }, { new: true });
+    Callback(null, updated);
+  } catch (error) {
+    Callback(error);
+  }
+};
+
+
 }
 
 module.exports = Database_Khoa; 

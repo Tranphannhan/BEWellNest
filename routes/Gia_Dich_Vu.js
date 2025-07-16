@@ -11,4 +11,6 @@ router.put('/Edit/:ID', Handle_Giadichvu.Upload_Giadichvu);
 router.delete('/Delete/:ID', Handle_Giadichvu.Delete_Giadichvu);
 router.patch ('/SuaTrangThai/:ID', Handle_Giadichvu.SuaTrangThai);
 router.get ('/Search' , Handle_Giadichvu.Search);
+router.put('/ActivateGiaKham/:ID', Handle_Giadichvu.Activate_GiaKham);
+router.get('/ActiveGiaKham', Handle_Giadichvu.GetActive_GiaKham);
 module.exports = router;

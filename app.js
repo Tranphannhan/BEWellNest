@@ -27,6 +27,7 @@ let indexRouter_Giadichvu = require ('./routes/Gia_Dich_Vu');
 let indexRouter_Loai_Xet_Nghiem = require ('./routes/Loai_Xet_Nghiem');
 let indexRouter_Chi_Tiet_Kham_Lam_Sang = require ('./routes/Chi_Tiet_Kham_Lam_Sang');
 let indexRouter_Chi_So_Sinh_Ton = require ('./routes/Chi_So_Sinh_Ton');
+let indexRouter_Chuc_Nang_He_Thong = require ('./routes/Chuc_Nang_He_Thong');
 let indexRouter_MoMo = require ('./routes/momo');
   
 
@@ -75,6 +76,7 @@ app.use ('/Giadichvu' , indexRouter_Giadichvu);
 app.use ('/Loaixetnghiem' , indexRouter_Loai_Xet_Nghiem);
 app.use ('/Chi_Tiet_Kham_Lam_Sang' , indexRouter_Chi_Tiet_Kham_Lam_Sang);
 app.use ('/Chi_So_Sinh_Ton' , indexRouter_Chi_So_Sinh_Ton);
+app.use ('/Chuc_Nang_He_Thong' , indexRouter_Chuc_Nang_He_Thong);
 app.use ('/PaymentMoMo' , indexRouter_MoMo);
 
 

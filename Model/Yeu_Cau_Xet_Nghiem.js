@@ -5,15 +5,38 @@ const Loaixetnghiem = require("../Schema/Loai_Xet_Nghiem");
 const Phieu_Kham_Benh = require("../Schema/Phieu_Kham_Benh"); 
 
 class Database_Yeu_Cau_Xet_Nghiem {
-    Select_Yeucauxetnghiem_M = async (Callback) => {
-        try {
-            await connectDB();
-            const Select_Yeucauxetnghiem = await Yeucauxetnghiem.find({});
-            Callback(null, Select_Yeucauxetnghiem);
-        } catch (error) {
-            Callback(error);
-        }   
-    };    
+    Select_Yeucauxetnghiem_M = async (NgayHienTai, TrangThaiThanhToan, TrangThai, TrangThaiHoatDong, Callback) => {
+      try {
+        await connectDB();
+
+        const query = {};
+
+        if (TrangThaiThanhToan) {
+          query["TrangThaiThanhToan"] = TrangThaiThanhToan;
+        }
+
+        if (TrangThai) {
+          query["TrangThai"] = TrangThai;
+        }
+
+        if (TrangThaiHoatDong){
+          query["TrangThaiHoatDong"] = TrangThaiHoatDong;
+        }
+
+      if (NgayHienTai === true || NgayHienTai === 'true') {
+      const ngayHienTai = new Date().toISOString().split('T')[0];
+      const formattedDate = ngayHienTai;
+
+      query["Ngay"] = formattedDate;
+    }
+
+        const total = await Yeucauxetnghiem.countDocuments(query)
+        Callback(null, {total:total});
+      } catch (error) {
+        Callback(error);
+      }
+    };
+ 
   
     Detail__M = async (_id , Callback) => {
         try {

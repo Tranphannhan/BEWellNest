@@ -10,5 +10,6 @@ router.delete('/:id', Handle_Khoa.deleteKhoa);
 router.put('/:id', Handle_Khoa.updateKhoa);
 router.patch ('/TrangThaiHoatDong/:ID' , Handle_Khoa.ThayDoiTrangThaiHoatDong);
 router.get ('/Search' , Handle_Khoa.Search);
+router.patch('/CanLamSang/:ID', Handle_Khoa.updateTrangThaiCanLamSang);
 module.exports = router;    
    
