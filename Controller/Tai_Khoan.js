@@ -134,7 +134,8 @@ class Tai_Khoan_Controler {
                 _TenTaiKhoan :  result.TenTaiKhoan,
                 _SoDienThoai : result.SoDienThoai,
                 _SoCCCD : result.SoCCCD,
-                _Image : result.Image
+                _Image : result.Image,
+                _Id_PhongThietBi: result.Id_PhongThietBi || null,
             } 
 
             const jwt = require('jsonwebtoken');
