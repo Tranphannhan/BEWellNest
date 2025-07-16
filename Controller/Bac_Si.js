@@ -130,6 +130,8 @@ class Bacsi_Controler {
         _NamSinh : result.NamSinh,
         _VaiTro: result.VaiTro,
         _Image : result.Image,
+        _SoCCCD: result.SoCCCD,
+        _ChuyenKhoa:result.ID_Khoa.TenKhoa,
         _TrangThaiHoatDong : result.TrangThaiHoatDong
       }   
 
