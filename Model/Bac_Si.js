@@ -180,7 +180,6 @@ class Database_Bacsi {
   }
 
 
-
   // Thêm bác sĩ
   Insert_Bacsi_M = async (data, Callback) => {
     try {
@@ -204,6 +203,21 @@ class Database_Bacsi {
       Callback(error);
     }
   };
+
+
+  // Cập nhật trạng thái bác sĩ
+  StateChange__M = async (id, TrangThaiHoatDong , Callback) => {
+    try {
+      await connectDB();
+      const updated = await Bac_Si.findByIdAndUpdate (id, {TrangThaiHoatDong}, { new: true });
+      Callback(null, updated);
+    } catch (error) {
+      Callback(error);
+    }
+  };
+
+
+
 
   // Xóa bác sĩ
   Delete_Bacsi_M = async (id, Callback) => {

@@ -73,16 +73,16 @@ class Giadichvu_Controler {
     };
 
   
+    // cập nhật trạng thái 
     SuaTrangThai = (req ,res , next) => {
         const { ID } = req.params;
         const GET_Status = req.query.TrangThaiHoatDong;
 
         Connect_Data_Model.SuaTrangThai__M (ID , GET_Status, (error, result) => {
-            if (error) return res.status(500).json({ message: "Cập nhật giá dịch vụ thất bại"});
-            res.status(201).json({ message: "cập nhật Trạng thái thành công"}); 
+            if (error) return res.status(500).json({ message: "Cập nhật giá dịch vụ thất bại" , status : false});
+            res.status(201).json({ message: "cập nhật Trạng thái thành công" , status : true}); 
         });
     }
-
 
 
     Upload_Giadichvu = (req, res, next) => {

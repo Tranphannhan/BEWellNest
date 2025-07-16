@@ -26,19 +26,30 @@ class Database_Phong_Thiet_Bi {
     }
   };
 
- 
-  SearchRoom__M = async (TenPhongThietBi, Callback) => {
+
+  // Cập nhật trạng thái 
+  StateChange__M = async (id, TrangThaiHoatDong , Callback) => {
     try {
       await connectDB();
-      const result = await Phong_Thiet_Bi.find({
-        TenPhongThietBi: { $regex: TenPhongThietBi, $options: "i" }})
-
-      Callback(null, result);
+      const updated = await Phong_Thiet_Bi.findByIdAndUpdate (id, {TrangThaiHoatDong}, { new: true });
+      Callback(null, updated);
     } catch (error) {
       Callback(error);
     }
   };
 
+
+  // Tìm kiếm 
+  SearchRoom__M = async (TenPhongThietBi, Callback) => {
+    try {
+      await connectDB();
+      const result = await Phong_Thiet_Bi.find({
+        TenPhongThietBi: { $regex: TenPhongThietBi, $options: "i" }})
+      Callback(null, result);
+    } catch (error) {
+      Callback(error);
+    }
+  };
 
 
   Get_Detail_Phong_Thiet_Bi_M = async (id, Callback) => {

@@ -12,4 +12,5 @@ router.post('/', Handle_Phong_Kham.add_Phong_Kham);
 router.delete('/:id', Handle_Phong_Kham.deletePhong_Kham);
 router.put('/:id', Handle_Phong_Kham.updatePhong_Kham);
 router.get ('/Search/:room' , Handle_Phong_Kham.SearchRoom);
+router.patch ('/StateChange/:id' , Handle_Phong_Kham.StateChange);
 module.exports = router;      

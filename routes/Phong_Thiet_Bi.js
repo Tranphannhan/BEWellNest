@@ -11,5 +11,5 @@ router.post('/Add', Upload.Upload_Image__.single("Image"), Handle_Phong_Thiet_Bi
 router.delete('/:id', Handle_Phong_Thiet_Bi.deletePhong_Thiet_Bi);
 router.put('/:id', Upload.Upload_Image__.single("Image"),Handle_Phong_Thiet_Bi.updatePhong_Thiet_Bi);
 router.get('/Search/:room' , Handle_Phong_Thiet_Bi.SearchRoom);
-
+router.patch ('/StateChange/:id' , Handle_Phong_Thiet_Bi.StateChange);
 module.exports = router;         

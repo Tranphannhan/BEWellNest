@@ -9,7 +9,7 @@ router.post ('/Add' , Handle_Thuoc.Add_Nhomthuoc);
 router.put ('/Edit/:ID' , Handle_Thuoc.Edit_Nhomthuoc);
 router.delete ('/Delete/:ID' , Handle_Thuoc.Delete_Nhomthuoc);
 router.get ('/TimKiemNhomThuoc' , Handle_Thuoc.TimKiemNhomThuoc);
-
+router.patch ('/StateChange/:id' , Handle_Thuoc.StateChange);
 module.exports = router;    
 
     

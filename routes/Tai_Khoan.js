@@ -13,4 +13,5 @@ router.put ('/Edit/:ID' , Upload.Upload_Image__.single("Image") , Handle_Tai_Kho
 router.delete ('/Delete/:ID' , Handle_Tai_Khoan.Delete_Tai_Khoan);
 router.post ('/Login/:Id_LoaiTaiKhoan' , Handle_Tai_Khoan.Check_Login);
 router.get ('/Search' , Handle_Tai_Khoan.Search);
+router.patch ('/StateChange/:id' , Handle_Tai_Khoan.StateChange);
 module.exports = router;    

@@ -9,6 +9,6 @@ router.get('/Detail/:ID', Handle_Giadichvu.GetDetail_Giadichvu);
 router.post('/Add', Handle_Giadichvu.Add_Giadichvu);
 router.put('/Edit/:ID', Handle_Giadichvu.Upload_Giadichvu);
 router.delete('/Delete/:ID', Handle_Giadichvu.Delete_Giadichvu);
-router.put ('/SuaTrangThai/:ID', Handle_Giadichvu.SuaTrangThai);
+router.patch ('/SuaTrangThai/:ID', Handle_Giadichvu.SuaTrangThai);
 router.get ('/Search' , Handle_Giadichvu.Search);
 module.exports = router;

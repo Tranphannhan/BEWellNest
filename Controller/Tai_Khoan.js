@@ -41,8 +41,21 @@ class Tai_Khoan_Controler {
             return res.status(200).json(result);
         });
     };
+    
 
+    // chuyển đổi trạng thái nhân viên
+    StateChange = (req, res, next) => {
+        const id = req.params.id;
+        const TrangThaiHoatDong = req.query.TrangThaiHoatDong;
+        if (TrangThaiHoatDong == null || !id)  return res.status(400).json({ message: "Thiếu ID hoặc trạng thái" });
 
+        Connect_Data_Model.StateChange__M(id, TrangThaiHoatDong, (error, result) => {
+            if (error) return res.status(500).json({ message: 'Lỗi khi cập nhật trạng thái', error , status : false });
+            return res.status(200).json({ message: "Cập nhật trạng thái thành công" , status : true});
+        });
+    };
+
+    
     Get_Tai_Khoan_ById = (req, res, next) => {
         this.ID = req.params.ID;
         if (!this.ID) return res.status(400).json({ message: "Thiếu ID tài khoản" });

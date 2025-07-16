@@ -25,6 +25,19 @@ class Database_Thuoc {
             Callback(error);
         }   
     };
+
+
+     // Cập nhật trạng thái 
+    StateChange__M = async (id, TrangThaiHoatDong , Callback) => {
+        try {
+        await connectDB();
+        const updated = await Thuoc.findByIdAndUpdate (id, {TrangThaiHoatDong}, { new: true });
+        Callback(null, updated);
+        } catch (error) {
+        Callback(error);
+        }
+    };
+
     
 
     TimKiemTenThuoc__M = async (TenThuoc, Callback) => {

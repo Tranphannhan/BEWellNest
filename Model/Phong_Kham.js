@@ -44,6 +44,19 @@ class Database_Phong_Kham {
   };
 
 
+    // Cập nhật trạng thái 
+  StateChange__M = async (id, TrangThaiHoatDong , Callback) => {
+    try {
+      await connectDB();
+      const updated = await Phong_Kham.findByIdAndUpdate (id, {TrangThaiHoatDong}, { new: true });
+      Callback(null, updated);
+    } catch (error) {
+      Callback(error);
+    }
+  };
+
+
+
   GetDetail_Phong_Kham_M = async (id, Callback) => {
     try {
       await connectDB();

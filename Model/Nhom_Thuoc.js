@@ -64,6 +64,16 @@ class Database_Nhom_Thuoc {
         }
     }
 
+  // Cập nhật trạng thái 
+  StateChange__M = async (id, TrangThaiHoatDong , Callback) => {
+    try {
+      await connectDB();
+      const updated = await NhomThuoc.findByIdAndUpdate (id, {TrangThaiHoatDong}, { new: true });
+      Callback(null, updated);
+    } catch (error) {
+      Callback(error);
+    }
+  };
 
 
     TimKiemNhomThuoc__M = async (TenNhomThuoc, Callback) => {

@@ -46,6 +46,17 @@ class Database_Taikhoan {
     };
 
 
+    // Cập nhật trạng thái bác sĩ
+    StateChange__M = async (id, TrangThaiHoatDong , Callback) => {
+        try {
+        await connectDB();
+        const updated = await Taikhoan.findByIdAndUpdate (id, {TrangThaiHoatDong}, { new: true });
+        Callback(null, updated);
+        } catch (error) {
+        Callback(error);
+        }
+    };
+
 
     Get_Tai_Khoan_ById_M = async (id, Callback) => {
         try {

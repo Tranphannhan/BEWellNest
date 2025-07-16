@@ -14,4 +14,5 @@ router.put('/Edit/:id', Upload.Upload_Image__.single("Image") , Handle_Bac_Si.up
 router.delete('/:id', Handle_Bac_Si.deleteBacSi);
 router.post ('/Login' , Handle_Bac_Si.Check_Login); 
 router.get ('/Search' , Handle_Bac_Si.Search);
+router.patch ('/StateChange/:id' , Handle_Bac_Si.StateChange);
 module.exports = router;          
