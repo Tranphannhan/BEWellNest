@@ -10,6 +10,17 @@ class Thuoc_Controler {
     });
   };
 
+  UpdateChucNang = (req, res, next) => {
+    const id = req.params.id;
+    const dataUpdate = req.body;
+
+    Connect_Data_Model.UpdateChucNang__M(id, dataUpdate, (error, result) => {
+      if (error) return next(error);
+      if (!result) return res.status(404).json({ message: "Không tìm thấy dữ liệu cần cập nhật" });
+      res.status(200).json({ message: "Cập nhật thành công", data: result });
+    });
+  };
+  
 }
 
 module.exports = Thuoc_Controler;

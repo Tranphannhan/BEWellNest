@@ -60,7 +60,8 @@ class Khoa_Controler {
   add_Khoa = (req, res, next) => {
     const data = {
       TenKhoa: req.body.TenKhoa?.trim(),
-      TrangThaiHoatDong : true
+      TrangThaiHoatDong : true,
+      CanLamSang:false
     };
    
     if (!data.TenKhoa) {
@@ -119,7 +120,7 @@ class Khoa_Controler {
   const { id } = req.params;
   const data = {
     TenKhoa: req.body.TenKhoa?.trim(),
-    TrangThaiHoatDong: req.body.TrangThaiHoatDong
+    TrangThaiHoatDong: req.body.TrangThaiHoatDong,
   };
 
   if (!data.TenKhoa) {
@@ -142,6 +143,32 @@ class Khoa_Controler {
 
     return res.status(200).json({
       message: 'Cập nhật khoa thành công',
+      data: updatedKhoa,
+    });
+  });
+};
+
+  updateTrangThaiCanLamSang = (req, res, next) => {
+  const { ID } = req.params;
+  const { CanLamSang } = req.query;
+
+  if (typeof CanLamSang === "undefined") {
+    return res.status(400).json({ message: "Vui lòng truyền CanLamSang" });
+  }
+
+  const booleanValue = CanLamSang === "true" || CanLamSang === true;
+
+  Connect_Data_Model.Update_CanLamSang(ID, booleanValue, (error, updatedKhoa) => {
+    if (error) {
+      return res.status(500).json({ message: "Lỗi khi cập nhật CanLamSang", error });
+    }
+
+    if (!updatedKhoa) {
+      return res.status(404).json({ message: "Không tìm thấy khoa để cập nhật CanLamSang" });
+    }
+
+    return res.status(200).json({
+      message: "Cập nhật CanLamSang thành công",
       data: updatedKhoa,
     });
   });

@@ -67,9 +67,12 @@ class Giadichvu_Controler {
         };
 
         Connect_Data_Model.Add_Giadichvu__M (data, (error, result) => {
-            if (error) return res.status(500).json({ message: "Thêm giá dịch vụ thất bại"});
-            res.status(201).json({ message: "Thêm giá dịch vụ thành công"}); 
+        if (error) return res.status(500).json({ message: "Thêm giá dịch vụ thất bại"});
+        res.status(201).json({
+            message: "Thêm giá dịch vụ thành công",
+            data: result  // thêm dòng này để trả về document mới thêm, có _id
         });
+    });
     };
 
   
@@ -107,6 +110,24 @@ class Giadichvu_Controler {
             return res.status(200).json({ message: 'Xóa giá dịch vụ thành công'});
         });
     };
+
+    Activate_GiaKham = (req, res, next) => {
+    const { ID } = req.params;
+
+    Connect_Data_Model.Activate_GiaKham__M(ID, (error, result) => {
+        if (error) return res.status(500).json({ message: "Kích hoạt thất bại", error });
+        return res.status(200).json({ message: "Kích hoạt giá GiaKham thành công", data: result });
+    });
+}
+
+GetActive_GiaKham = (req, res, next) => {
+    Connect_Data_Model.GetActive_GiaKham__M((error, result) => {
+        if (error) return res.status(500).json({ message: "Lấy giá khám đang hoạt động thất bại" });
+        if (!result || result.length === 0) return res.status(404).json({ message: "Không có giá khám nào đang hoạt động" });
+        return res.status(200).json(result);
+    });
+};
+
 
 
 }

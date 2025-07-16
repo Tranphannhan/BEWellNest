@@ -11,7 +11,17 @@ class Database_Thuoc {
         } catch (error) {
             Callback(error);
         }   
-    };  
+    };
+    
+    UpdateChucNang__M = async (id, dataUpdate, Callback) => {
+    try {
+      await connectDB();
+      const Updated = await ChucNangHeThong.findByIdAndUpdate(id, dataUpdate, { new: true });
+      Callback(null, Updated);
+    } catch (error) {
+      Callback(error);
+    }
+  };
 }
 
 module.exports = Database_Thuoc;

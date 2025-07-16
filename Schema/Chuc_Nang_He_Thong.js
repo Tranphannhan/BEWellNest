@@ -8,6 +8,6 @@ const Thuoc_Schema = new mongoose.Schema({
     },
     ThoiGianKham:Number,
     ApDungThoiGianKham:Boolean,
-    GioiHangBenhNhan:Number
+    GioiHanBenhNhan:Number
 }, { collection: "Chuc_Nang_He_Thong" }); 
 module.exports = mongoose.model("Chuc_Nang_He_Thong", Thuoc_Schema);
