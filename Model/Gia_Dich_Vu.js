@@ -158,7 +158,7 @@ class Database_Dichvu {
 GetActive_GiaKham__M = async (Callback) => {
     try {
         await connectDB();
-        const activeExaminationPrices = await Hoadon.find({
+        const activeExaminationPrices = await Hoadon.findOne({
             Loaigia: "GiaKham",
             TrangThaiHoatDong: true
         });

@@ -6,7 +6,7 @@ class Database_Thuoc {
     GetChucNang__M = async (Callback) => {
         try {
             await connectDB();
-            const Select_Thuoc = await ChucNangHeThong.find({});
+            const Select_Thuoc = await ChucNangHeThong.findOne({});
             Callback(null, Select_Thuoc);
         } catch (error) {
             Callback(error);
