@@ -2,6 +2,7 @@
 const Connect_Select_Yeu_Cau_Xet_Nghiem = require("../Model/Yeu_Cau_Xet_Nghiem");
 const Connect_Data_Model = new Connect_Select_Yeu_Cau_Xet_Nghiem();
 
+
 class Yeucauxetnghiem_Controler {
   Runviews = (req, res, next) => {
     res.status(200).json({ message: "Loadding Thành Công" });
@@ -39,6 +40,8 @@ class Yeucauxetnghiem_Controler {
 
   PaymentConfirmation = (req, res, next) => {
     const Id_PhieuKhamBenh = req.query.Id_PhieuKhamBenh;
+    const Id_ThuNgan = req.query.Id_ThuNgan;
+    if(!Id_ThuNgan)return res.status(404).json({ message: "Không có Id_ThuNgan" });
     if(!Id_PhieuKhamBenh) return res.status(404).json({ message: "Không có Id_PhieuKhamBenh" });
     Connect_Data_Model.Select_Check_Status_Yeucauxetnghiem_M ( Id_PhieuKhamBenh , (error, result) => {
       if (error) return next(error);
@@ -46,7 +49,7 @@ class Yeucauxetnghiem_Controler {
         return res.status(404).json({ message: "không có yêu cầu xét nghiệm cần thanh toán" });
       }else{
         const listId = result.map(item => item._id);
-          Connect_Data_Model.PaymentConfirmation_M(listId,(error, result)=>{
+          Connect_Data_Model.PaymentConfirmation_M(listId, Id_PhieuKhamBenh, Id_ThuNgan,(error, result)=>{
             if (error) return next(error);
             return res.status(200).json({
               message: "Xác nhận thanh toán yêu cầu xét nghiệm thành công",
@@ -199,9 +202,10 @@ TimKiemBenhNhanBangSDTHoacIdTheKhamBenh = (req, res, next) => {
   const limit = parseInt(req.query.limit) || 7;
   const page = parseInt(req.query.page) || 1;
   const TrangThaiHoatDong = req.query.TrangThaiHoatDong || null;
+  const BoQua = req.query.BoQua || null;
 
   Connect_Data_Model.TimKiemBenhNhanBangSDTHoacIdTheKhamBenh__M(
-    page, limit, id_PhongThietBi, ngay,
+    page, limit, id_PhongThietBi, BoQua, ngay,
     TrangThai, TrangThaiHoatDong, TrangThaiThanhToan,
     SDT, HoVaTen, // Truyền đúng tham số
     (error, result) => {

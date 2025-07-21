@@ -3,6 +3,8 @@ const connectDB = require("../Model/Db");
 const Yeucauxetnghiem = require("../Schema/Yeu_Cau_Xet_Nghiem"); 
 const Loaixetnghiem = require("../Schema/Loai_Xet_Nghiem"); 
 const Phieu_Kham_Benh = require("../Schema/Phieu_Kham_Benh"); 
+const Connect_Hoadon_M = require("../Model/Hoadon");
+const Connect_Data_Model = new Connect_Hoadon_M();
 
 class Database_Yeu_Cau_Xet_Nghiem {
     Select_Yeucauxetnghiem_M = async (NgayHienTai, TrangThaiThanhToan, TrangThai, TrangThaiHoatDong, Callback) => {
@@ -148,49 +150,75 @@ Select_Check_Status_Yeucauxetnghiem_M = async (id, Callback) => {
 };
 
 
-   PaymentConfirmation_M = async (arrID, Callback) => {
-    try {
-        await connectDB();
+PaymentConfirmation_M = async (arrID, Id_PhieuKhamBenh, Id_ThuNgan, Callback) => {
+  try {
+    await connectDB();
+    const results = [];
 
-        const results = [];
+    for (const id of arrID) {
+      try {
+        const stt = await this.GetNextSTT_ByYeuCauId(id);
 
-        for (const id of arrID) {
-            const stt = await this.GetNextSTT_ByYeuCauId(id); // phải chờ STT mới nhất
-
-            const updated = await Yeucauxetnghiem.findByIdAndUpdate(
-                id,
-                {
-                    $set: {
-                        TrangThaiThanhToan: true,
-                        STT: stt,
-                    },
-                },
-                { new: true }
-            ).populate([
-                { path: "Id_LoaiXetNghiem" },
-                {
-                    path: "Id_PhieuKhamBenh",
-                    select: "TrangThaiThanhToan",
-                    populate: {
-                        path: "Id_TheKhamBenh",
-                        select: "HoVaTen"
-                    }
-                }
-            ]);
-
-            if (!updated) {
-                return Callback("Thanh toán thất bại");
+        const updated = await Yeucauxetnghiem.findByIdAndUpdate(
+          id,
+          {
+            $set: {
+              TrangThaiThanhToan: true,
+              STT: stt,
+            },
+          },
+          { new: true }
+        ).populate([
+          { path: "Id_LoaiXetNghiem" },
+          {
+            path: "Id_PhieuKhamBenh",
+            select: "TrangThaiThanhToan",
+            populate: {
+              path: "Id_TheKhamBenh",
+              select: "HoVaTen"
             }
+          }
+        ]);
 
-            results.push(updated);
+        if (!updated) {
+          results.push({ id, status: "fail", message: "Không tìm thấy yêu cầu để cập nhật" });
+          continue;
         }
 
-        return Callback(null, results);
+        const hoaDonData = {
+          Id_PhieuKhamBenh: Id_PhieuKhamBenh,
+          Id_Dichvu: id,
+          Id_ThuNgan: Id_ThuNgan,
+          LoaiHoaDon: 'XetNghiem',
+          TenHoaDon: 'Hóa Đơn Xét nghiệm',
+        };
 
-    } catch (error) {
-        return Callback("Thanh toán thất bại");
+        await new Promise((resolve) => {
+          Connect_Data_Model.Add_Hoadon__M(hoaDonData, (err, res) => {
+            if (err) {
+              console.error("Tạo hóa đơn thất bại:", err);
+              results.push({ id, status: "partial", data: updated, message: "Hóa đơn thất bại" });
+              resolve();
+            } else {
+              results.push({ id, status: "success", data: updated });
+              resolve();
+            }
+          });
+        });
+      } catch (err) {
+        console.error("Lỗi xử lý id:", id, err);
+        results.push({ id, status: "fail", message: "Lỗi khi xử lý" });
+      }
     }
+
+    return Callback(null, results);
+  } catch (error) {
+    console.error("Lỗi tổng thể:", error);
+    return Callback("Thanh toán thất bại");
+  }
 };
+
+
 
 
       
@@ -412,7 +440,7 @@ Upload_Status_handling__M = async (ID, Callback) => {
 
 
 TimKiemBenhNhanBangSDTHoacIdTheKhamBenh__M = async (
-  page, limit, id_PhongThietBi, Ngay,
+  page, limit, id_PhongThietBi, BoQua, Ngay,
   TrangThai, TrangThaiHoatDong, TrangThaiThanhToan,
   SDT, HoVaTen, Callback
 ) => {
@@ -458,6 +486,10 @@ TimKiemBenhNhanBangSDTHoacIdTheKhamBenh__M = async (
       query.TrangThai = TrangThai;
     }
 
+    if (BoQua !== null && BoQua !== undefined) {
+    query.BoQua = BoQua;
+  }
+
     const allResults = await Yeucauxetnghiem.find(query)
       .populate([
         {
@@ -469,7 +501,7 @@ TimKiemBenhNhanBangSDTHoacIdTheKhamBenh__M = async (
         },
         {
           path: 'Id_LoaiXetNghiem',
-          select: 'TenXetNghiem',
+          select: 'TenXetNghiem Id_ThietBi',
           populate: {
             path: 'Id_GiaDichVu',
             select: 'Giadichvu'
@@ -478,10 +510,20 @@ TimKiemBenhNhanBangSDTHoacIdTheKhamBenh__M = async (
       ])
       .sort({ createdAt: 1 });
 
+    let filteredAllResults = allResults;
+
+    // Nếu có id_PhongThietBi → lọc theo thiết bị
+    if (id_PhongThietBi) {
+      filteredAllResults = allResults.filter(item => {
+        const thietBiId = item?.Id_LoaiXetNghiem?.Id_ThietBi?._id?.toString();
+        return thietBiId === id_PhongThietBi;
+      });
+}
+
     // 4. Gom nhóm theo phiếu khám bệnh để tính tổng tiền
     const grouped = new Map();
 
-    for (const item of allResults) {
+    for (const item of filteredAllResults) {
       const phieuId = item?.Id_PhieuKhamBenh?._id?.toString();
       const gia = item?.Id_LoaiXetNghiem?.Id_GiaDichVu?.Giadichvu || 0;
 
