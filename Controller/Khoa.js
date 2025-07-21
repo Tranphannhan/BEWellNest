@@ -1,5 +1,8 @@
 const Connect_Khoa = require("../Model/Khoa");
 const Connect_Data_Model = new Connect_Khoa();
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 class Khoa_Controler {
   Runviews = (req, res, next) => res.status(200).json({ message: "Loadding Thành Công" }); // ✅ Đã sửa thành chuẩn response JSON
@@ -173,6 +176,104 @@ class Khoa_Controler {
     });
   });
 };
+
+suggestKhoa = async (req, res, next) => {
+  const { symptoms } = req.body;
+
+  if (!Array.isArray(symptoms) || symptoms.length === 0) {
+    return res.status(400).json({ message: "Vui lòng cung cấp danh sách triệu chứng" });
+  }
+
+  try {
+    // Lấy danh sách khoa từ database
+    Connect_Data_Model.Select_Khoa_M(1, 100, true, async (error, result) => {
+      if (error) return next(error);
+      if (!result || result.data.length < 1) {
+        return res.status(404).json({ message: "Dữ liệu khoa rỗng" });
+      }
+
+      const khoaList = result.data.map(khoa => khoa.TenKhoa).join(", ");
+      const symptomList = symptoms.join(", ");
+
+      // Prompt yêu cầu Gemini phân tích triệu chứng và đề xuất
+      const prompt = `
+Tôi có các triệu chứng sau: ${symptomList}.
+Danh sách các khoa trong bệnh viện: ${khoaList}.
+
+Nhiệm vụ của bạn:
+1. Phân tích và xác định triệu chứng **nghiêm trọng hoặc cần xử lý y tế trước**.
+2. Dựa vào triệu chứng nghiêm trọng nhất đó, chọn ra 1 khoa phù hợp nhất và **ưu tiên các khoa có tính chất cấp cứu hoặc xử lý chấn thương** → gọi là "khoaUuTien".
+3. Các triệu chứng nhẹ hơn có thể dẫn đến các "khoaLienQuan".
+4. Chỉ sử dụng tên khoa trong danh sách đã cung cấp.
+
+Trả về kết quả ở định dạng JSON thuần (không thêm giải thích):
+{
+  "khoaUuTien": "Tên khoa",
+  "khoaLienQuan": ["Tên khoa 1", "Tên khoa 2"]
+}
+Nếu không rõ, để "Không xác định".
+`;
+
+      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+      const geminiResult = await model.generateContent(prompt);
+      const geminiText = geminiResult.response.text().trim();
+
+      // 👉 Làm sạch JSON nếu bị bọc bởi markdown
+      let parsed;
+      try {
+        const cleanText = geminiText.replace(/```(?:json)?\s*([\s\S]*?)\s*```/, "$1").trim();
+        parsed = JSON.parse(cleanText);
+      } catch (e) {
+        return res.status(500).json({
+          message: "Lỗi khi phân tích phản hồi từ Gemini API",
+          error: e.message,
+          rawResponse: geminiText
+        });
+      }
+
+      const { khoaUuTien, khoaLienQuan } = parsed;
+
+      // Tìm thông tin khoa
+      const findKhoaDetail = (tenKhoa) =>
+        new Promise((resolve, reject) => {
+          Connect_Data_Model.Search__M(tenKhoa, (err, result) => {
+            if (err) return reject(err);
+            resolve(result && result.length > 0 ? result[0] : null);
+          });
+        });
+
+      const mainKhoa = await findKhoaDetail(khoaUuTien);
+      const relatedKhoaDetails = [];
+
+      if (Array.isArray(khoaLienQuan)) {
+        for (const khoa of khoaLienQuan) {
+          const detail = await findKhoaDetail(khoa);
+          if (detail) relatedKhoaDetails.push(detail);
+        }
+      }
+
+      if (!mainKhoa) {
+        return res.status(404).json({ message: "Không tìm thấy khoa ưu tiên phù hợp" });
+      }
+
+      return res.status(200).json({
+        message: "Gợi ý khoa thành công",
+        data: {
+          symptoms,
+          khoaUuTien: mainKhoa,
+          khoaLienQuan: relatedKhoaDetails
+        }
+      });
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Lỗi khi gọi Gemini API",
+      error: error.message
+    });
+  }
+};
+
+
 
 }
 
