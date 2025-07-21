@@ -11,5 +11,6 @@ router.put('/:id', Handle_Khoa.updateKhoa);
 router.patch ('/TrangThaiHoatDong/:ID' , Handle_Khoa.ThayDoiTrangThaiHoatDong);
 router.get ('/Search' , Handle_Khoa.Search);
 router.patch('/CanLamSang/:ID', Handle_Khoa.updateTrangThaiCanLamSang);
+router.post('/Suggest', Handle_Khoa.suggestKhoa); // Thêm route mới cho gợi ý khoa
 module.exports = router;    
    

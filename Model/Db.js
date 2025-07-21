@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+
 const uri = "mongodb+srv://tranphannhan:oLVT47GDg2GMj9mb@cluster0.av1kh.mongodb.net/WellNest?retryWrites=true&w=majority"
 
 
