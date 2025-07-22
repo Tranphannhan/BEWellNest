@@ -128,128 +128,126 @@ exports.createPayment = async (req, res) => {
 };
 
 exports.handleCallback = async (req, res) => {
-  console.log('có gọi nha bạn')
-  res.send('có gọi nha bạn')
  
-  // const result = req.body;
-  // const extraData = result.extraData;
+  const result = req.body;
+  const extraData = result.extraData;
 
-  // console.log('📩 Momo callback received:', result);
-  // console.log('🧾 ExtraData:', extraData);
+  console.log('📩 Momo callback received:', result);
+  console.log('🧾 ExtraData:', extraData);
 
-  // try {
-  //   await connectDB();
+  try {
+    await connectDB();
 
-  //   const { Id: id, Type: type } = JSON.parse(extraData || '{}');
-  //   if (!type || !id) {
-  //     return res.status(400).json({ message: 'Dữ liệu extraData không hợp lệ' });
-  //   }
+    const { Id: id, Type: type } = JSON.parse(extraData || '{}');
+    if (!type || !id) {
+      return res.status(400).json({ message: 'Dữ liệu extraData không hợp lệ' });
+    }
 
-  //   // ✅ Trường hợp thanh toán thành công
-  //   if (result.resultCode === 0) {
+    // ✅ Trường hợp thanh toán thành công
+    if (result.resultCode === 0) {
 
-  //     // 🎯 Phiếu khám
-  //     if (type === 'PhiKham') {
-  //       return PhieuKhamBenh.Select_Check_Status_Phieukhambenh_M(id, (error, result) => {
-  //         if (error) {
-  //           console.error('❌ Lỗi kiểm tra trạng thái:', error);
-  //           return res.status(500).json({ message: "Lỗi khi kiểm tra phiếu khám", error });
-  //         }
+      // 🎯 Phiếu khám
+      if (type === 'PhiKham') {
+        return PhieuKhamBenh.Select_Check_Status_Phieukhambenh_M(id, (error, result) => {
+          if (error) {
+            console.error('❌ Lỗi kiểm tra trạng thái:', error);
+            return res.status(500).json({ message: "Lỗi khi kiểm tra phiếu khám", error });
+          }
 
-  //         if (!result || result.length === 0) {
-  //           return res.status(404).json({ message: "Không tìm thấy phiếu khám bệnh" });
-  //         }
+          if (!result || result.length === 0) {
+            return res.status(404).json({ message: "Không tìm thấy phiếu khám bệnh" });
+          }
 
-  //         const phieu = result[0];
-  //         if (phieu.TrangThaiThanhToan === true) {
-  //           return res.status(200).json({
-  //             message: "Phiếu khám bệnh đã được thanh toán trước đó",
-  //             TrangThaiDaThanhToan: true,
-  //             data: phieu
-  //           });
-  //         }
+          const phieu = result[0];
+          if (phieu.TrangThaiThanhToan === true) {
+            return res.status(200).json({
+              message: "Phiếu khám bệnh đã được thanh toán trước đó",
+              TrangThaiDaThanhToan: true,
+              data: phieu
+            });
+          }
 
-  //         PhieuKhamBenh.GetNextSTT_M(phieu.Ngay, phieu.Id_Bacsi, (error, nextSTT) => {
-  //           if (error) {
-  //             console.error('❌ Lỗi lấy STT:', error);
-  //             return res.status(500).json({ message: "Lỗi lấy STT", error });
-  //           }
+          PhieuKhamBenh.GetNextSTT_M(phieu.Ngay, phieu.Id_Bacsi, (error, nextSTT) => {
+            if (error) {
+              console.error('❌ Lỗi lấy STT:', error);
+              return res.status(500).json({ message: "Lỗi lấy STT", error });
+            }
 
-  //           PhieuKhamBenh.PaymentConfirmation_M(id, nextSTT, (error, result2) => {
-  //             if (error) {
-  //               console.error('❌ Lỗi xác nhận thanh toán:', error);
-  //               return res.status(500).json({ message: "Lỗi xác nhận thanh toán", error });
-  //             }
+            PhieuKhamBenh.PaymentConfirmation_M(id, nextSTT, (error, result2) => {
+              if (error) {
+                console.error('❌ Lỗi xác nhận thanh toán:', error);
+                return res.status(500).json({ message: "Lỗi xác nhận thanh toán", error });
+              }
 
-  //             return res.status(200).json({
-  //               message: "✅ Xác nhận thanh toán phiếu khám thành công",
-  //               TrangThaiDaThanhToan: true,
-  //               STT: nextSTT,
-  //               data: result2
-  //             });
-  //           });
-  //         });
-  //       });
-  //     }
+              return res.status(200).json({
+                message: "✅ Xác nhận thanh toán phiếu khám thành công",
+                TrangThaiDaThanhToan: true,
+                STT: nextSTT,
+                data: result2
+              });
+            });
+          });
+        });
+      }
 
-  //     // 🎯 Xét nghiệm (theo phiếu khám)
-  //     if (type === 'XetNghiem') {
-  //       return XetNghiem_M.Select_Check_Status_Yeucauxetnghiem_M(id, (error, result) => {
-  //         if (error) {
-  //           console.error('❌ Lỗi kiểm tra Xét nghiệm:', error);
-  //           return res.status(500).json({ message: "Lỗi kiểm tra xét nghiệm", error });
-  //         }
+      // 🎯 Xét nghiệm (theo phiếu khám)
+      if (type === 'XetNghiem') {
+        return XetNghiem_M.Select_Check_Status_Yeucauxetnghiem_M(id, (error, result) => {
+          if (error) {
+            console.error('❌ Lỗi kiểm tra Xét nghiệm:', error);
+            return res.status(500).json({ message: "Lỗi kiểm tra xét nghiệm", error });
+          }
 
-  //         if (!result || result.length === 0) {
-  //           return res.status(404).json({ message: "Không có yêu cầu xét nghiệm cần thanh toán" });
-  //         }
+          if (!result || result.length === 0) {
+            return res.status(404).json({ message: "Không có yêu cầu xét nghiệm cần thanh toán" });
+          }
 
-  //         const listId = result.map(item => item._id);
-  //         XetNghiem_M.PaymentConfirmation_M(listId, (error, result2) => {
-  //           if (error) {
-  //             console.error('❌ Lỗi xác nhận thanh toán Xét nghiệm:', error);
-  //             return res.status(500).json({ message: "Lỗi xác nhận thanh toán", error });
-  //           }
+          const listId = result.map(item => item._id);
+          XetNghiem_M.PaymentConfirmation_M(listId, (error, result2) => {
+            if (error) {
+              console.error('❌ Lỗi xác nhận thanh toán Xét nghiệm:', error);
+              return res.status(500).json({ message: "Lỗi xác nhận thanh toán", error });
+            }
 
-  //           return res.status(200).json({
-  //             message: "✅ Xác nhận thanh toán yêu cầu xét nghiệm thành công",
-  //             data: result2
-  //           });
-  //         });
-  //       });
-  //     }
+            return res.status(200).json({
+              message: "✅ Xác nhận thanh toán yêu cầu xét nghiệm thành công",
+              data: result2
+            });
+          });
+        });
+      }
 
-  //     // 🎯 Đơn thuốc (dùng await)
-  //     if (type === 'Donthuoc') {
-  //       const updatedData = await Donthuoc.findByIdAndUpdate(
-  //         id,
-  //         { $set: { TrangThaiThanhToan: true } },
-  //         { new: true }
-  //       );
+      // 🎯 Đơn thuốc (dùng await)
+      if (type === 'Donthuoc') {
+        const updatedData = await Donthuoc.findByIdAndUpdate(
+          id,
+          { $set: { TrangThaiThanhToan: true } },
+          { new: true }
+        );
 
-  //       if (!updatedData) {
-  //         return res.status(404).json({ message: 'Không tìm thấy đơn thuốc để cập nhật' });
-  //       }
+        if (!updatedData) {
+          return res.status(404).json({ message: 'Không tìm thấy đơn thuốc để cập nhật' });
+        }
 
-  //       console.log(`✅ Đã cập nhật trạng thái thanh toán cho Donthuoc ID ${id}`);
-  //       return res.status(200).json({
-  //         message: '✅ Đã cập nhật trạng thái thanh toán đơn thuốc thành công',
-  //         data: updatedData,
-  //       });
-  //     }
+        console.log(`✅ Đã cập nhật trạng thái thanh toán cho Donthuoc ID ${id}`);
+        return res.status(200).json({
+          message: '✅ Đã cập nhật trạng thái thanh toán đơn thuốc thành công',
+          data: updatedData,
+        });
+      }
 
-  //     // ❌ Nếu không khớp loại nào
-  //     return res.status(400).json({ message: 'Loại thanh toán không hợp lệ' });
-  //   }
+      // ❌ Nếu không khớp loại nào
+      return res.status(400).json({ message: 'Loại thanh toán không hợp lệ' });
+    }
 
-  //   // ❌ Giao dịch thất bại
-  //   console.warn(`❌ Giao dịch thất bại. orderId: ${result.orderId}`);
-  //   return res.status(200).json({ message: '❌ Giao dịch thất bại từ MoMo' });
+    // ❌ Giao dịch thất bại
+    console.warn(`❌ Giao dịch thất bại. orderId: ${result.orderId}`);
+    return res.status(200).json({ message: '❌ Giao dịch thất bại từ MoMo' });
 
-  // } catch (error) {
-  //   console.error('❌ Lỗi xử lý callback:', error);
-  //   return res.status(500).json({ message: '❌ Lỗi server khi xác nhận thanh toán' });
-  // }
+  } catch (error) {
+    console.error('❌ Lỗi xử lý callback:', error);
+    return res.status(500).json({ message: '❌ Lỗi server khi xác nhận thanh toán' });
+  }
 };
 
 
