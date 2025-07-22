@@ -452,8 +452,7 @@ TimKiemBenhNhanBangSDTHoacIdTheKhamBenh__M = async (
     const searchPhieu = { Ngay };
     let danhSachPhieu = await Phieu_Kham_Benh.find(searchPhieu)
       .populate({
-        path: "Id_TheKhamBenh",
-        select: "HoVaTen SoDienThoai"
+        path: "Id_TheKhamBenh"
       })
       .lean();
 

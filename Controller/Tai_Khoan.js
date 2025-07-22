@@ -135,6 +135,7 @@ class Tai_Khoan_Controler {
                 _SoDienThoai : result.SoDienThoai,
                 _SoCCCD : result.SoCCCD,
                 _Image : result.Image,
+                _GioiTinh: result.GioiTinh,
                 _Id_PhongThietBi: result.Id_PhongThietBi || null,
             } 
 
