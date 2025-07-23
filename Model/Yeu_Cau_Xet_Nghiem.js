@@ -493,9 +493,9 @@ TimKiemBenhNhanBangSDTHoacIdTheKhamBenh__M = async (
       .populate([
         {
           path: 'Id_PhieuKhamBenh',
-          select: 'Ngay',
+          select: 'Ngay LyDoDenKham',
           populate: [
-            { path: 'Id_TheKhamBenh', select: 'HoVaTen SoDienThoai' }
+            { path: 'Id_TheKhamBenh' }
           ]
         },
         {

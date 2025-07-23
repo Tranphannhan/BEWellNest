@@ -2,6 +2,7 @@
 
 const connectDB = require("../Model/Db");
 const Hoadon = require("../Schema/Hoadon"); 
+const { populate } = require("../Schema/Tai_Khoan");
 
 class Database_Hoadon {
     Select_Hoadon__M = async (page,limit,Callback) => {
@@ -53,17 +54,30 @@ class Database_Hoadon {
             const Select_Hoadon = await Hoadon.find(condition)
             .skip(skip)
             .limit(limit)
-            .populate({
+            .populate([{
                 path: "Id_PhieuKhamBenh",
-                select: "Ngay",
-                populate: [{
-                path: "Id_TheKhamBenh",
-                select: "HoVaTen"
-                } , {
-                    path: "Id_GiaDichVu",
-                    select : 'Giadichvu'
-                }]
-            });
+                select: "Ngay Id_TheKhamBenh Id_GiaDichVu",
+                populate: [
+                    {
+                        path: "Id_TheKhamBenh",
+                        select: "HoVaTen"
+                    },{
+                        path:"Id_GiaDichVu",
+                        select:"Giadichvu"
+                    }
+                ]
+            },{
+                path: "Id_Dichvu",
+                select: "Gio",
+                populate:{
+                    path: "Id_LoaiXetNghiem",
+                    select: "TenXetNghiem",
+                    populate: {
+                        path: "Id_GiaDichVu",
+                        select: "Giadichvu"
+                    }
+                } 
+            }]);
 
             const total = await Hoadon.countDocuments(condition);
             Callback(null, {
@@ -88,7 +102,7 @@ class Database_Hoadon {
 
         // Lấy tất cả dữ liệu trước
         let fullList = await Hoadon.find(condition)
-            .populate({
+            .populate([{
                 path: "Id_PhieuKhamBenh",
                 select: "Ngay Id_TheKhamBenh Id_GiaDichVu",
                 populate: [
@@ -98,10 +112,21 @@ class Database_Hoadon {
                     },
                     {
                         path: "Id_GiaDichVu",
-                        select: "Giadichvu"
+                        select:"Giadichvu"
                     }
                 ]
-            });
+            },{
+                path: "Id_Dichvu",
+                select: "Gio",
+                populate:{
+                    path: "Id_LoaiXetNghiem",
+                    select: "TenXetNghiem",
+                    populate: {
+                        path: "Id_GiaDichVu",
+                        select: "Giadichvu"
+                    }
+                } 
+            }]);
 
         // 🔍 Lọc theo HoVaTen sau khi populate
         if (keyword) {

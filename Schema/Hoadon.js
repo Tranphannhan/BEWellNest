@@ -6,7 +6,10 @@ const HoadonnSchema = new mongoose.Schema({
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'Phieu_Kham_Benh', 
             },
-    Id_Dichvu: ObjectId || null,
+    Id_Dichvu: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Yeu_Cau_Xet_Nghiem', 
+            } || ObjectId,
     Id_ThuNgan: {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'Tai_Khoan',
