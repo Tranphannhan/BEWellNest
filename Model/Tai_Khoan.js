@@ -1,6 +1,5 @@
 
 const connectDB = require("../Model/Db");
-const { patch } = require("../routes/Bac_Si");
 const Taikhoan = require("../Schema/Tai_Khoan"); 
 
 class Database_Taikhoan {
@@ -110,7 +109,7 @@ class Database_Taikhoan {
                     path:'Id_LoaiTaiKhoan',
                     
                 },
-                {patch:'Id_PhongThietBi'}
+                {path:'Id_PhongThietBi'}
                 ]);
                 Callback (null , Result_Request);
         } catch {

@@ -139,8 +139,6 @@ class Tai_Khoan_Controler {
                 _GioiTinh: result.GioiTinh,
                 _Id_PhongThietBi: result.Id_PhongThietBi.TenPhongThietBi || null,
             } 
-
-            console.log(Data_Token_);
             
             const jwt = require('jsonwebtoken');
             const secretKey = 'WellNest_User';
