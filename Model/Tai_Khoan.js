@@ -1,5 +1,6 @@
 
 const connectDB = require("../Model/Db");
+const { patch } = require("../routes/Bac_Si");
 const Taikhoan = require("../Schema/Tai_Khoan"); 
 
 class Database_Taikhoan {
@@ -104,10 +105,13 @@ class Database_Taikhoan {
         try {
             await connectDB ();
             const Result_Request = await Taikhoan.findOne ({SoDienThoai : SDT_Login, Id_LoaiTaiKhoan: Id_LoaiTaiKhoan})
-                .select('_id Id_LoaiTaiKhoan TenTaiKhoan SoDienThoai SoCCCD Image MatKhau Id_PhongThietBi').populate({
+                .select('_id Id_LoaiTaiKhoan TenTaiKhoan SoDienThoai SoCCCD Image MatKhau Id_PhongThietBi').populate([
+                    {
                     path:'Id_LoaiTaiKhoan',
                     
-                });
+                },
+                {patch:'Id_PhongThietBi'}
+                ]);
                 Callback (null , Result_Request);
         } catch {
             Callback(error);
