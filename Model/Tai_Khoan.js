@@ -104,10 +104,13 @@ class Database_Taikhoan {
         try {
             await connectDB ();
             const Result_Request = await Taikhoan.findOne ({SoDienThoai : SDT_Login, Id_LoaiTaiKhoan: Id_LoaiTaiKhoan})
-                .select('_id Id_LoaiTaiKhoan TenTaiKhoan SoDienThoai SoCCCD Image MatKhau Id_PhongThietBi').populate({
+                .select('_id Id_LoaiTaiKhoan TenTaiKhoan SoDienThoai SoCCCD Image MatKhau Id_PhongThietBi').populate([
+                    {
                     path:'Id_LoaiTaiKhoan',
                     
-                });
+                },
+                {path:'Id_PhongThietBi'}
+                ]);
                 Callback (null , Result_Request);
         } catch {
             Callback(error);
