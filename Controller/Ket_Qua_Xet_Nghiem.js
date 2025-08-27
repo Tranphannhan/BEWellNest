@@ -15,69 +15,40 @@ class Ketquaxetnghiem_Controler {
   }; 
 
   
-  Add_Ketquaxetnghiem = (req, res, next) => {
-  try {
-    // Ngày Việt Nam dạng YYYY-MM-DD
+  Add_Ketquaxetnghiem = (req , res , next) => {
+        // Ngày Việt Nam dạng YYYY-MM-DD
     const ngay = new Date().toLocaleDateString("sv-SE", { timeZone: "Asia/Ho_Chi_Minh" });
     // Giờ Việt Nam dạng HH:mm:ss
     const formattedTime = new Date().toLocaleTimeString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh" });
-
-    // Lấy ảnh, nếu không có thì dùng ảnh mặc định
     const Image = req.file ? req.file.filename : "AnhMacDinhKetQuaXetNghiem.png";
 
-    // Lấy dữ liệu từ request body
-    const {
-      Id_YeuCauXetNghiem,
-      Id_PhieuKhamBenh,
-      Id_NguoiXetNghiem,
-      MaXetNghiem,
-      TenXetNghiem,
-      LoaiKetQua,
-      KetQua,
-      DonViTinh,
-      ChiSoBinhThuong,
-      GhiChu,
-      LoaiChup,
-      VungChup,
-      NguonThamChieu,
-      GioiHanCanhBao,
-    } = req.body;
-
-    // Kiểm tra bắt buộc
-    if (!Id_YeuCauXetNghiem || !Id_PhieuKhamBenh || !Id_NguoiXetNghiem) {
-      return res.status(400).json({ message: "Thiếu dữ liệu bắt buộc" });
-    }
-
     const Data_Add = {
-      Id_YeuCauXetNghiem: Id_YeuCauXetNghiem.trim(),
-      Id_PhieuKhamBenh: Id_PhieuKhamBenh.trim(),
-      Id_NguoiXetNghiem: Id_NguoiXetNghiem.trim(),
-      MaXetNghiem: MaXetNghiem?.trim() || "",
-      TenXetNghiem: TenXetNghiem?.trim() || "",
-      LoaiKetQua: LoaiKetQua || "",
-      KetQua: KetQua?.trim() || "",
-      DonViTinh: DonViTinh?.trim() || "",
-      ChiSoBinhThuong: ChiSoBinhThuong?.trim() || "",
-      GhiChu: GhiChu?.trim() || "",
-      NgayXetNghiem: ngay,
-      Gio: formattedTime,
-      Image: Image,
-      LoaiChup: LoaiChup?.trim() || "",
-      VungChup: VungChup?.trim() || "",
-      NguonThamChieu: NguonThamChieu?.trim() || "",
-      GioiHanCanhBao: GioiHanCanhBao?.trim() || "",
+        Id_YeuCauXetNghiem: req.body.Id_YeuCauXetNghiem?.trim() || "",
+        Id_PhieuKhamBenh: req.body.Id_PhieuKhamBenh?.trim() || "",
+        Id_NguoiXetNghiem: req.body.Id_NguoiXetNghiem?.trim() || "",
+        MaXetNghiem: req.body.MaXetNghiem?.trim() || "",
+        TenXetNghiem: req.body.TenXetNghiem?.trim() || "",
+        KetQua: req.body.KetQua?.trim() || "",
+        DonViTinh: req.body.DonViTinh?.trim() || "",
+        ChiSoBinhThuong: req.body.ChiSoBinhThuong?.trim() || "",
+        GhiChu: req.body.GhiChu?.trim() || "",
+        LoaiChup: req.body.LoaiChup?.trim() || "",
+        VungChup: req.body.VungChup?.trim() || "",
+        NguonThamChieu: req.body.NguonThamChieu?.trim() || "",
+        GioiHanCanhBao: req.body.GioiHanCanhBao?.trim() || "",
+        Gio: formattedTime,
+        NgayXetNghiem: ngay,
+        Image: Image
     };
 
-    // Gọi model thêm dữ liệu
-    Connect_Data_Model.Add_Ketquaxetnghiem_M(Data_Add, (Error, Result) => {
-      if (Error) return next(Error);
-      res.status(200).json({ message: "Thêm mới kết quả xét nghiệm thành công", data: Result });
+    if (!Data_Add.Id_YeuCauXetNghiem || !Data_Add.Id_PhieuKhamBenh) {
+        return res.status(400).json({ message: "Thiếu dữ liệu bắt buộc" });
+    }
+    Connect_Data_Model.Add_Ketquaxetnghiem_M (Data_Add , (Error , Result) => {
+        if (Error) return next(Error);
+        res.status(400).json({ message : "Thêm Mới Kết quả Xét Nghiệm Thành Công"});
     });
-  } catch (err) {
-    next(err);
-  }
-};
-
+  }  
 
 
    
