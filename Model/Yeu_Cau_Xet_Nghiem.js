@@ -601,7 +601,7 @@ Get_Not_yet_paid_Detail = async (page, limit, Ngay, TrangThaiThanhToan, TrangTha
         },
         {
           path: "Id_LoaiXetNghiem",
-          select: "TenXetNghiem",
+          select: "TenXetNghiem LoaiKetQua MaXetNghiem",
           populate: [
             { path: "Id_PhongThietBi", select: "TenPhongThietBi _id" },
             { path: "Id_GiaDichVu", select: "Giadichvu" },
