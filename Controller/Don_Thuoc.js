@@ -82,7 +82,9 @@ class Donthuoc_Controler {
 
   // Danh sách phát thuốc nhưng có phân trang
   MedicineDistributionList_Pagination = (req , res , next) => {
-   const ngayHienTai = new Date().toISOString().split('T')[0];
+   const ngayHienTai = new Date()
+  .toLocaleDateString("sv-SE", { timeZone: "Asia/Ho_Chi_Minh" }); 
+
    const selectedDate = req.query.date || ngayHienTai;
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 7;
@@ -94,7 +96,8 @@ class Donthuoc_Controler {
   }
 
   HistoryOfMedicineDispensing_Pagination = (req , res , next) => {
-   const ngayHienTai = new Date().toISOString().split('T')[0];
+   const ngayHienTai = new Date()
+  .toLocaleDateString("sv-SE", { timeZone: "Asia/Ho_Chi_Minh" }); 
    const selectedDate = req.query.date || ngayHienTai;
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 7;
@@ -125,8 +128,10 @@ class Donthuoc_Controler {
 
   // 
   add_Donthuoc = (req, res, next) => {
-      const now = new Date();
-      const formattedTime = now.toLocaleTimeString('vi-VN'); 
+
+    // Giờ Việt Nam dạng HH:mm:ss
+    const formattedTime = new Date().toLocaleTimeString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh" });
+
     const data = {
       Id_PhieuKhamBenh: req.body.Id_PhieuKhamBenh,
       TenDonThuoc: req.body.TenDonThuoc?.trim(),
@@ -193,7 +198,8 @@ class Donthuoc_Controler {
   }
 
   Get_Not_Yet_Paid = (req, res, next) =>{
-    const ngayHienTai = new Date().toISOString().split('T')[0];
+    const ngayHienTai = new Date()
+  .toLocaleDateString("sv-SE", { timeZone: "Asia/Ho_Chi_Minh" }); 
     const ngay = req.query.ngay || ngayHienTai;
     const TrangThaiThanhToan = req.query.TrangThaiThanhToan ;
     const limit = parseInt (req.query.limit)||7;
@@ -210,7 +216,8 @@ class Donthuoc_Controler {
 
  TimKiemBenhNhanBangTenVaSDT = (req, res, next) => {
   try {
-    const ngayHienTai = new Date().toISOString().split("T")[0];
+    const ngayHienTai = new Date()
+  .toLocaleDateString("sv-SE", { timeZone: "Asia/Ho_Chi_Minh" }); 
     const Ngay = req.query.ngay || ngayHienTai;
     const TrangThai = req.query.TrangThai || null;
     const TrangThaiThanhToan = req.query.TrangThaiThanhToan || null;

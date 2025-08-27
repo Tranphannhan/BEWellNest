@@ -135,7 +135,8 @@ class Phieu_Kham_Benh {
   
 
   Fill_Cakhambenh = (req, res, next) => {
-    const ngayHienTai = new Date().toISOString().split('T')[0];
+    const ngayHienTai = new Date()
+  .toLocaleDateString("sv-SE", { timeZone: "Asia/Ho_Chi_Minh" }); 
     const id = req.query.Id_Bacsi;
     const ngay = req.query.ngay || ngayHienTai;
     const TrangThai = req.query.TrangThai || false;
@@ -151,7 +152,8 @@ class Phieu_Kham_Benh {
 
 
 TimKiemBenhNhanBangTenHoacSDT = (req, res, next) => {
-  const ngayHienTai = new Date().toISOString().split('T')[0];
+  const ngayHienTai = new Date()
+  .toLocaleDateString("sv-SE", { timeZone: "Asia/Ho_Chi_Minh" }); 
   const soDienThoai = req.query.soDienThoai || null;
   const hoVaTen = req.query.hoVaTen || null;
   const trangThaiThanhToan = req.query.TrangThaiThanhToan || null;
@@ -208,7 +210,8 @@ TimKiemBenhNhanBangTenHoacSDT = (req, res, next) => {
   
 
   Get_Not_Yet_Paid = (req, res, next) =>{
-    const ngayHienTai = new Date().toISOString().split('T')[0];
+    const ngayHienTai = new Date()
+  .toLocaleDateString("sv-SE", { timeZone: "Asia/Ho_Chi_Minh" }); 
     const ngay = req.query.ngay || ngayHienTai;
     const TrangThaiThanhToan = req.query.TrangThaiThanhToan ;
     const limit = parseInt (req.query.limit)||7;

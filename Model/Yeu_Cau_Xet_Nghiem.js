@@ -26,7 +26,8 @@ class Database_Yeu_Cau_Xet_Nghiem {
         }
 
       if (NgayHienTai === true || NgayHienTai === 'true') {
-      const ngayHienTai = new Date().toISOString().split('T')[0];
+      const ngayHienTai = new Date()
+  .toLocaleDateString("sv-SE", { timeZone: "Asia/Ho_Chi_Minh" }); 
       const formattedDate = ngayHienTai;
 
       query["Ngay"] = formattedDate;

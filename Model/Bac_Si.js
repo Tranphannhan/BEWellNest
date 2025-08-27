@@ -122,7 +122,8 @@ class Database_Bacsi {
     DemSoLuongNguoiDangKham__M = async (Id_Bacsi) => {
     try {
       await connectDB();
-      const ngayHienTai = new Date().toISOString().split('T')[0];
+      const ngayHienTai = new Date()
+  .toLocaleDateString("sv-SE", { timeZone: "Asia/Ho_Chi_Minh" }); 
       const count = await Phieu_Kham_Benh.countDocuments({
         Id_Bacsi: Id_Bacsi,
         Ngay: ngayHienTai,

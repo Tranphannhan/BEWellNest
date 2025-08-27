@@ -18,7 +18,8 @@ Select_Phieukhambenh_M = async (NgayHienTai, TrangThai, TrangThaiHoatDong, Callb
     }
 
     if (NgayHienTai === true || NgayHienTai === 'true') {
-      const ngayHienTai = new Date().toISOString().split('T')[0];
+      const ngayHienTai = new Date()
+  .toLocaleDateString("sv-SE", { timeZone: "Asia/Ho_Chi_Minh" }); 
       const formattedDate = ngayHienTai;
 
       query["Ngay"] = formattedDate;
@@ -400,7 +401,8 @@ Add_Phieukhambenh_M = async (Data, Callback) => {
         try {
             await connectDB();
             const now = new Date();
-            const formattedTime = now.toLocaleTimeString('vi-VN'); // Kết quả: "14:25:30"
+            // Giờ Việt Nam dạng HH:mm:ss
+            const formattedTime = new Date().toLocaleTimeString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh" });
             const data = await Phieu_Kham_Benh.findByIdAndUpdate(_id,{ $set: { TrangThai: true, GioKetThucKham: formattedTime}},{ new: true });
           Callback(null, data);
         } catch (error){

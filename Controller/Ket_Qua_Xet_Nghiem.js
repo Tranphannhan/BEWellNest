@@ -16,10 +16,12 @@ class Ketquaxetnghiem_Controler {
 
   
   Add_Ketquaxetnghiem = (req , res , next) => {
+        // Ngày Việt Nam dạng YYYY-MM-DD
+    const ngay = new Date().toLocaleDateString("sv-SE", { timeZone: "Asia/Ho_Chi_Minh" });
+    // Giờ Việt Nam dạng HH:mm:ss
+    const formattedTime = new Date().toLocaleTimeString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh" });
     const Image = req.file ? req.file.filename : "AnhMacDinhKetQuaXetNghiem.png";
-    const now = new Date();
-    const formattedTime = now.toLocaleTimeString('vi-VN'); 
-    const ngay = new Date().toISOString().split('T')[0];
+
     const Data_Add = {
         Id_YeuCauXetNghiem : req.body.Id_YeuCauXetNghiem.trim(),
         Id_PhieuKhamBenh : req.body.Id_PhieuKhamBenh.trim(),
