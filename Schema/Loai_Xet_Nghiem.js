@@ -11,6 +11,12 @@ const Loai_Xet_Nghiem_Schema = new mongoose.Schema ({
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Gia_Dich_Vu'
         },
+    LoaiKetQua: {
+        type: String,
+        enum: ['DinhTinh', 'DinhLuong', 'HinhAnh', 'MoTa'], 
+        required: true
+    },
+    MaXetNghiem:String,
     TenXetNghiem : String,
     MoTaXetNghiem : String,
     Image : String,
