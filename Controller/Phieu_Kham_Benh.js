@@ -38,9 +38,11 @@ class Phieu_Kham_Benh {
 
   // Sửa phần chỗ này ------  
   Add_Phieukhambenh = (req, res, next) => {
-    const ngay = new Date().toISOString().split('T')[0]; // Lấy ngày hiện tại dạng YYYY-MM-DD
-    const now = new Date();
-    const formattedTime = now.toLocaleTimeString('vi-VN'); // Kết quả: "14:25:30"
+    // Ngày Việt Nam dạng YYYY-MM-DD
+    const ngay = new Date().toLocaleDateString("sv-SE", { timeZone: "Asia/Ho_Chi_Minh" });
+
+    // Giờ Việt Nam dạng HH:mm:ss
+    const formattedTime = new Date().toLocaleTimeString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh" });
 
     // Lấy số thứ tự tiếp theo
     // Connect_Data_Model.GetNextSTT_M(ngay, req.body.Id_CaKham.trim(), (error, nextSTT) => {
