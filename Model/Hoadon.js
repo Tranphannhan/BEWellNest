@@ -79,7 +79,8 @@ class Database_Hoadon {
                 } 
             },
         {
-            path:'Id_ThuNgan'
+            path:'Id_ThuNgan',
+            select:"TenTaiKhoan"
         }]);
 
             const total = await Hoadon.countDocuments(condition);
@@ -130,7 +131,8 @@ class Database_Hoadon {
                     }
                 } 
             },{
-                path: "Id_ThuNgan"
+                path: "Id_ThuNgan",
+                select:"TenTaiKhoan"
             }]);
 
         // 🔍 Lọc theo HoVaTen sau khi populate
