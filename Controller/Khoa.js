@@ -185,7 +185,89 @@ suggestKhoa = async (req, res, next) => {
   }
 
   try {
-    // Lấy danh sách khoa từ database
+    // ✅ Danh sách triệu chứng chung chung
+const trieuChungChungChung = [
+  "mệt mỏi",
+  "chóng mặt",
+  "nhức đầu",
+  "sốt",
+  "ớn lạnh",
+  "ra mồ hôi",
+  "khó ngủ",
+  "mất ngủ",
+  "nôn",
+  "ói",
+  "buồn nôn",
+  "đau bụng",
+  "đau ngực",
+  "ho",
+  "khó thở",
+  "đau lưng",
+  "đau khớp",
+  "đau cơ",
+  "run tay chân",
+  "chán ăn",
+  "sụt cân",
+  "tăng cân",
+  "đầy bụng",
+  "khó tiêu",
+  "tiêu chảy",
+  "táo bón",
+  "ợ nóng",
+  "ợ chua",
+  "đau họng",
+  "khàn giọng",
+  "chảy nước mũi",
+  "nghẹt mũi",
+  "hắt hơi",
+  "mẩn ngứa",
+  "nổi mề đay",
+  "phát ban",
+  "da vàng",
+  "da xanh xao",
+  "hoa mắt",
+  "tê tay chân",
+  "mất thăng bằng",
+  "tim đập nhanh",
+  "tim đập chậm",
+  "huyết áp cao",
+  "huyết áp thấp",
+  "khó tập trung",
+  "suy giảm trí nhớ",
+  "căng thẳng",
+  "lo âu",
+  "trầm cảm nhẹ",
+  "khát nước",
+  "tiểu nhiều",
+  "tiểu ít",
+  "tiểu buốt",
+  "mắt mờ",
+  "mắt đỏ",
+  "chảy nước mắt",
+  "ù tai",
+  "nghe kém",
+  "chảy máu cam",
+  "chảy máu chân răng",
+  "bầm tím dễ dàng",
+  "Hoại tử",
+  "ngứa",
+];
+
+
+
+    // Nếu có bất kỳ triệu chứng chung chung nào → cho vào Tổng Hợp luôn
+    if (symptoms.some(s => trieuChungChungChung.includes(s.toLowerCase()))) {
+      return res.status(200).json({
+        message: "Gợi ý khoa thành công",
+        data: {
+          symptoms,
+          khoaUuTien: { TenKhoa: "Khoa Tổng Hợp" },
+          khoaLienQuan: []
+        }
+      });
+    }
+
+    // Nếu không phải triệu chứng chung chung → mới gọi Gemini
     Connect_Data_Model.Select_Khoa_M(1, 100, true, async (error, result) => {
       if (error) return next(error);
       if (!result || result.data.length < 1) {
@@ -195,30 +277,27 @@ suggestKhoa = async (req, res, next) => {
       const khoaList = result.data.map(khoa => khoa.TenKhoa).join(", ");
       const symptomList = symptoms.join(", ");
 
-      // Prompt yêu cầu Gemini phân tích triệu chứng và đề xuất
       const prompt = `
 Tôi có các triệu chứng sau: ${symptomList}.
 Danh sách các khoa trong bệnh viện: ${khoaList}.
 
 Nhiệm vụ của bạn:
-1. Phân tích và xác định triệu chứng **nghiêm trọng hoặc cần xử lý y tế trước**.
-2. Dựa vào triệu chứng nghiêm trọng nhất đó, chọn ra 1 khoa phù hợp nhất và **ưu tiên các khoa có tính chất cấp cứu hoặc xử lý chấn thương** → gọi là "khoaUuTien".
-3. Các triệu chứng nhẹ hơn có thể dẫn đến các "khoaLienQuan".
-4. Chỉ sử dụng tên khoa trong danh sách đã cung cấp.
+1. Đừng suy diễn quá sâu, tập chung vào thực tế.
+2. Chọn ra 1 khoa phù hợp nhất gọi là "khoaUuTien".
+3. Các triệu chứng khác có thể dẫn đến "khoaLienQuan".
+4. Chỉ sử dụng tên khoa trong danh sách đã cung cấp. Nếu không tìm thấy khoa khớp → để "Không xác định".
 
-Trả về kết quả ở định dạng JSON thuần (không thêm giải thích):
+Trả về JSON thuần:
 {
   "khoaUuTien": "Tên khoa",
-  "khoaLienQuan": ["Tên khoa 1", "Tên khoa 2"]
+  "khoaLienQuan": ["Tên khoa 1", "Tên khoa 2","..."]
 }
-Nếu không rõ, để "Không xác định".
 `;
 
       const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
       const geminiResult = await model.generateContent(prompt);
       const geminiText = geminiResult.response.text().trim();
 
-      // 👉 Làm sạch JSON nếu bị bọc bởi markdown
       let parsed;
       try {
         const cleanText = geminiText.replace(/```(?:json)?\s*([\s\S]*?)\s*```/, "$1").trim();
@@ -233,7 +312,6 @@ Nếu không rõ, để "Không xác định".
 
       const { khoaUuTien, khoaLienQuan } = parsed;
 
-      // Tìm thông tin khoa
       const findKhoaDetail = (tenKhoa) =>
         new Promise((resolve, reject) => {
           Connect_Data_Model.Search__M(tenKhoa, (err, result) => {
@@ -252,10 +330,6 @@ Nếu không rõ, để "Không xác định".
         }
       }
 
-      if (!mainKhoa) {
-        return res.status(404).json({ message: "Không tìm thấy khoa ưu tiên phù hợp" });
-      }
-
       return res.status(200).json({
         message: "Gợi ý khoa thành công",
         data: {
@@ -272,6 +346,7 @@ Nếu không rõ, để "Không xác định".
     });
   }
 };
+
 
 
 
