@@ -285,7 +285,7 @@ Nhiệm vụ của bạn:
 1. Đừng suy diễn quá sâu, tập chung vào thực tế.
 2. Chọn ra 1 khoa phù hợp nhất gọi là "khoaUuTien".
 3. Các triệu chứng khác có thể dẫn đến "khoaLienQuan".
-4. Chỉ sử dụng tên khoa trong danh sách đã cung cấp. Nếu không tìm thấy khoa khớp → để "Không xác định".
+4. Nếu khoa phù hợp không có trong danh sách bệnh viện thì vẫn gợi ý tên khoa mới theo thực tế y khoa (ví dụ: "Nam học", "Nội tiết", ...). KHÔNG được để null hoặc "Không xác định".
 
 Trả về JSON thuần:
 {
@@ -312,13 +312,20 @@ Trả về JSON thuần:
 
       const { khoaUuTien, khoaLienQuan } = parsed;
 
-      const findKhoaDetail = (tenKhoa) =>
-        new Promise((resolve, reject) => {
-          Connect_Data_Model.Search__M(tenKhoa, (err, result) => {
-            if (err) return reject(err);
-            resolve(result && result.length > 0 ? result[0] : null);
-          });
-        });
+const findKhoaDetail = (tenKhoa) =>
+  new Promise((resolve, reject) => {
+    if (!tenKhoa) return resolve({ TenKhoa: "AI không trả về tên khoa." });
+
+    Connect_Data_Model.Search__M(tenKhoa, (err, result) => {
+      if (err) return reject(err);
+
+      if (result && result.length > 0) {
+        resolve(result[0]); // ✅ Có trong DB
+      } else {
+        resolve({ TenKhoa: `Hiện tại bệnh viện chưa có Khoa ${tenKhoa}` });
+      }
+    });
+  });
 
       const mainKhoa = await findKhoaDetail(khoaUuTien);
       const relatedKhoaDetails = [];
