@@ -26,7 +26,8 @@ class Database_Yeu_Cau_Xet_Nghiem {
         }
 
       if (NgayHienTai === true || NgayHienTai === 'true') {
-      const ngayHienTai = new Date().toISOString().split('T')[0];
+      const ngayHienTai = new Date()
+  .toLocaleDateString("sv-SE", { timeZone: "Asia/Ho_Chi_Minh" }); 
       const formattedDate = ngayHienTai;
 
       query["Ngay"] = formattedDate;
@@ -600,7 +601,7 @@ Get_Not_yet_paid_Detail = async (page, limit, Ngay, TrangThaiThanhToan, TrangTha
         },
         {
           path: "Id_LoaiXetNghiem",
-          select: "TenXetNghiem",
+          select: "TenXetNghiem LoaiKetQua MaXetNghiem",
           populate: [
             { path: "Id_PhongThietBi", select: "TenPhongThietBi _id" },
             { path: "Id_GiaDichVu", select: "Giadichvu" },

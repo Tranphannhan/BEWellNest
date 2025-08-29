@@ -16,26 +16,34 @@ class Ketquaxetnghiem_Controler {
 
   
   Add_Ketquaxetnghiem = (req , res , next) => {
+        // Ngày Việt Nam dạng YYYY-MM-DD
+    const ngay = new Date().toLocaleDateString("sv-SE", { timeZone: "Asia/Ho_Chi_Minh" });
+    // Giờ Việt Nam dạng HH:mm:ss
+    const formattedTime = new Date().toLocaleTimeString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh" });
     const Image = req.file ? req.file.filename : "AnhMacDinhKetQuaXetNghiem.png";
-    const now = new Date();
-    const formattedTime = now.toLocaleTimeString('vi-VN'); 
-    const ngay = new Date().toISOString().split('T')[0];
-    const Data_Add = {
-        Id_YeuCauXetNghiem : req.body.Id_YeuCauXetNghiem.trim(),
-        Id_PhieuKhamBenh : req.body.Id_PhieuKhamBenh.trim(),
-        Id_NguoiXetNghiem: req.body.Id_NguoiXetNghiem.trim(),
-        MaXetNghiem : req.body.MaXetNghiem.trim(),
-        TenXetNghiem : req.body.TenXetNghiem.trim(),
-        KetQua : req.body.KetQua.trim(),
-        DonViTinh : req.body.DonViTinh.trim(),
-        ChiSoBinhThuong : req.body.ChiSoBinhThuong.trim(),
-        GhiChu : req.body.GhiChu.trim(),
-        Gio:formattedTime,
-        NgayXetNghiem : ngay,
-        Image : `${Image}` 
-    }   
 
-    if (!Data_Add) return res.send ("Không có dữ liệu");
+    const Data_Add = {
+        Id_YeuCauXetNghiem: req.body.Id_YeuCauXetNghiem?.trim() || "",
+        Id_PhieuKhamBenh: req.body.Id_PhieuKhamBenh?.trim() || "",
+        Id_NguoiXetNghiem: req.body.Id_NguoiXetNghiem?.trim() || "",
+        MaXetNghiem: req.body.MaXetNghiem?.trim() || "",
+        TenXetNghiem: req.body.TenXetNghiem?.trim() || "",
+        KetQua: req.body.KetQua?.trim() || "",
+        DonViTinh: req.body.DonViTinh?.trim() || "",
+        ChiSoBinhThuong: req.body.ChiSoBinhThuong?.trim() || "",
+        GhiChu: req.body.GhiChu?.trim() || "",
+        LoaiChup: req.body.LoaiChup?.trim() || "",
+        VungChup: req.body.VungChup?.trim() || "",
+        NguonThamChieu: req.body.NguonThamChieu?.trim() || "",
+        GioiHanCanhBao: req.body.GioiHanCanhBao?.trim() || "",
+        Gio: formattedTime,
+        NgayXetNghiem: ngay,
+        Image: Image
+    };
+
+    if (!Data_Add.Id_YeuCauXetNghiem || !Data_Add.Id_PhieuKhamBenh) {
+        return res.status(400).json({ message: "Thiếu dữ liệu bắt buộc" });
+    }
     Connect_Data_Model.Add_Ketquaxetnghiem_M (Data_Add , (Error , Result) => {
         if (Error) return next(Error);
         res.status(400).json({ message : "Thêm Mới Kết quả Xét Nghiệm Thành Công"});

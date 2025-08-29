@@ -64,9 +64,11 @@ class Yeucauxetnghiem_Controler {
 
 
 Add_Yeucauxetnghiem = (req, res, next) => {
-  const ngay = new Date().toISOString().split("T")[0];
-  const now = new Date();
-  const formattedTime = now.toLocaleTimeString('vi-VN'); // Kết quả: "14:25:30"
+    // Ngày Việt Nam dạng YYYY-MM-DD
+    const ngay = new Date().toLocaleDateString("sv-SE", { timeZone: "Asia/Ho_Chi_Minh" });
+
+    // Giờ Việt Nam dạng HH:mm:ss
+    const formattedTime = new Date().toLocaleTimeString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh" });
 
   const idPhieuKhamBenh = req.body.Id_PhieuKhamBenh?.trim();
   const idLoaiXetNghiem = req.body.Id_LoaiXetNghiem?.trim();
@@ -134,7 +136,8 @@ Add_Yeucauxetnghiem = (req, res, next) => {
   };
 
   Get_ById_PTB_Date = (req, res, next) => {
-      const ngayHienTai = new Date().toISOString().split('T')[0];
+    const ngayHienTai = new Date()
+  .toLocaleDateString("sv-SE", { timeZone: "Asia/Ho_Chi_Minh" }); 
     const ngay = req.query.ngay || ngayHienTai;
     const  Id_PhongThietBi = req.query.Id_PhongThietBi;
     const limit = parseInt(req.query.limit)||7;
@@ -157,7 +160,8 @@ Add_Yeucauxetnghiem = (req, res, next) => {
   };
 
   Get_Not_Yet_Paid = (req, res, next) =>{
-    const ngayHienTai = new Date().toISOString().split('T')[0];
+    const ngayHienTai = new Date()
+  .toLocaleDateString("sv-SE", { timeZone: "Asia/Ho_Chi_Minh" }); 
     const ngay = req.query.ngay || ngayHienTai;
     const TrangThaiThanhToan = req.query.TrangThaiThanhToan ;
     const limit = parseInt (req.query.limit)||7;
@@ -173,7 +177,8 @@ Add_Yeucauxetnghiem = (req, res, next) => {
   }
 
     Get_Not_yet_paid_Detail = (req, res, next) =>{
-    const ngayHienTai = new Date().toISOString().split('T')[0];
+    const ngayHienTai = new Date()
+  .toLocaleDateString("sv-SE", { timeZone: "Asia/Ho_Chi_Minh" }); 
     const ngay = req.query.ngay || ngayHienTai;
     const Id_PhieuKhamBenh = req.query.Id_PhieuKhamBenh;
     const TrangThaiThanhToan = req.query.TrangThaiThanhToan || null;
@@ -192,7 +197,8 @@ Add_Yeucauxetnghiem = (req, res, next) => {
   }
 
 TimKiemBenhNhanBangSDTHoacIdTheKhamBenh = (req, res, next) => {
-  const ngayHienTai = new Date().toISOString().split('T')[0];
+  const ngayHienTai = new Date()
+  .toLocaleDateString("sv-SE", { timeZone: "Asia/Ho_Chi_Minh" }); 
   const id_PhongThietBi = req.query.Id || null;
   const SDT = req.query.SDT || null;
   const HoVaTen = req.query.HoVaTen || null;

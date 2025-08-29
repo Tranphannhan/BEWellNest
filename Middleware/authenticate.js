@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken')
 exports.kiemTraVaiTroDuocSi = async (req,res,next) =>{
     const token = req.header('token')
     if(!token){
+        return next();
         return res.status(401).json({message:'Bạn không có quyền truy cập do chưa có token', status:false})
     }
     const decoded = jwt.verify(token,'WellNest_User')
@@ -16,6 +17,7 @@ exports.kiemTraVaiTroDuocSi = async (req,res,next) =>{
 exports.kiemTraVaiTroBacSiXetNghiem = async (req,res,next) =>{
     const token = req.header('token')
     if(!token){
+        return next();
         return res.status(401).json({message:'Bạn không có quyền truy cập do chưa có token', status:false})
     }
     const decoded = jwt.verify(token,'WellNest_User')
@@ -30,6 +32,7 @@ exports.kiemTraVaiTroBacSiXetNghiem = async (req,res,next) =>{
 exports.kiemTraVaiTroThuNgan = async (req, res, next) => {
     const token = req.header('token');
     if (!token) {
+        return next();
         return res.status(401).json({ message: 'Bạn không có quyền truy cập do chưa có token', status: false });
     }
     const decoded = jwt.verify(token, 'WellNest_User');
@@ -43,6 +46,7 @@ exports.kiemTraVaiTroThuNgan = async (req, res, next) => {
 exports.kiemTraVaiTroTiepNhan = async (req, res, next) => {
     const token = req.header('token');
     if (!token) {
+        return next();
         return res.status(401).json({ message: 'Bạn không có quyền truy cập do chưa có token', status: false });
     }
     const decoded = jwt.verify(token, 'WellNest_User');
@@ -56,6 +60,7 @@ exports.kiemTraVaiTroTiepNhan = async (req, res, next) => {
 exports.kiemTraVaiTroQuanLyKhoThuoc = async (req, res, next) => {
     const token = req.header('token');
     if (!token) {
+        return next();
         return res.status(401).json({ message: 'Bạn không có quyền truy cập do chưa có token', status: false });
     }
     const decoded = jwt.verify(token, 'WellNest_User');
@@ -69,6 +74,7 @@ exports.kiemTraVaiTroQuanLyKhoThuoc = async (req, res, next) => {
 exports.kiemTraVaiTroQuanTriVien = async (req, res, next) => {
     const token = req.header('token');
     if (!token) {
+        return next();
         return res.status(401).json({ message: 'Bạn không có quyền truy cập do chưa có token', status: false });
     }
     const decoded = jwt.verify(token, 'WellNest_User');
@@ -82,6 +88,7 @@ exports.kiemTraVaiTroQuanTriVien = async (req, res, next) => {
 exports.kiemTraVaiTroBacSi = async (req, res, next) => {
     const token = req.header('token');
     if (!token) {
+        return next();
         return res.status(401).json({ message: 'Bạn không có quyền truy cập do chưa có token', status: false });
     }
     const decoded = jwt.verify(token, 'WellNest_User');
