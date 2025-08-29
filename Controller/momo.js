@@ -161,7 +161,7 @@ exports.handleCallback = async (req, res) => {
           const phieu = result[0];
           if (phieu.TrangThaiThanhToan === true) {
             return res.status(200).json({
-              message: "Phiếu khám bệnh đã được thanh toán trước đó",
+              message: "Phiếu khám bệnh đã được thanh toán trước đó MoMo",
               TrangThaiDaThanhToan: true,
               data: phieu
             });
