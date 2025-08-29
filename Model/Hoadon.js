@@ -77,7 +77,10 @@ class Database_Hoadon {
                         select: "Giadichvu"
                     }
                 } 
-            }]);
+            },
+        {
+            path:'Id_ThuNgan'
+        }]);
 
             const total = await Hoadon.countDocuments(condition);
             Callback(null, {
@@ -126,6 +129,8 @@ class Database_Hoadon {
                         select: "Giadichvu"
                     }
                 } 
+            },{
+                path: "Id_ThuNgan"
             }]);
 
         // 🔍 Lọc theo HoVaTen sau khi populate
