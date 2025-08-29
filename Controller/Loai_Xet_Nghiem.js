@@ -105,6 +105,8 @@ Upload_LoaiXetNghiem = (req, res, next) => {
         Id_PhongThietBi: req.body.Id_PhongThietBi?.trim(),
         Id_GiaDichVu : req.body.Id_GiaDichVu?.trim(),
         MoTaXetNghiem : req.body.MoTaXetNghiem?.trim(),
+        LoaiKetQua : req.body.LoaiKetQua?.trim(),
+        MaXetNghiem : req.body.MaXetNghiem?.trim(),
         TenXetNghiem : req.body.TenXetNghiem?.trim(),
         TrangThaiHoatDong: req.body.TrangThaiHoatDong ?? true
     };
